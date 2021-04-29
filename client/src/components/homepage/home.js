@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Draggable from "react-draggable";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
@@ -22,6 +22,7 @@ import Button from "@material-ui/core/Button";
 import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
 import announcement from "../../assets/announcement.png";
 import "./home.css";
+import { useScreenshot } from 'use-screenshot-hook';
 
 const emails = ["username@gmail.com", "user02@gmail.com"];
 const useStyles = makeStyles({
@@ -33,7 +34,7 @@ const useStyles = makeStyles({
 
 function DownloadForm(props) {
   const classes = useStyles();
-  const { onClose, selectedValue, open } = props;
+  const { onClose, selectedValue, open, image } = props;
 
   const handleClose = () => {
     onClose(selectedValue);
@@ -49,6 +50,7 @@ function DownloadForm(props) {
       aria-labelledby="simple-dialog-title"
       open={open}
     >
+      {image && <img src={image} />}
       <DialogTitle id="simple-dialog-title">Set backup account</DialogTitle>
       <List>
         {emails.map((email) => (
@@ -106,6 +108,8 @@ ValueLabelComponent.propTypes = {
 };
 
 function Home() {
+  const imageRef = useRef(null);
+  const { image, takeScreenshot } = useScreenshot({ref:imageRef});
   const classes = useStyles();
   const [message, setMessage] = useState("Scribble Message");
   const [sendee, setSendee] = useState("Your Name");
@@ -121,6 +125,7 @@ function Home() {
     setRotateValue(newValue);
   };
   const handleDownloadOpen = () => {
+    takeScreenshot()
     setDownloadDialog(true);
   };
 
@@ -307,6 +312,7 @@ function Home() {
                     selectedValue={downloadInput}
                     open={openDownloadDialog}
                     onClose={handleDownloadClose}
+                    image={image}
                   />
                 </div>
               </div>
@@ -329,7 +335,12 @@ function Home() {
           <div className={"column"}>
             {/* RIGHT COLUMN */}
 
-            <div className={"scribble-image1"}>
+            <div className={"scribble-image1"} ref={imageRef}>
+              <h2 style={{position: 'absolute',
+top: '50%',
+left: '26%',
+color: '#000',
+zIndex: 1}}>I am madan</h2>
               <Image
                 src={require("../../assets/tshirt1.png")}
                 className={"male-front"}

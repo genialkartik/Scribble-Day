@@ -184,9 +184,9 @@ footer a:hover {
 /* NEW CSS */
 
 .scribble-image1 {
-  position: absolute;
-  top: 25%;
-  left: 55%;
+  position: relative;
+  /* top: 25%;
+  left: 55%; */
 }
 
 .male-front {
