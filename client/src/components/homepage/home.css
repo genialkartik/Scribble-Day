@@ -42,7 +42,7 @@ input:-internal-autofill-selected {
   background-image: none !important;
   color: -internal-light-dark(black, white) !important;
 }
-.hacktoberfest-imgbox {
+.scribble-imgbox {
   height: fit-content;
   display: flex;
   align-items: center;

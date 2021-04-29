@@ -2,18 +2,23 @@ import React, { useRef, useState } from "react";
 import Draggable from "react-draggable";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
-import Avatar from "@material-ui/core/Avatar";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import ListItemText from "@material-ui/core/ListItemText";
-import DialogTitle from "@material-ui/core/DialogTitle";
+
+import Input from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import FormControl from "@material-ui/core/FormControl";
+import AccountCircle from "@material-ui/icons/AccountCircle";
 import Dialog from "@material-ui/core/Dialog";
+import Avatar from "@material-ui/core/Avatar";
+import MenuItem from "@material-ui/core/MenuItem";
+import Select from "@material-ui/core/Select";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import Slider from "@material-ui/core/Slider";
 import Typography from "@material-ui/core/Typography";
+import DialogTitle from "@material-ui/core/DialogTitle";
 import Tooltip from "@material-ui/core/Tooltip";
-import PersonIcon from "@material-ui/icons/Person";
-import AddIcon from "@material-ui/icons/Add";
+import SendIcon from "@material-ui/icons/Send";
+import VpnKeyIcon from "@material-ui/icons/VpnKey";
 import { blue } from "@material-ui/core/colors";
 import { Container, Row, Col, Form, Image } from "react-bootstrap";
 import AutorenewIcon from "@material-ui/icons/Autorenew";
@@ -22,7 +27,8 @@ import Button from "@material-ui/core/Button";
 import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
 import announcement from "../../assets/announcement.png";
 import "./home.css";
-import { useScreenshot } from 'use-screenshot-hook';
+import { useScreenshot } from "use-screenshot-hook";
+import Preview from "../preview";
 
 const emails = ["username@gmail.com", "user02@gmail.com"];
 const useStyles = makeStyles({
@@ -31,65 +37,6 @@ const useStyles = makeStyles({
     color: blue[600],
   },
 });
-
-function DownloadForm(props) {
-  const classes = useStyles();
-  const { onClose, selectedValue, open, image } = props;
-
-  const handleClose = () => {
-    onClose(selectedValue);
-  };
-
-  const handleListItemClick = (value) => {
-    onClose(value);
-  };
-
-  return (
-    <Dialog
-      onClose={handleClose}
-      aria-labelledby="simple-dialog-title"
-      open={open}
-    >
-      {image && <img src={image} />}
-      <DialogTitle id="simple-dialog-title">Set backup account</DialogTitle>
-      <List>
-        {emails.map((email) => (
-          <ListItem
-            button
-            onClick={() => handleListItemClick(email)}
-            key={email}
-          >
-            <ListItemAvatar>
-              <Avatar className={classes.avatar}>
-                <PersonIcon />
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText primary={email} />
-          </ListItem>
-        ))}
-
-        <ListItem
-          autoFocus
-          button
-          onClick={() => handleListItemClick("addAccount")}
-        >
-          <ListItemAvatar>
-            <Avatar>
-              <AddIcon />
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText primary="Add account" />
-        </ListItem>
-      </List>
-    </Dialog>
-  );
-}
-
-DownloadForm.propTypes = {
-  onClose: PropTypes.func.isRequired,
-  open: PropTypes.bool.isRequired,
-  selectedValue: PropTypes.string.isRequired,
-};
 
 function ValueLabelComponent(props) {
   const { children, open, value } = props;
@@ -109,7 +56,7 @@ ValueLabelComponent.propTypes = {
 
 function Home() {
   const imageRef = useRef(null);
-  const { image, takeScreenshot } = useScreenshot({ref:imageRef});
+  const { image, takeScreenshot } = useScreenshot({ ref: imageRef });
   const classes = useStyles();
   const [message, setMessage] = useState("Scribble Message");
   const [sendee, setSendee] = useState("Your Name");
@@ -117,21 +64,207 @@ function Home() {
   const [dragBool, setDragBool] = useState(false);
   const [messageFont, setMessageFont] = useState(".8em");
 
+  const [gender, setGender] = useState("female");
+  const [frontSide, setSide] = useState(true);
+
   const [openDownloadDialog, setDownloadDialog] = useState(false);
+  const [openPreviewDialog, setPreviewDialog] = useState(false);
   const [downloadInput, setDownloadInput] = useState(emails[1]);
   const [rotateValue, setRotateValue] = useState(0);
+  const [gmailCode, setGmailCode] = useState(false);
+  const [allowDownload, setAllowDownload] = useState(false);
+  const [allowShare, setAllowShare] = useState(false);
+  const [clickedOnShareOrDownload, setSD] = useState("download");
+
+  const [university, setUniversity] = React.useState("");
+
+  const handleUniversityChange = (event) => {
+    setUniversity(event.target.value);
+  };
 
   const handleRotateChange = (event, newValue) => {
     setRotateValue(newValue);
   };
-  const handleDownloadOpen = () => {
-    takeScreenshot()
+  const handleDownloadOpen = (downloadOrShare) => {
+    takeScreenshot();
     setDownloadDialog(true);
+    setSD(downloadOrShare);
   };
 
   const handleDownloadClose = (value) => {
     setDownloadDialog(false);
     setDownloadInput(value);
+    setAllowDownload(false);
+    setAllowShare(true);
+  };
+  const handlePreviewOpen = () => {
+    setPreviewDialog(true);
+  };
+
+  const handlePreviewClose = () => {
+    setPreviewDialog(false);
+  };
+
+  function PreviewDialog(props) {
+    const classes = useStyles();
+    const { onClose, selectedValue, open } = props;
+    const handlePreviewClose = () => {
+      onClose(selectedValue);
+    };
+
+    const handleListItemClick = (value) => {
+      onClose(value);
+    };
+    return (
+      <Dialog
+        onClose={handlePreviewClose}
+        aria-labelledby="simple-dialog-title"
+        open={open}
+      >
+        <Preview />
+      </Dialog>
+    );
+  }
+  function DownloadForm(props) {
+    const classes = useStyles();
+    const { onClose, selectedValue, open, image, gmailcode } = props;
+    const handleClose = () => {
+      onClose(selectedValue);
+    };
+
+    const handleListItemClick = (value) => {
+      onClose(value);
+    };
+
+    return (
+      <Dialog
+        onClose={handleClose}
+        aria-labelledby="simple-dialog-title"
+        open={open}
+      >
+        {image ? <img src={image} /> : <CircularProgress />}
+
+        {allowDownload ? (
+          <>
+            {clickedOnShareOrDownload === "download" ? (
+              <div className="part">
+                <Button
+                  variant="contained"
+                  // onClick={handleDownloadOpen}
+                  style={{ backgroundColor: "#0A0", color: "#fff" }}
+                >
+                  <span className={"fa fa-download"}></span>
+                  Download
+                </Button>
+              </div>
+            ) : (
+              <div className="part">
+                <Button
+                  variant="contained"
+                  // onClick={() => handleDownloadOpen("share")}
+                  style={{ backgroundColor: "#8A374A", color: "#fff" }}
+                >
+                  <span className={"fa fa-instagram"}></span>
+                  Instagram
+                </Button>
+                <Button
+                  variant="contained"
+                  // onClick={() => handleDownloadOpen("share")}
+                  style={{ backgroundColor: "#2E73AD", color: "#fff" }}
+                >
+                  <span className={"fa fa-linkedin"}></span>
+                  LinkedIn
+                </Button>
+                <Button
+                  variant="contained"
+                  // onClick={() => handleDownloadOpen("share")}
+                  style={{ backgroundColor: "#4095ED", color: "#fff" }}
+                >
+                  <span className={"fa fa-facebook"}></span>
+                  Facebook
+                </Button>
+                <Button
+                  variant="contained"
+                  // onClick={() => handleDownloadOpen("share")}
+                  style={{ backgroundColor: "#05ABFF", color: "#fff" }}
+                >
+                  <span className={"fa fa-twitter"}></span>
+                  Twitter
+                </Button>
+                <Button
+                  variant="contained"
+                  // onClick={() => handleDownloadOpen("share")}
+                  style={{ backgroundColor: "#0DC143", color: "#fff" }}
+                >
+                  <span className={"fa fa-whatsapp"}></span>
+                  WhatsApp
+                </Button>
+              </div>
+            )}
+          </>
+        ) : (
+          <>
+            <InputLabel
+              htmlFor="input-with-icon-adornment"
+              style={{ padding: 10 }}
+            >
+              Sign up to save and download
+            </InputLabel>
+            {gmailCode ? (
+              <>
+                <FormControl className={classes.margin} style={{ padding: 20 }}>
+                  <Input
+                    id="input-with-icon-adornment"
+                    placeholder="Verification Code"
+                    variant="filled"
+                    startAdornment={
+                      <InputAdornment position="start">
+                        <VpnKeyIcon />
+                      </InputAdornment>
+                    }
+                    endAdornment={
+                      <InputAdornment
+                        position="end"
+                        onClick={() => setAllowDownload(true)}
+                      >
+                        <SendIcon />
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
+              </>
+            ) : (
+              <FormControl className={classes.margin} style={{ padding: 20 }}>
+                <Input
+                  id="input-with-icon-adornment"
+                  placeholder="Email"
+                  variant="filled"
+                  startAdornment={
+                    <InputAdornment position="start">
+                      <AccountCircle />
+                    </InputAdornment>
+                  }
+                  endAdornment={
+                    <InputAdornment
+                      position="end"
+                      onClick={() => setGmailCode(true)}
+                    >
+                      <SendIcon />
+                    </InputAdornment>
+                  }
+                />
+              </FormControl>
+            )}
+          </>
+        )}
+      </Dialog>
+    );
+  }
+
+  DownloadForm.propTypes = {
+    onClose: PropTypes.func.isRequired,
+    open: PropTypes.bool.isRequired,
+    selectedValue: PropTypes.string.isRequired,
   };
 
   return (
@@ -140,43 +273,110 @@ function Home() {
         <Row className={"container text-center"}>
           <Col>
             <img src={announcement} height="40px" alt="announcement" />{" "}
-            &nbsp;Don't forget to
+            &nbsp;Make your virtual Scribble Day more exciting by
             <a
-              href="https://hacktoberfest.digitalocean.com/"
+              href="https://ethicallearner.com"
               target="_blank"
               rel="noopener noreferrer"
             >
               {" "}
-              register
-            </a>{" "}
-            to be eligible for the tee or tree!
+              Placing ORDER of your SCRRIBLE TSHIRT
+            </a>
           </Col>
         </Row>
       </Container>
 
       <div className={"main"}>
-        <div className={"center hacktoberfest-imgbox"}>
+        <div className={"center scribble-imgbox"}>
           <div className="row" style={{ width: "100%" }}>
             <div className={"column"}>
-              <Image
-                src={require("../../assets/ScribbleDay.png")}
-                height="190px"
-              />
+              <div>
+                <Image
+                  style={{ left: 100 }}
+                  src={require("../../assets/ScribbleDay.png")}
+                  height="190px"
+                />
+              </div>
             </div>
             <div className={"column"}>
               <div className="details-of-site" style={{ marginTop: "50px" }}>
                 <div className="part">
                   <ButtonGroup disableElevation aria-label="contained">
-                    <Button color="primary">Front</Button>
-                    <Button color="secondary">Back</Button>
+                    <Button
+                      color="primary"
+                      onClick={() => {
+                        setSide(true);
+                      }}
+                    >
+                      Front
+                    </Button>
+                    <Button
+                      color="secondary"
+                      onClick={() => {
+                        setSide(false);
+                      }}
+                    >
+                      Back
+                    </Button>
                   </ButtonGroup>
                 </div>
                 <div className="part">
                   <ButtonGroup disableElevation variant="contained">
-                    <Button color="primary">Male</Button>
-                    <Button color="secondary">Female</Button>
+                    <Button
+                      color="primary"
+                      onClick={() => {
+                        setGender("male");
+                      }}
+                    >
+                      Male
+                    </Button>
+                    <Button
+                      color="secondary"
+                      onClick={() => {
+                        setGender("female");
+                      }}
+                    >
+                      Female
+                    </Button>
                   </ButtonGroup>
                 </div>
+              </div>
+
+              <div style={{ textAlign: "center" }}>
+                <Button
+                  variant="contained"
+                  onClick={() => handleDownloadOpen("download")}
+                  style={{
+                    backgroundColor: "#0A0",
+                    marginInline: 10,
+                    color: "#fff",
+                  }}
+                >
+                  <span className={"fa fa-download"}></span>
+                  Download
+                </Button>
+                <DownloadForm
+                  gmailcode={gmailCode}
+                  selectedValue={downloadInput}
+                  open={openDownloadDialog}
+                  onClose={handleDownloadClose}
+                />
+                <Button
+                  variant="contained"
+                  onClick={() => handlePreviewOpen("download")}
+                  style={{
+                    backgroundColor: "#05ABFF",
+                    marginInline: 10,
+                    color: "#fff",
+                  }}
+                >
+                  <span className={"fa fa-user"}></span>
+                  Preview
+                </Button>
+                <PreviewDialog
+                  open={openPreviewDialog}
+                  onClose={handlePreviewClose}
+                />
               </div>
             </div>
           </div>
@@ -185,17 +385,6 @@ function Home() {
         <div className="row">
           {/* LEFT COLUMN */}
           <div className={"column"}>
-            <h1
-              className={"center text-center"}
-              style={{
-                color: "#FF8AE2",
-                fontFamily: "sans",
-                textAlign: "left",
-              }}
-            >
-              A Day worth Remembering
-            </h1>
-
             <Form
               // onSubmit={handleSubmit}
               autoComplete="off"
@@ -204,6 +393,56 @@ function Home() {
             >
               <div className={"col-12 col-sm-10 col-lg-8 d-flex"}>
                 <div className="formBox row align-items-center justify-content-around">
+                  {/* <FormControl
+                    variant="filled"
+                    className={"col-12 col-sm-8 col-md-9 form"}
+                  >
+                    <InputLabel
+                      id="demo-simple-select-filled-label"
+                      style={{ color: "#fff" }}
+                    >
+                      Select your University
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-filled-label"
+                      id="demo-simple-select-filled"
+                      value={university}
+                      onChange={handleUniversityChange}
+                    >
+                      <MenuItem value="">
+                        <em>None</em>
+                      </MenuItem>
+                      <MenuItem value={10}>LPU</MenuItem>
+                      <MenuItem value={20}>Amity</MenuItem>
+                      <MenuItem value={30}>TMU</MenuItem>
+                    </Select>
+                  </FormControl> */}
+                  <Form.Control
+                    className={"col-12 col-sm-8 col-md-9 form"}
+                    type="text"
+                    placeholder="University Name"
+                    name="message"
+                    maxLength={250}
+                    onChange={(e) => setMessage(e.target.value)}
+                    required
+                  />
+                  <Avatar
+                    alt="Remy Sharp"
+                    src={require("../../assets/lpu.png")}
+                  />
+                  <Form.Control
+                    className={"col-12 col-sm-8 col-md-9 form"}
+                    type="text"
+                    placeholder="Friend's Name"
+                    name="friendname"
+                    maxLength={250}
+                    onChange={(e) => setMessage(e.target.value)}
+                    required
+                  />
+                  <Avatar
+                    alt="Remy Sharp"
+                    src={require("../../assets/logo192.png")}
+                  />
                   <Form.Control
                     className={"col-12 col-sm-8 col-md-9 form"}
                     type="text"
@@ -279,19 +518,38 @@ function Home() {
                 </div>
               </div>
             </Form>
-
-            <div className="details-of-site" style={{ marginTop: "50px" }}>
+            <h3
+              className={"center text-center"}
+              style={{
+                color: "#FF8AE2",
+                fontFamily: "sans",
+                textAlign: "left",
+              }}
+            >
+              A Day worth Remembering
+            </h3>
+            <div className="details-of-site">
+              {/* Delete It later */}
+              <Button
+                variant="contained"
+                onClick={() => handleDownloadOpen("download")}
+                style={{ backgroundColor: "#0A0", color: "#fff" }}
+              >
+                <span className={"fa fa-download"}></span>
+                Save
+              </Button>
               <div className="part">
                 <div>
                   <Button
                     variant="contained"
-                    onClick={handleDownloadOpen}
+                    onClick={() => handleDownloadOpen("download")}
                     style={{ backgroundColor: "#0A0", color: "#fff" }}
                   >
-                    <span className={"fa fa-download"}></span>
-                    Download
+                    <span className={"fa fa-shopping-cart"}></span>
+                    Place Order
                   </Button>
                   <DownloadForm
+                    gmailcode={gmailCode}
                     selectedValue={downloadInput}
                     open={openDownloadDialog}
                     onClose={handleDownloadClose}
@@ -302,13 +560,14 @@ function Home() {
                 <div>
                   <Button
                     variant="contained"
-                    onClick={handleDownloadOpen}
+                    onClick={() => handleDownloadOpen("share")}
                     style={{ backgroundColor: "#05ABFF", color: "#fff" }}
                   >
                     <span className={"fa fa-share"}></span>
                     Share
                   </Button>
                   <DownloadForm
+                    gmailcode={gmailCode}
                     selectedValue={downloadInput}
                     open={openDownloadDialog}
                     onClose={handleDownloadClose}
@@ -321,7 +580,7 @@ function Home() {
             <footer className={"center"} style={{ textAlign: "center" }}>
               <p>
                 Spread the happiness among your friends, juniors, and
-                connections to <br /> celebrate this year's{" "}
+                connections to celebrate this year's <br />
                 <a
                   href="https://hacktoberfest.digitalocean.com/"
                   target="_blank"
@@ -336,15 +595,32 @@ function Home() {
             {/* RIGHT COLUMN */}
 
             <div className={"scribble-image1"} ref={imageRef}>
-              <h2 style={{position: 'absolute',
-top: '50%',
-left: '26%',
-color: '#000',
-zIndex: 1}}>I am madan</h2>
-              <Image
-                src={require("../../assets/tshirt1.png")}
-                className={"male-front"}
-              />
+              {/* <h2
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "26%",
+                  color: "#000",
+                  zIndex: 1,
+                }}
+              >
+                I am madan
+              </h2> */}
+              {gender === "female" ? (
+                <Image
+                  src={require(frontSide
+                    ? "../../assets/femalefront.png"
+                    : "../../assets/malefront.png")}
+                  className={"male-front"}
+                />
+              ) : (
+                <Image
+                  src={require(frontSide
+                    ? "../../assets/malefront.png"
+                    : "../../assets/maleback.png")}
+                  className={"male-front"}
+                />
+              )}
             </div>
 
             <div className={"university-logo"}>
