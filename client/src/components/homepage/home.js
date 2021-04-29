@@ -148,6 +148,7 @@ function Home() {
           <>
             {clickedOnShareOrDownload === "download" ? (
               <div className="part">
+                <a href={image} download>
                 <Button
                   variant="contained"
                   // onClick={handleDownloadOpen}
@@ -156,6 +157,7 @@ function Home() {
                   <span className={"fa fa-download"}></span>
                   Download
                 </Button>
+                </a>
               </div>
             ) : (
               <div className="part">
@@ -392,7 +394,34 @@ function Home() {
               className={"row justify-content-center form1"}
             >
               <div className={"col-12 col-sm-10 col-lg-8 d-flex"}>
-                <div className="formBox row align-items-center justify-content-around">
+                <div className="formBox row align-items-center ">
+
+                  <div className="boxWrapper">
+                    <Button variant="contained" >Send Scribble</Button>
+                    <span class="previewText">get your feedback from friends</span>
+                  </div>
+
+                  <div className="boxWrapper">
+                    <Button variant="contained" >My Scribble</Button>
+                    <span class="previewText">send your Tshirt to friends</span>
+                  </div>
+
+                  <div className="detailWrapper">
+                    <label>Name</label>
+                    <span>Kartik Tyagi</span>
+                  </div>
+                  <div className="detailWrapper">
+                    <label>Email</label>
+                    <span>kartiktyagi@kaka.com</span>
+                  </div>
+                  <div className="detailWrapper">
+                    <label>Gender</label>
+                    <span>Male</span>
+                  </div>
+                  <div className="detailWrapper">
+                    <label>University</label>
+                    <span>LPU</span>
+                  </div>
                   {/* <FormControl
                     variant="filled"
                     className={"col-12 col-sm-8 col-md-9 form"}
@@ -427,6 +456,7 @@ function Home() {
                     required
                   />
                   <Avatar
+                    style={{marginLeft: 12}}
                     alt="Remy Sharp"
                     src={require("../../assets/lpu.png")}
                   />
@@ -440,6 +470,7 @@ function Home() {
                     required
                   />
                   <Avatar
+                    style={{marginLeft: 12}}
                     alt="Remy Sharp"
                     src={require("../../assets/logo192.png")}
                   />
@@ -530,14 +561,19 @@ function Home() {
             </h3>
             <div className="details-of-site">
               {/* Delete It later */}
-              <Button
-                variant="contained"
-                onClick={() => handleDownloadOpen("download")}
-                style={{ backgroundColor: "#0A0", color: "#fff" }}
-              >
-                <span className={"fa fa-download"}></span>
-                Save
-              </Button>
+              <div className="part">
+                <div>
+                  <Button
+                    variant="contained"
+                    onClick={() => handleDownloadOpen("download")}
+                    style={{ backgroundColor: "#0A0", color: "#fff" }}
+                  >
+                    <span className={"fa fa-download"}></span>
+                    Save
+                  </Button>
+                </div>
+              </div>
+              
               <div className="part">
                 <div>
                   <Button
@@ -621,10 +657,8 @@ function Home() {
                   className={"male-front"}
                 />
               )}
-            </div>
-
             <div className={"university-logo"}>
-              <Image src={require("../../assets/lpu.png")} height="60px" />
+              <Image src={require("../../assets/lpu.png")} height="32px" />
             </div>
             <Draggable disabled={dragBool}>
               <div
@@ -705,6 +739,9 @@ function Home() {
                 )}
               </div>
             </Draggable>
+            </div>
+
+            {/* remove draggable from here to above */}
           </div>
         </div>
       </div>

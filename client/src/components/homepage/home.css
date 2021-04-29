@@ -4,7 +4,7 @@
 }
 .nav {
   background-color: rgb(147, 194, 219);
-  height: 40px !important;
+  /* height: 40px !important; */
   padding: 0 !important;
   font-size: 85%;
 }
@@ -34,7 +34,7 @@
 .form {
   color: white !important;
   background-color: rgb(24, 61, 93) !important;
-  margin: 30px;
+  margin: 0 0 12px 0;
 }
 input:-internal-autofill-selected {
   appearance: menulist-button;
@@ -67,6 +67,7 @@ input:-internal-autofill-selected {
 }
 .formBox {
   width: calc(100% - 100px);
+  width: 100%;
 }
 .formBox.row {
   margin: 0;
@@ -195,14 +196,14 @@ footer a:hover {
 }
 
 .scribble-message1 {
-  position: relative;
+  position: absolute;
   text-align: center;
   align-items: center;
   max-width: 25%;
   min-width: 20%;
   word-wrap: break-word;
   left: 37%;
-  top: 14%;
+  top: 36%;
   width: max-content;
   border-radius: 10px;
 }
@@ -230,9 +231,10 @@ footer a:hover {
 }
 
 .university-logo {
-  position: relative;
-  left: 55%;
-  top: 8%;
+  position: absolute;
+  left: 60%;
+  top: 22%;
+  transform: translateX(-50%);
 }
 
 /* .rotate-slider {
@@ -240,3 +242,31 @@ footer a:hover {
   text-align: center;
   top: 30%;
 } */
+
+
+.boxWrapper {
+  width: 100%;
+  display: grid;
+  text-align: center;
+  padding: 2rem;
+  background: rgba(234,234,234,0.1);
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+.previewText {
+  opacity: 0.4;
+}
+.detailWrapper {
+  width: 100%;
+  margin-bottom: 12px;
+  background: rgba(255,255,255,0.1);
+  padding: 4px 16px;
+}
+.detailWrapper label {
+  display: flex;
+  justify-content: left;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #bbb;
+}
