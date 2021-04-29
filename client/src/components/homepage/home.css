@@ -1,0 +1,242 @@
+.appbody {
+  min-height: 100vh;
+  overflow: hidden;
+}
+.nav {
+  background-color: rgb(147, 194, 219);
+  height: 40px !important;
+  padding: 0 !important;
+  font-size: 85%;
+}
+.appbody .main {
+  min-height: calc(100vh - 40px);
+  display: grid;
+}
+.main {
+  background-color: #02203c;
+  text-decoration-color: rgb(255, 255, 255);
+  color: rgb(255, 255, 255);
+  height: 100%;
+  width: 100%;
+}
+.column {
+  float: left;
+  width: 50%;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.form {
+  color: white !important;
+  background-color: rgb(24, 61, 93) !important;
+  margin: 30px;
+}
+input:-internal-autofill-selected {
+  appearance: menulist-button;
+  background-color: rgb(24, 61, 93) !important;
+  background-image: none !important;
+  color: -internal-light-dark(black, white) !important;
+}
+.hacktoberfest-imgbox {
+  height: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  padding-inline-start: 90px;
+  padding-top: 10px;
+}
+.profile {
+  display: flex;
+  justify-content: center;
+}
+.profile div {
+  text-align: center;
+}
+.form1 {
+  margin: 0 0 20px;
+  padding: 5px 0 90px;
+  width: 100%;
+}
+.avatarBox {
+  width: 100px;
+}
+.formBox {
+  width: calc(100% - 100px);
+}
+.formBox.row {
+  margin: 0;
+}
+.pullbox {
+  transition: 0.3s ease-in-out;
+}
+.pullbox:hover {
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+.pullbox:hover .row {
+  box-shadow: 1px 8px 10px rgba(0, 0, 0, 0.7);
+}
+.pullbox .row {
+  display: flex;
+  justify-content: space-between;
+  box-shadow: 1px 8px 10px rgba(0, 0, 0, 0.4);
+  margin-bottom: 20px;
+  border-radius: 8px;
+  background-color: #183d5d;
+  padding: 1rem;
+}
+.pullbox .card {
+  border: none;
+  border-radius: 0;
+}
+.card-info {
+  background-color: transparent;
+  justify-content: center;
+}
+.card-info p {
+  margin: 0;
+}
+.card-info a {
+  color: lightpink;
+  display: block;
+  text-decoration: none;
+}
+.pullbox .detail-card.card {
+  border-left: 0.25rem solid;
+}
+.detail-card p {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  height: 30px;
+  line-height: 30px;
+}
+
+.loader {
+  padding: 10px;
+  width: 100%;
+}
+.loadscreen {
+  margin: 0 auto;
+  width: 60px;
+  height: 60px;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  border-left: none;
+  box-shadow: 0px 0px 5px 1px #777;
+  background-color: #113545;
+  animation: loader infinite 500ms;
+}
+
+@keyframes loader {
+  to {
+    transform: rotate(0deg);
+  }
+  from {
+    transform: rotate(-360deg);
+  }
+}
+
+.details-of-site {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+.details-of-site .part {
+  margin: 10px;
+}
+.details-of-site .part .fa {
+  margin-right: 8px;
+}
+
+footer a {
+  color: lightcoral;
+  font-weight: bold;
+}
+footer a:hover {
+  color: aqua;
+  text-decoration: none;
+}
+
+@media screen and (max-width: 575.99px) {
+  .avatarBox {
+    display: none;
+  }
+  .formBox {
+    width: 100%;
+  }
+  .formBox input {
+    margin-bottom: 20px;
+  }
+  .hacktoberfest-imgbox img {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+/* NEW CSS */
+
+.scribble-image1 {
+  position: absolute;
+  top: 25%;
+  left: 55%;
+}
+
+.male-front {
+  position: relative;
+  width: 95%;
+}
+
+.scribble-message1 {
+  position: relative;
+  text-align: center;
+  align-items: center;
+  max-width: 25%;
+  min-width: 20%;
+  word-wrap: break-word;
+  left: 37%;
+  top: 14%;
+  width: max-content;
+  border-radius: 10px;
+}
+
+.scribble-message1 p {
+  padding: 0%;
+  margin: 0%;
+}
+
+.scribble-message1 .actions {
+  position: relative;
+  color: #38a5ff;
+  right: 0;
+  background-color: #c8e6ff;
+  width: min-content;
+  padding-inline: 5%;
+  margin: 0%;
+  justify-content: end;
+  border-radius: 5px;
+  float: left;
+  margin-inline: 1%;
+  font-size: 0.8em;
+  margin-top: 5px;
+  cursor: pointer;
+}
+
+.university-logo {
+  position: relative;
+  left: 55%;
+  top: 8%;
+}
+
+/* .rotate-slider {
+  position: relative;
+  text-align: center;
+  top: 30%;
+} */
