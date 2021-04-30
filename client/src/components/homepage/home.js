@@ -8,6 +8,8 @@ import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import FormControl from "@material-ui/core/FormControl";
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import Dialog from "@material-ui/core/Dialog";
 import Avatar from "@material-ui/core/Avatar";
@@ -29,12 +31,21 @@ import "./home.css";
 import { useScreenshot } from "use-screenshot-hook";
 import Preview from "../preview";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme)=>({
   avatar: {
     backgroundColor: blue[100],
     color: blue[600],
   },
-});
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+    color: '#fff',
+    borderColor: '#fff'
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
+}));
 
 function ValueLabelComponent(props) {
   const { children, open, value } = props;
@@ -56,6 +67,11 @@ function Home() {
   const imageRef = useRef(null);
   const { image, takeScreenshot } = useScreenshot({ ref: imageRef });
   const classes = useStyles();
+  const [age, setAge] = React.useState('');
+
+  const handleChange = (event) => {
+    setAge(event.target.value);
+  };
   const [userdata, setUserData] = useState(null);
   const [message, setMessage] = useState("Scribble Message");
   const [sendee, setSendee] = useState("Your Name");
@@ -320,17 +336,16 @@ function Home() {
                     </Button>
                   </ButtonGroup>
                 </div>
-                <div className="part">
+                 <div className="part">
                   <ButtonGroup disableElevation variant="contained">
                     <Button
                       color="primary"
-                      onClick={() => {
-                        setGender("male");
-                      }}
                     >
-                      Male
+                      Send Scribble
                     </Button>
-                    <Button
+                    </ButtonGroup>
+                  </div>
+                   {/* <Button
                       color="secondary"
                       onClick={() => {
                         setGender("female");
@@ -339,10 +354,10 @@ function Home() {
                       Female
                     </Button>
                   </ButtonGroup>
-                </div>
+                </div> */}
               </div>
 
-              <div style={{ textAlign: "center" }}>
+              <div style={{ textAlign: "center" }} className="d-none d-sm-block">
                 <Button
                   variant="contained"
                   onClick={() => handleDownloadOpen("download")}
@@ -382,7 +397,7 @@ function Home() {
           </div>
         </div>
 
-        <div className="row">
+        <div className="row mb-view">
           {/* LEFT COLUMN */}
           <div className={"column"}>
             <Form
@@ -391,7 +406,8 @@ function Home() {
               inline
               className={"row justify-content-center form1"}
             >
-              <div className={"col-12 col-sm-10 col-lg-8 d-flex"}>
+              <div className={"col-12 col-sm-10 col-lg-8 d-flex flex-column"}>
+                <div style={{padding: '1rem'}}>
                 <HomeIcon
                   onClick={() => {
                     setUserDetailsBool(false);
@@ -400,6 +416,7 @@ function Home() {
                     setLandingPageBool(true);
                   }}
                 />
+                </div>
                 <div className="formBox row align-items-center">
                   <hr />
                   {landingPageBool && (
@@ -475,9 +492,7 @@ function Home() {
                         <div
                           className={"rotate-slider"}
                           style={{
-                            position: "relative",
-                            textAlign: "left",
-                            top: 30,
+                            margin: '1rem 0'
                           }}
                         >
                           <Typography
@@ -497,13 +512,34 @@ function Home() {
                           />
                         </div>
                       </div>
-
-                      <Button
-                        variant="contained"
-                        onClick={handleSendScribbleForm}
-                      >
-                        Submit
-                      </Button>
+                      <div style={{display: 'flex', flexDirection: 'column',padding: '0 12px'}}>
+                        <FormControl variant="outlined" className={classes.formControl}>
+                          <InputLabel color="primary" classes={{
+                            outlined: {color: '#fff'}
+                          }} id="demo-simple-select-outlined-label">Age</InputLabel>
+                          <Select
+                            labelId="demo-simple-select-outlined-label"
+                            id="demo-simple-select-outlined"
+                            value={age}
+                            onChange={handleChange}
+                            label="Age"
+                          >
+                            <MenuItem value="">
+                              <em>None</em>
+                            </MenuItem>
+                            <MenuItem value={10}>Ten</MenuItem>
+                            <MenuItem value={20}>Twenty</MenuItem>
+                            <MenuItem value={30}>Thirty</MenuItem>
+                          </Select>
+                        </FormControl>
+                        <Button
+                          variant="contained"
+                          onClick={handleSendScribbleForm}
+                        >
+                          Submit
+                        </Button>
+                      </div>
+                      <div style={{width: '100%', height: 1,margin: '12px 0 16px', backgroundColor: '#ccc'}}/>
                       <div className="boxWrapper">
                         <Button
                           variant="contained"
@@ -653,8 +689,9 @@ function Home() {
                   )}
                   {signupFormBool && (
                     <>
+                    <div className="col-12 col-sm-11 col-lg-9 row">
                       <Form.Control
-                        className={"col-12 col-sm-8 col-md-9 form"}
+                        className={"col-12 form"}
                         type="text"
                         placeholder="Fullname"
                         name="name"
@@ -666,7 +703,7 @@ function Home() {
                         required
                       />
                       <Form.Control
-                        className={"col-12 col-sm-8 col-md-9 form"}
+                        className={"col-12 form"}
                         type="text"
                         placeholder="University Name"
                         name="university"
@@ -678,7 +715,7 @@ function Home() {
                         required
                       />
                       <Form.Control
-                        className={"col-12 col-sm-8 col-md-9 form"}
+                        className={"col-12 form"}
                         type="text"
                         placeholder="Gender"
                         name="gender"
@@ -689,7 +726,7 @@ function Home() {
                         required
                       />
                       <Form.Control
-                        className={"col-12 col-sm-8 col-md-9 form"}
+                        className={"col-12 form"}
                         type="text"
                         placeholder="Enter a 4 digit's PIN"
                         name="pin"
@@ -701,7 +738,7 @@ function Home() {
                         required
                       />
                       <Form.Control
-                        className={"col-12 col-sm-8 col-md-9 form"}
+                        className={"col-12 form"}
                         type="text"
                         placeholder="Avatar Link"
                         name="avatar"
@@ -717,11 +754,48 @@ function Home() {
                       >
                         Submit
                       </Button>
+                      </div>
                     </>
                   )}
                 </div>
               </div>
             </Form>
+            <div style={{ textAlign: "center", marginBottom: '1rem' }} className="d-block d-sm-none">
+                <Button
+                  variant="contained"
+                  onClick={() => handleDownloadOpen("download")}
+                  style={{
+                    backgroundColor: "#0A0",
+                    marginInline: 10,
+                    color: "#fff",
+                  }}
+                >
+                  <span className={"fa fa-download"}></span>
+                  Download
+                </Button>
+                <DownloadForm
+                  insertVerifyCode={insertVerifyCode}
+                  selectedValue={downloadInput}
+                  open={openDownloadDialog}
+                  onClose={handleDownloadClose}
+                />
+                <Button
+                  variant="contained"
+                  onClick={() => handlePreviewOpen("download")}
+                  style={{
+                    backgroundColor: "#05ABFF",
+                    marginInline: 10,
+                    color: "#fff",
+                  }}
+                >
+                  <span className={"fa fa-user"}></span>
+                  Preview
+                </Button>
+                <PreviewDialog
+                  open={openPreviewDialog}
+                  onClose={handlePreviewClose}
+                />
+              </div>
             <h3
               className={"center text-center"}
               style={{
@@ -734,7 +808,7 @@ function Home() {
             </h3>
             <div className="details-of-site">
               {/* Delete It later */}
-              <div className="part">
+              {/* <div className="part">
                 <div>
                   <Button
                     variant="contained"
@@ -745,7 +819,7 @@ function Home() {
                     Save
                   </Button>
                 </div>
-              </div>
+              </div> */}
 
               <div className="part">
                 <div>
@@ -765,6 +839,7 @@ function Home() {
                   />
                 </div>
               </div>
+              
               <div className="part">
                 <div>
                   <Button
@@ -786,7 +861,7 @@ function Home() {
               </div>
             </div>
 
-            <footer className={"center"} style={{ textAlign: "center" }}>
+            <footer className={"center"} style={{ textAlign: "center", padding:'0 2rem' }}>
               <p>
                 Spread the happiness among your friends, juniors, and
                 connections to celebrate this year's <br />
