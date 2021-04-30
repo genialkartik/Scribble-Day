@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import Draggable from "react-draggable";
+import axios from "axios";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -10,12 +11,10 @@ import FormControl from "@material-ui/core/FormControl";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import Dialog from "@material-ui/core/Dialog";
 import Avatar from "@material-ui/core/Avatar";
-import MenuItem from "@material-ui/core/MenuItem";
-import Select from "@material-ui/core/Select";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Slider from "@material-ui/core/Slider";
 import Typography from "@material-ui/core/Typography";
-import DialogTitle from "@material-ui/core/DialogTitle";
+import HomeIcon from "@material-ui/icons/Home";
 import Tooltip from "@material-ui/core/Tooltip";
 import SendIcon from "@material-ui/icons/Send";
 import VpnKeyIcon from "@material-ui/icons/VpnKey";
@@ -30,7 +29,6 @@ import "./home.css";
 import { useScreenshot } from "use-screenshot-hook";
 import Preview from "../preview";
 
-const emails = ["username@gmail.com", "user02@gmail.com"];
 const useStyles = makeStyles({
   avatar: {
     backgroundColor: blue[100],
@@ -58,9 +56,12 @@ function Home() {
   const imageRef = useRef(null);
   const { image, takeScreenshot } = useScreenshot({ ref: imageRef });
   const classes = useStyles();
+  const [userdata, setUserData] = useState(null);
   const [message, setMessage] = useState("Scribble Message");
   const [sendee, setSendee] = useState("Your Name");
+  const [friendname, setFriendName] = useState("");
   const [messageColor, setMessageColor] = useState("#000000");
+  const [rotateValue, setRotateValue] = useState(0);
   const [dragBool, setDragBool] = useState(false);
   const [messageFont, setMessageFont] = useState(".8em");
 
@@ -69,17 +70,129 @@ function Home() {
 
   const [openDownloadDialog, setDownloadDialog] = useState(false);
   const [openPreviewDialog, setPreviewDialog] = useState(false);
-  const [downloadInput, setDownloadInput] = useState(emails[1]);
-  const [rotateValue, setRotateValue] = useState(0);
-  const [gmailCode, setGmailCode] = useState(false);
+  const [downloadInput, setDownloadInput] = useState();
+  const [insertVerifyCode, setInsertVerifyCode] = useState(false);
   const [allowDownload, setAllowDownload] = useState(false);
   const [allowShare, setAllowShare] = useState(false);
   const [clickedOnShareOrDownload, setSD] = useState("download");
-
   const [university, setUniversity] = React.useState("");
 
-  const handleUniversityChange = (event) => {
-    setUniversity(event.target.value);
+  // const [sendScribbleButtonBool, setSendScribbleButtonBool] = useState(true);
+  const [landingPageBool, setLandingPageBool] = useState(false);
+  const [userDetailsBool, setUserDetailsBool] = useState(false);
+  const [enterEmailBool, setEnterEmailBool] = useState(false);
+  const [
+    askedForSendVerificationCode,
+    setAskedForSendVerificationCode,
+  ] = useState(false);
+  const [enterPinOrCodeBool, setEnterPinOrCodeBool] = useState("pin");
+  const [signupFormBool, setSignUpformBool] = useState(true);
+
+  const [inputEmail, setInputEmail] = useState("");
+  const [pinCodeToVerify, setPinCodeToVerify] = useState("");
+  const [codeToCheck, setCodeToCheck] = useState("");
+  const [signupFormInputs, setSignupFormInputs] = useState({});
+
+  const handleMyScribbleClick = async () => {
+    if (userdata) {
+      // send to users details
+      setUserDetailsBool(true);
+      setLandingPageBool(false);
+    } else {
+      setLandingPageBool(false);
+      setEnterEmailBool(true);
+    }
+  };
+
+  const handleSendScribbleForm = async () => {
+    if (userdata) {
+      // save details to db
+    } else {
+      setLandingPageBool(false);
+      setEnterEmailBool(true);
+    }
+  };
+
+  const handleSendVerificationCode = async () => {
+    if (!inputEmail) alert("Insert Email");
+    const resp = await axios.post("/email/verify", {
+      email: inputEmail,
+    });
+    if (resp.data.sent) {
+      setAskedForSendVerificationCode(false);
+      setInsertVerifyCode(true);
+      setEnterPinOrCodeBool("code");
+      setCodeToCheck(resp.data.codeToCheck);
+    } else {
+      alert(resp.data.respMessage);
+    }
+  };
+
+  const handleVerifyPin = async () => {
+    if (!pinCodeToVerify) alert("Insert PIN to verify");
+    else if (!inputEmail) alert("Insert Email first");
+    else {
+      const resp = await axios.post("/login", {
+        email: inputEmail,
+        pin: pinCodeToVerify,
+      });
+      if (resp.data.loggedIn) {
+        setLandingPageBool(true);
+        setInsertVerifyCode(false);
+        setEnterPinOrCodeBool("pin");
+        setUserData(resp.data.userdata ? resp.data.userdata : null);
+      } else {
+        alert(resp.data.respMessage);
+      }
+    }
+  };
+
+  const handleVerifyCode = async () => {
+    if (!pinCodeToVerify) alert("Insert Code to verify");
+    else if (!inputEmail) alert("Insert Email first");
+    else {
+      if (codeToCheck == pinCodeToVerify) {
+        setInsertVerifyCode(false);
+        setEnterPinOrCodeBool("");
+        setSignUpformBool(true);
+        setPinCodeToVerify("");
+      } else {
+        alert("Code not Match");
+      }
+    }
+  };
+
+  const checkUserAccountWithEmail = async () => {
+    if (!inputEmail) alert("Insert Email");
+    else {
+      setEnterEmailBool(false);
+      const resp = await axios.post("/profile", {
+        inputEmail,
+      });
+      const res = resp.data;
+      console.log(res);
+      if (!res.profile) {
+        setAskedForSendVerificationCode(true);
+      } else {
+        setEnterEmailBool(false);
+        setInsertVerifyCode(true);
+        setEnterPinOrCodeBool("pin");
+      }
+    }
+  };
+
+  const handleSubmitSignupForm = async () => {
+    if (signupFormInputs == {}) {
+      alert("Enter all Inputs");
+    } else {
+      const resp = await axios.post("/create", signupFormInputs);
+      if (resp.data.signUp) {
+        setSignUpformBool(false);
+        setLandingPageBool(true);
+      } else {
+        alert(resp.data.respMessage);
+      }
+    }
   };
 
   const handleRotateChange = (event, newValue) => {
@@ -125,9 +238,10 @@ function Home() {
       </Dialog>
     );
   }
+
   function DownloadForm(props) {
     const classes = useStyles();
-    const { onClose, selectedValue, open, image, gmailcode } = props;
+    const { onClose, selectedValue, open, image, insertVerifyCode } = props;
     const handleClose = () => {
       onClose(selectedValue);
     };
@@ -143,122 +257,6 @@ function Home() {
         open={open}
       >
         {image ? <img src={image} /> : <CircularProgress />}
-
-        {allowDownload ? (
-          <>
-            {clickedOnShareOrDownload === "download" ? (
-              <div className="part">
-                <a href={image} download>
-                <Button
-                  variant="contained"
-                  // onClick={handleDownloadOpen}
-                  style={{ backgroundColor: "#0A0", color: "#fff" }}
-                >
-                  <span className={"fa fa-download"}></span>
-                  Download
-                </Button>
-                </a>
-              </div>
-            ) : (
-              <div className="part">
-                <Button
-                  variant="contained"
-                  // onClick={() => handleDownloadOpen("share")}
-                  style={{ backgroundColor: "#8A374A", color: "#fff" }}
-                >
-                  <span className={"fa fa-instagram"}></span>
-                  Instagram
-                </Button>
-                <Button
-                  variant="contained"
-                  // onClick={() => handleDownloadOpen("share")}
-                  style={{ backgroundColor: "#2E73AD", color: "#fff" }}
-                >
-                  <span className={"fa fa-linkedin"}></span>
-                  LinkedIn
-                </Button>
-                <Button
-                  variant="contained"
-                  // onClick={() => handleDownloadOpen("share")}
-                  style={{ backgroundColor: "#4095ED", color: "#fff" }}
-                >
-                  <span className={"fa fa-facebook"}></span>
-                  Facebook
-                </Button>
-                <Button
-                  variant="contained"
-                  // onClick={() => handleDownloadOpen("share")}
-                  style={{ backgroundColor: "#05ABFF", color: "#fff" }}
-                >
-                  <span className={"fa fa-twitter"}></span>
-                  Twitter
-                </Button>
-                <Button
-                  variant="contained"
-                  // onClick={() => handleDownloadOpen("share")}
-                  style={{ backgroundColor: "#0DC143", color: "#fff" }}
-                >
-                  <span className={"fa fa-whatsapp"}></span>
-                  WhatsApp
-                </Button>
-              </div>
-            )}
-          </>
-        ) : (
-          <>
-            <InputLabel
-              htmlFor="input-with-icon-adornment"
-              style={{ padding: 10 }}
-            >
-              Sign up to save and download
-            </InputLabel>
-            {gmailCode ? (
-              <>
-                <FormControl className={classes.margin} style={{ padding: 20 }}>
-                  <Input
-                    id="input-with-icon-adornment"
-                    placeholder="Verification Code"
-                    variant="filled"
-                    startAdornment={
-                      <InputAdornment position="start">
-                        <VpnKeyIcon />
-                      </InputAdornment>
-                    }
-                    endAdornment={
-                      <InputAdornment
-                        position="end"
-                        onClick={() => setAllowDownload(true)}
-                      >
-                        <SendIcon />
-                      </InputAdornment>
-                    }
-                  />
-                </FormControl>
-              </>
-            ) : (
-              <FormControl className={classes.margin} style={{ padding: 20 }}>
-                <Input
-                  id="input-with-icon-adornment"
-                  placeholder="Email"
-                  variant="filled"
-                  startAdornment={
-                    <InputAdornment position="start">
-                      <AccountCircle />
-                    </InputAdornment>
-                  }
-                  endAdornment={
-                    <InputAdornment
-                      position="end"
-                      onClick={() => setGmailCode(true)}
-                    >
-                      <SendIcon />
-                    </InputAdornment>
-                  }
-                />
-              </FormControl>
-            )}
-          </>
-        )}
       </Dialog>
     );
   }
@@ -358,7 +356,7 @@ function Home() {
                   Download
                 </Button>
                 <DownloadForm
-                  gmailcode={gmailCode}
+                  insertVerifyCode={insertVerifyCode}
                   selectedValue={downloadInput}
                   open={openDownloadDialog}
                   onClose={handleDownloadClose}
@@ -394,158 +392,333 @@ function Home() {
               className={"row justify-content-center form1"}
             >
               <div className={"col-12 col-sm-10 col-lg-8 d-flex"}>
-                <div className="formBox row align-items-center ">
-
-                  <div className="boxWrapper">
-                    <Button variant="contained" >Send Scribble</Button>
-                    <span class="previewText">get your feedback from friends</span>
-                  </div>
-
-                  <div className="boxWrapper">
-                    <Button variant="contained" >My Scribble</Button>
-                    <span class="previewText">send your Tshirt to friends</span>
-                  </div>
-
-                  <div className="detailWrapper">
-                    <label>Name</label>
-                    <span>Kartik Tyagi</span>
-                  </div>
-                  <div className="detailWrapper">
-                    <label>Email</label>
-                    <span>kartiktyagi@kaka.com</span>
-                  </div>
-                  <div className="detailWrapper">
-                    <label>Gender</label>
-                    <span>Male</span>
-                  </div>
-                  <div className="detailWrapper">
-                    <label>University</label>
-                    <span>LPU</span>
-                  </div>
-                  {/* <FormControl
-                    variant="filled"
-                    className={"col-12 col-sm-8 col-md-9 form"}
-                  >
-                    <InputLabel
-                      id="demo-simple-select-filled-label"
-                      style={{ color: "#fff" }}
-                    >
-                      Select your University
-                    </InputLabel>
-                    <Select
-                      labelId="demo-simple-select-filled-label"
-                      id="demo-simple-select-filled"
-                      value={university}
-                      onChange={handleUniversityChange}
-                    >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
-                      <MenuItem value={10}>LPU</MenuItem>
-                      <MenuItem value={20}>Amity</MenuItem>
-                      <MenuItem value={30}>TMU</MenuItem>
-                    </Select>
-                  </FormControl> */}
-                  <Form.Control
-                    className={"col-12 col-sm-8 col-md-9 form"}
-                    type="text"
-                    placeholder="University Name"
-                    name="message"
-                    maxLength={250}
-                    onChange={(e) => setMessage(e.target.value)}
-                    required
-                  />
-                  <Avatar
-                    style={{marginLeft: 12}}
-                    alt="Remy Sharp"
-                    src={require("../../assets/lpu.png")}
-                  />
-                  <Form.Control
-                    className={"col-12 col-sm-8 col-md-9 form"}
-                    type="text"
-                    placeholder="Friend's Name"
-                    name="friendname"
-                    maxLength={250}
-                    onChange={(e) => setMessage(e.target.value)}
-                    required
-                  />
-                  <Avatar
-                    style={{marginLeft: 12}}
-                    alt="Remy Sharp"
-                    src={require("../../assets/logo192.png")}
-                  />
-                  <Form.Control
-                    className={"col-12 col-sm-8 col-md-9 form"}
-                    type="text"
-                    placeholder="Scribble Message"
-                    name="message"
-                    maxLength={250}
-                    onChange={(e) => setMessage(e.target.value)}
-                    required
-                  />
-                  <Form.Control
-                    className={"col-12 col-sm-8 col-md-9 form"}
-                    type="text"
-                    placeholder="Your Name"
-                    name="writeename"
-                    maxLength={50}
-                    onChange={(e) => setSendee(e.target.value)}
-                    required
-                  />
-                  <div>
-                    <FiberManualRecordIcon
-                      onClick={() => setMessageColor("#f00000")}
-                      style={{ color: "#f00000" }}
-                    />
-                    <FiberManualRecordIcon
-                      onClick={() => setMessageColor("#07c603")}
-                      style={{ color: "#07c603" }}
-                    />
-                    <FiberManualRecordIcon
-                      onClick={() => setMessageColor("#05abff")}
-                      style={{ color: "#05abff" }}
-                    />
-                    <FiberManualRecordIcon
-                      onClick={() => setMessageColor("#ead300")}
-                      style={{ color: "#ead300" }}
-                    />
-                    <FiberManualRecordIcon
-                      onClick={() => setMessageColor("#ff8300")}
-                      style={{ color: "#ff8300" }}
-                    />
-                    <FiberManualRecordIcon
-                      onClick={() => setMessageColor("#9605ff")}
-                      style={{ color: "#9605ff" }}
-                    />
-                    <FiberManualRecordIcon
-                      onClick={() => setMessageColor("#ff05fa")}
-                      style={{ color: "#ff05fa" }}
-                    />
-                    <div
-                      className={"rotate-slider"}
-                      style={{
-                        position: "relative",
-                        textAlign: "left",
-                        top: 30,
-                      }}
-                    >
-                      <Typography
-                        gutterBottom
-                        style={{ fontSize: "0.9em", color: "#FC88DF" }}
-                      >
-                        Rotate Scribble Message
-                      </Typography>
-                      <Slider
-                        ValueLabelComponent={ValueLabelComponent}
-                        aria-label="custom thumb label"
-                        value={rotateValue}
-                        min={-180}
-                        max={180}
-                        style={{ color: "white" }}
-                        onChange={handleRotateChange}
+                <HomeIcon
+                  onClick={() => {
+                    setUserDetailsBool(false);
+                    setEnterEmailBool(false);
+                    setAskedForSendVerificationCode(false);
+                    setLandingPageBool(true);
+                  }}
+                />
+                <div className="formBox row align-items-center">
+                  <hr />
+                  {landingPageBool && (
+                    <>
+                      <Form.Control
+                        className={"col-12 col-sm-8 col-md-9 form"}
+                        type="text"
+                        placeholder="University Name"
+                        name="message"
+                        maxLength={250}
+                        value={university}
+                        onChange={(e) => setUniversity(e.target.value)}
+                        required
                       />
+                      <Avatar
+                        style={{ marginLeft: 12 }}
+                        alt="Remy Sharp"
+                        src={require("../../assets/lpu.png")}
+                      />
+                      <Form.Control
+                        className={"col-12 col-sm-8 col-md-9 form"}
+                        type="text"
+                        placeholder="Friend's Name"
+                        name="friendname"
+                        maxLength={250}
+                        value={friendname}
+                        onChange={(e) => setFriendName(e.target.value)}
+                        required
+                      />
+                      <Avatar
+                        style={{ marginLeft: 12 }}
+                        alt="Remy Sharp"
+                        src={require("../../assets/logo192.png")}
+                      />
+                      <Form.Control
+                        className={"col-12 col-sm-8 col-md-9 form"}
+                        type="text"
+                        placeholder="Scribble Message"
+                        name="message"
+                        maxLength={250}
+                        onChange={(e) => setMessage(e.target.value)}
+                        required
+                      />
+                      <div>
+                        <FiberManualRecordIcon
+                          onClick={() => setMessageColor("#f00000")}
+                          style={{ color: "#f00000" }}
+                        />
+                        <FiberManualRecordIcon
+                          onClick={() => setMessageColor("#07c603")}
+                          style={{ color: "#07c603" }}
+                        />
+                        <FiberManualRecordIcon
+                          onClick={() => setMessageColor("#05abff")}
+                          style={{ color: "#05abff" }}
+                        />
+                        <FiberManualRecordIcon
+                          onClick={() => setMessageColor("#ead300")}
+                          style={{ color: "#ead300" }}
+                        />
+                        <FiberManualRecordIcon
+                          onClick={() => setMessageColor("#ff8300")}
+                          style={{ color: "#ff8300" }}
+                        />
+                        <FiberManualRecordIcon
+                          onClick={() => setMessageColor("#9605ff")}
+                          style={{ color: "#9605ff" }}
+                        />
+                        <FiberManualRecordIcon
+                          onClick={() => setMessageColor("#ff05fa")}
+                          style={{ color: "#ff05fa" }}
+                        />
+                        <div
+                          className={"rotate-slider"}
+                          style={{
+                            position: "relative",
+                            textAlign: "left",
+                            top: 30,
+                          }}
+                        >
+                          <Typography
+                            gutterBottom
+                            style={{ fontSize: "0.9em", color: "#FC88DF" }}
+                          >
+                            Rotate Scribble Message
+                          </Typography>
+                          <Slider
+                            ValueLabelComponent={ValueLabelComponent}
+                            aria-label="custom thumb label"
+                            value={rotateValue}
+                            min={-180}
+                            max={180}
+                            style={{ color: "white" }}
+                            onChange={handleRotateChange}
+                          />
+                        </div>
+                      </div>
+
+                      <Button
+                        variant="contained"
+                        onClick={handleSendScribbleForm}
+                      >
+                        Submit
+                      </Button>
+                      <div className="boxWrapper">
+                        <Button
+                          variant="contained"
+                          onClick={handleMyScribbleClick}
+                        >
+                          My Scribble
+                        </Button>
+                      </div>
+                    </>
+                  )}
+                  {userDetailsBool && userdata && (
+                    <>
+                      <div className="detailWrapper">
+                        <label>Name</label>
+                        <span>{userdata.name}</span>
+                      </div>
+                      <div className="detailWrapper">
+                        <label>Email</label>
+                        <span>{userdata.email}</span>
+                      </div>
+                      <div className="detailWrapper">
+                        <label>Gender</label>
+                        <span>{userdata.gender}</span>
+                      </div>
+                      <div className="detailWrapper">
+                        <label>University</label>
+                        <span>{userdata.university}</span>
+                      </div>
+                      <div className="part">
+                        <Button
+                          variant="contained"
+                          // onClick={() => handleDownloadOpen("share")}
+                          style={{ backgroundColor: "#8A374A", color: "#fff" }}
+                        >
+                          <span className={"fa fa-instagram"}></span>
+                          Instagram
+                        </Button>
+                        <Button
+                          variant="contained"
+                          // onClick={() => handleDownloadOpen("share")}
+                          style={{ backgroundColor: "#2E73AD", color: "#fff" }}
+                        >
+                          <span className={"fa fa-linkedin"}></span>
+                          LinkedIn
+                        </Button>
+                        <Button
+                          variant="contained"
+                          // onClick={() => handleDownloadOpen("share")}
+                          style={{ backgroundColor: "#4095ED", color: "#fff" }}
+                        >
+                          <span className={"fa fa-facebook"}></span>
+                          Facebook
+                        </Button>
+                        <Button
+                          variant="contained"
+                          // onClick={() => handleDownloadOpen("share")}
+                          style={{ backgroundColor: "#05ABFF", color: "#fff" }}
+                        >
+                          <span className={"fa fa-twitter"}></span>
+                          Twitter
+                        </Button>
+                        <Button
+                          variant="contained"
+                          // onClick={() => handleDownloadOpen("share")}
+                          style={{ backgroundColor: "#0DC143", color: "#fff" }}
+                        >
+                          <span className={"fa fa-whatsapp"}></span>
+                          WhatsApp
+                        </Button>
+                      </div>
+                    </>
+                  )}
+                  {insertVerifyCode && (
+                    <>
+                      <FormControl
+                        className={"col-12 col-sm-8 col-md-9 form"}
+                        style={{ padding: 20 }}
+                      >
+                        <Input
+                          style={{ color: "white" }}
+                          id="input-with-icon-adornment"
+                          placeholder={
+                            enterPinOrCodeBool === "pin"
+                              ? "Enter PIN"
+                              : "Verification Code"
+                          }
+                          variant="filled"
+                          onChange={(e) => setPinCodeToVerify(e.target.value)}
+                          startAdornment={
+                            <InputAdornment position="start">
+                              <VpnKeyIcon />
+                            </InputAdornment>
+                          }
+                          endAdornment={
+                            <InputAdornment
+                              position="end"
+                              onClick={
+                                enterPinOrCodeBool === "pin"
+                                  ? handleVerifyPin
+                                  : handleVerifyCode
+                              }
+                            >
+                              <SendIcon />
+                            </InputAdornment>
+                          }
+                        />
+                      </FormControl>
+                    </>
+                  )}
+                  {askedForSendVerificationCode && (
+                    <div className="boxWrapper">
+                      <Button
+                        variant="contained"
+                        onClick={handleSendVerificationCode}
+                      >
+                        Send Verification Code
+                      </Button>
+                      <span class="previewText">to {inputEmail}</span>
                     </div>
-                  </div>
+                  )}
+                  {enterEmailBool && (
+                    <FormControl
+                      className={"col-12 col-sm-8 col-md-9 form"}
+                      style={{ padding: 20 }}
+                    >
+                      <Input
+                        id="input-with-icon-adornment"
+                        style={{ color: "white" }}
+                        placeholder="Email"
+                        variant="filled"
+                        onChange={(e) => setInputEmail(e.target.value)}
+                        startAdornment={
+                          <InputAdornment position="start">
+                            <AccountCircle />
+                          </InputAdornment>
+                        }
+                        endAdornment={
+                          <InputAdornment
+                            position="end"
+                            onClick={checkUserAccountWithEmail}
+                          >
+                            <SendIcon style={{ cursor: "pointer" }} />
+                          </InputAdornment>
+                        }
+                      />
+                    </FormControl>
+                  )}
+                  {signupFormBool && (
+                    <>
+                      <Form.Control
+                        className={"col-12 col-sm-8 col-md-9 form"}
+                        type="text"
+                        placeholder="Fullname"
+                        name="name"
+                        maxLength={250}
+                        value={signupFormInputs?.name}
+                        onChange={(e) =>
+                          setSignupFormInputs({ name: e.target.value })
+                        }
+                        required
+                      />
+                      <Form.Control
+                        className={"col-12 col-sm-8 col-md-9 form"}
+                        type="text"
+                        placeholder="University Name"
+                        name="university"
+                        maxLength={250}
+                        value={signupFormInputs?.university}
+                        onChange={(e) =>
+                          setSignupFormInputs({ university: e.target.value })
+                        }
+                        required
+                      />
+                      <Form.Control
+                        className={"col-12 col-sm-8 col-md-9 form"}
+                        type="text"
+                        placeholder="Gender"
+                        name="gender"
+                        value={signupFormInputs?.gender}
+                        onChange={(e) =>
+                          setSignupFormInputs({ gender: e.target.value })
+                        }
+                        required
+                      />
+                      <Form.Control
+                        className={"col-12 col-sm-8 col-md-9 form"}
+                        type="text"
+                        placeholder="Enter a 4 digit's PIN"
+                        name="pin"
+                        maxLength={4}
+                        value={signupFormInputs?.pin}
+                        onChange={(e) =>
+                          setSignupFormInputs({ pin: e.target.value })
+                        }
+                        required
+                      />
+                      <Form.Control
+                        className={"col-12 col-sm-8 col-md-9 form"}
+                        type="text"
+                        placeholder="Avatar Link"
+                        name="avatar"
+                        value={signupFormInputs?.avatar}
+                        onChange={(e) =>
+                          setSignupFormInputs({ avatar: e.target.value })
+                        }
+                        required
+                      />
+                      <Button
+                        variant="contained"
+                        onClick={handleSubmitSignupForm}
+                      >
+                        Submit
+                      </Button>
+                    </>
+                  )}
                 </div>
               </div>
             </Form>
@@ -573,7 +746,7 @@ function Home() {
                   </Button>
                 </div>
               </div>
-              
+
               <div className="part">
                 <div>
                   <Button
@@ -585,7 +758,7 @@ function Home() {
                     Place Order
                   </Button>
                   <DownloadForm
-                    gmailcode={gmailCode}
+                    insertVerifyCode={insertVerifyCode}
                     selectedValue={downloadInput}
                     open={openDownloadDialog}
                     onClose={handleDownloadClose}
@@ -603,7 +776,7 @@ function Home() {
                     Share
                   </Button>
                   <DownloadForm
-                    gmailcode={gmailCode}
+                    insertVerifyCode={insertVerifyCode}
                     selectedValue={downloadInput}
                     open={openDownloadDialog}
                     onClose={handleDownloadClose}
@@ -657,88 +830,88 @@ function Home() {
                   className={"male-front"}
                 />
               )}
-            <div className={"university-logo"}>
-              <Image src={require("../../assets/lpu.png")} height="32px" />
-            </div>
-            <Draggable disabled={dragBool}>
-              <div
-                className={"scribble-message1"}
-                style={
-                  !dragBool
-                    ? {
-                        rotate: rotateValue + "deg",
-                        backgroundColor: "#e5fcff",
-                        border: "1px solid rgb(233, 233, 233)",
-                      }
-                    : {
-                        border: "none",
-                        rotate: "90deg",
-                        backgroundColor: "transparent",
-                      }
-                }
-              >
+              <div className={"university-logo"}>
+                <Image src={require("../../assets/lpu.png")} height="32px" />
+              </div>
+              <Draggable disabled={dragBool}>
                 <div
-                  style={{
-                    color: messageColor,
-                    fontSize: messageFont,
-                    cursor: dragBool ? "default" : "move",
-                  }}
+                  className={"scribble-message1"}
+                  style={
+                    !dragBool
+                      ? {
+                          rotate: rotateValue + "deg",
+                          backgroundColor: "#e5fcff",
+                          border: "1px solid rgb(233, 233, 233)",
+                        }
+                      : {
+                          border: "none",
+                          rotate: "90deg",
+                          backgroundColor: "transparent",
+                        }
+                  }
                 >
-                  <p>
-                    {message}
-                    <span>
-                      <br />~ {sendee}
-                    </span>
-                  </p>
-                </div>
-                {!dragBool ? (
-                  <>
+                  <div
+                    style={{
+                      color: messageColor,
+                      fontSize: messageFont,
+                      cursor: dragBool ? "default" : "move",
+                    }}
+                  >
+                    <p>
+                      {message}
+                      <span>
+                        <br />~ {sendee}
+                      </span>
+                    </p>
+                  </div>
+                  {!dragBool ? (
+                    <>
+                      <div
+                        className={"actions"}
+                        onClick={() => {
+                          setDragBool(true);
+                        }}
+                      >
+                        fix
+                      </div>
+                      <div
+                        className={"actions"}
+                        onClick={() => setMessageFont(".4em")}
+                      >
+                        1
+                      </div>
+                      <div
+                        className={"actions"}
+                        onClick={() => setMessageFont(".5em")}
+                      >
+                        2
+                      </div>
+                      <div
+                        className={"actions"}
+                        onClick={() => setMessageFont(".6em")}
+                      >
+                        3
+                      </div>
+                      <div
+                        className={"actions"}
+                        onClick={() => setMessageFont(".7em")}
+                      >
+                        4
+                      </div>
+                    </>
+                  ) : (
                     <div
                       className={"actions"}
                       onClick={() => {
-                        setDragBool(true);
+                        setDragBool(false);
+                        setMessageFont(".9em");
                       }}
                     >
-                      fix
+                      <AutorenewIcon style={{ fontSize: "0.9em" }} />
                     </div>
-                    <div
-                      className={"actions"}
-                      onClick={() => setMessageFont(".4em")}
-                    >
-                      1
-                    </div>
-                    <div
-                      className={"actions"}
-                      onClick={() => setMessageFont(".5em")}
-                    >
-                      2
-                    </div>
-                    <div
-                      className={"actions"}
-                      onClick={() => setMessageFont(".6em")}
-                    >
-                      3
-                    </div>
-                    <div
-                      className={"actions"}
-                      onClick={() => setMessageFont(".7em")}
-                    >
-                      4
-                    </div>
-                  </>
-                ) : (
-                  <div
-                    className={"actions"}
-                    onClick={() => {
-                      setDragBool(false);
-                      setMessageFont(".9em");
-                    }}
-                  >
-                    <AutorenewIcon style={{ fontSize: "0.9em" }} />
-                  </div>
-                )}
-              </div>
-            </Draggable>
+                  )}
+                </div>
+              </Draggable>
             </div>
 
             {/* remove draggable from here to above */}
