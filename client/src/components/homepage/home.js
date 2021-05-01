@@ -366,7 +366,7 @@ function Home() {
         aria-labelledby="simple-dialog-title"
         open={open}
       >
-        <Preview />
+        <Preview img={image} face={frontSide?'front':'back'} />
       </Dialog>
     );
   }
@@ -452,9 +452,9 @@ function Home() {
                     </Button>
                   </ButtonGroup>
                 </div>
-                <div className="part">
+                <div className="part d-sm-none">
                   <ButtonGroup disableElevation variant="contained">
-                    <Button color="primary">Send Scribble</Button>
+                    <Button href="#formboxbysend" color="primary">Send Scribble</Button>
                   </ButtonGroup>
                 </div>
               </div>
@@ -518,12 +518,12 @@ function Home() {
                     }}
                   />
                 </div>
-                <div className="formBox row align-items-center">
+                <div className="formBox row align-items-center" id="formboxbysend">
                   <hr />
                   {landingPageBool && (
                     <>
                       <div className="formAvatarGroup col-12 col-sm-8 col-md-9">
-                        <div style={{ position: "relative" }}>
+                        <div style={{ position: "relative", width: '100%' }}>
                           <Form.Control
                             className={" form"}
                             type="text"
@@ -563,7 +563,7 @@ function Home() {
                         />
                       </div>
                       <div className="formAvatarGroup col-12 col-sm-8 col-md-9">
-                        <div style={{ position: "relative" }}>
+                        <div style={{ position: "relative", width: '100%' }}>
                           <Form.Control
                             className={" form"}
                             type="text"
