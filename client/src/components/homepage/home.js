@@ -179,15 +179,12 @@ function Home() {
   const [newUnivesityLogo, setNewUniversityLogo] = useState();
   const [avatar, setAvatar] = useState();
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const handlePopOverClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+  const [anchorEl, setAnchorEl] = useState(null);
   const handlePopOverClose = () => {
     setAnchorEl(null);
   };
   const popOverOpen = Boolean(anchorEl);
-  const popOverId = popOverOpen ? "simple-popover" : undefined;
+  const popOverId = popOverOpen ? "scribble-message1" : undefined;
 
   useEffect(() => {
     (async () => {
@@ -1166,6 +1163,7 @@ function Home() {
               </div>
               <Draggable disabled={dragBool}>
                 <div
+                  aria-describedby={popOverId}
                   className={"scribble-message1"}
                   style={
                     !dragBool
@@ -1202,13 +1200,30 @@ function Home() {
                         onClick={(e) => {
                           setDragBool(true);
                           setIsFixed(true);
-                          // handlePopOverClick(e);
                           setAnchorEl(e.currentTarget);
                           console.log(e.currentTarget);
                         }}
                       >
                         fix
                       </div>
+                      <Popover
+                        id={popOverId}
+                        open={popOverOpen}
+                        anchorEl={anchorEl}
+                        onClose={handlePopOverClose}
+                        anchorOrigin={{
+                          vertical: "bottom",
+                          horizontal: "center",
+                        }}
+                        transformOrigin={{
+                          vertical: "bottom",
+                          horizontal: "left",
+                        }}
+                      >
+                        <Typography className={classes.typography}>
+                          The content of the Popover.
+                        </Typography>
+                      </Popover>
                       <div
                         className={"actions"}
                         onClick={() => setMessageFont(".4em")}
@@ -1263,24 +1278,6 @@ function Home() {
         autoHideDuration={1000}
         message={msgSnackbar}
       />
-      <Popover
-        id={popOverId}
-        open={popOverOpen}
-        anchorEl={anchorEl}
-        onClose={handlePopOverClose}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "center",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "center",
-        }}
-      >
-        <Typography className={classes.typography}>
-          The content of the Popover.
-        </Typography>
-      </Popover>
     </div>
   );
 }
