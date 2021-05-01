@@ -51,6 +51,25 @@ const useStyles = makeStyles((theme) => ({
   selectEmpty: {
     marginTop: theme.spacing(2),
   },
+  resultOfUlist:{
+    top: 38,
+    position: 'absolute',
+    zIndex: 1,
+    background: '#fff',
+    color: '#000',
+    width: '100%',
+    maxHeight: 160,
+    overflow: 'hidden',
+    overflowY: 'auto'
+  },
+  resultListItem:{
+    padding: '6px 12px',
+    borderBottom: '1px solid #ccc',
+    cursor: 'pointer',
+    '&:hover':{
+      backgroundColor: '#bbb'
+    }
+  }
 }));
 
 function ValueLabelComponent(props) {
@@ -78,6 +97,42 @@ function Home() {
   const handleChange = (event) => {
     setAge(event.target.value);
   };
+  const [duniversityList, setDUniversityList] = useState([
+    {name: 'IIT Delhi'},
+    {name: 'Poornima University'}
+  ]);
+  const [dfriendList, setDFriendList] = useState([
+    {name: 'Ramesh'},
+    {name: 'Dooper'}
+  ]);
+  const [universityList, setUniversityList] = useState([
+    {name: 'IIT Delhi'},
+    {name: 'Poornima University'}
+  ]);
+  const [friendList, setFriendList] = useState([
+    {name: 'Ramesh'},
+    {name: 'Dooper'}
+  ]);
+  const searchFilterFunction = (text, data, setData) => {
+    // Check if searched text is not blank
+    if (text) {
+      // Inserted text is not blank
+      // Filter the masterDataSource
+      // Update FilteredDataSource
+      const newData = data.filter(function (item) {
+        const itemData = item.name ? item.name.toUpperCase() : "".toUpperCase();
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      setData(newData);
+    } else {
+      // Inserted text is blank
+      // Update FilteredDataSource with masterDataSource
+      setData(data);
+    }
+  };
+  const [isFriendFocus, setFriendInput] = useState(false);
+  const [isUlistFocus, setUlistInput] = useState(false);
   const [userdata, setUserData] = useState(null);
   const [message, setMessage] = useState("Scribble Message");
   const [sendee, setSendee] = useState("Your Name");
@@ -472,21 +527,44 @@ function Home() {
                   <hr />
                   {landingPageBool && (
                     <>
-                      <Form.Control
-                        className={"col-12 col-sm-8 col-md-9 form"}
-                        type="text"
-                        placeholder="University Name"
-                        name="message"
-                        maxLength={250}
-                        value={university}
-                        onChange={(e) => setUniversity(e.target.value)}
-                        required
-                      />
+                      <div style={{position: 'relative'}}>
+                        <Form.Control
+                          className={"col-12 col-sm-8 col-md-9 form"}
+                          type="text"
+                          placeholder="University Name"
+                          name="message"
+                          maxLength={250}
+                          value={university}
+                          onFocus={()=>setUlistInput(true)}
+                          onBlur={()=>setUlistInput(false)}
+                          onChange={(e) => {
+                            setUniversity(e.target.value)
+                            searchFilterFunction(e.target.value,duniversityList,setUniversityList)
+                          }}
+                          required
+                        />
+                        <div className={classes.resultOfUlist}>
+                          {
+                            isUlistFocus &&
+                            (
+                            universityList.length>0?
+                            universityList.map(uObj=>(
+                              <div className={classes.resultListItem}>
+                                {uObj.name}
+                              </div>
+                            ))
+                            :
+                            <div></div>
+                            )
+                          }
+                        </div>
+                      </div>
                       <Avatar
                         style={{ marginLeft: 12 }}
                         alt="Remy Sharp"
                         src={require("../../assets/lpu.png")}
                       />
+                      <div style={{position: 'relative'}}>
                       <Form.Control
                         className={"col-12 col-sm-8 col-md-9 form"}
                         type="text"
@@ -494,9 +572,29 @@ function Home() {
                         name="friendname"
                         maxLength={250}
                         value={friendname}
-                        onChange={(e) => setFriendName(e.target.value)}
+                        onFocus={()=>setFriendInput(true)}
+                        onBlur={()=>setFriendInput(false)}
+                        onChange={(e) => {
+                          setFriendName(e.target.value);
+                          searchFilterFunction(e.target.value,dfriendList,setFriendList)
+                        }}
                         required
                       />
+                      <div className={classes.resultOfUlist}>
+                          {
+                            isFriendFocus&&(
+                            friendList.length>0?
+                            friendList.map(uObj=>(
+                              <div className={classes.resultListItem}>
+                                {uObj.name}
+                              </div>
+                            ))
+                            :
+                            <div></div>
+                            )
+                          }
+                        </div>
+                      </div>
                       <Avatar
                         style={{ marginLeft: 12 }}
                         alt="Remy Sharp"
