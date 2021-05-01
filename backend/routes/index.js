@@ -207,6 +207,8 @@ rtr.post("/save/scribble", async (req, res) => {
 
 rtr.post("/institute/add", async (req, res) => {
   try {
+    console.log(req.body);
+    console.log(req.files);
     if (!req.files.logo) {
       res.json({
         added: false,
@@ -216,9 +218,8 @@ rtr.post("/institute/add", async (req, res) => {
       const imageLocation = await uploadToS3B(req.files.logo);
       if (imageLocation) {
         const newInstitute = new Institute({
-          instituteId: uuidv4(),
-          instituteName: req.body.name,
-          instituteLogo: imageLocation,
+          name: req.body.name,
+          logo: imageLocation,
         });
         const institute = await newInstitute.save();
         res.json({

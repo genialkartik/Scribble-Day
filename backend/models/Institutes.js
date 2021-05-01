@@ -1,17 +1,12 @@
 const mongoose = require("mongoose");
 
 const instituteSchema = mongoose.Schema({
-  instituteId: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  instituteName: {
+  name: {
     type: String,
     unique: true,
     required: true,
   },
-  instituteLogo: {
+  logo: {
     type: String,
     required: true,
   },
