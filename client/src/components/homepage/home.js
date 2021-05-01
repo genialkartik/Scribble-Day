@@ -90,6 +90,7 @@ ValueLabelComponent.propTypes = {
 };
 
 function Home() {
+  const [fixside, setFixSide] = useState(null);
   const imageRef = useRef(null);
   const { image, takeScreenshot } = useScreenshot({ ref: imageRef });
   const classes = useStyles();
@@ -221,6 +222,15 @@ function Home() {
     console.log(userdata);
     if (userdata) {
       // save details to db
+      if(fixside===null){
+
+      }else{
+        const response = await axios.post('',{
+          image: image,
+          side: fixside==='front'? 'front': 'back'
+        })
+      }
+
     } else {
       setLandingPageBool(false);
       setEnterEmailBool(true);
@@ -337,6 +347,7 @@ function Home() {
     setAllowShare(true);
   };
   const handlePreviewOpen = () => {
+    takeScreenshot();
     setPreviewDialog(true);
   };
 
