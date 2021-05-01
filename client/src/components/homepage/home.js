@@ -89,8 +89,14 @@ ValueLabelComponent.propTypes = {
 };
 
 function Home() {
-  const imageRef = useRef(null);
-  const { image, takeScreenshot } = useScreenshot({ ref: imageRef });
+  const imageFemaleFrontRef = useRef(null);
+  const { imageff, takeffScreenshot } = useScreenshot({ ref: imageFemaleFrontRef });
+  const imageFemaleBackRef = useRef(null);
+  const { imagefb, takefbScreenshot } = useScreenshot({ ref: imageFemaleBackRef });
+  const imageMaleFrontRef = useRef(null);
+  const { imagemf, takemfScreenshot } = useScreenshot({ ref: imageMaleFrontRef });
+  const imageMaleBackRef = useRef(null);
+  const { imagemb, takembScreenshot } = useScreenshot({ ref: imageMaleBackRef });
   const classes = useStyles();
   const [age, setAge] = useState("");
 
@@ -208,6 +214,9 @@ function Home() {
   const handleSendScribbleForm = async () => {
     if (userdata) {
       // save details to db
+      const fi = gender==='female'?imageff:imagemf;
+      const bi = gender==='female'?imagefb:imagemb;
+
     } else {
       setLandingPageBool(false);
       setEnterEmailBool(true);
@@ -312,7 +321,14 @@ function Home() {
     setRotateValue(newValue);
   };
   const handleDownloadOpen = (downloadOrShare) => {
-    takeScreenshot();
+    if(gender==='female'){
+      takeffScreenshot();
+      takefbScreenshot();
+    }
+    else{
+      takembScreenshot();
+      takemfScreenshot();
+    }
     setDownloadDialog(true);
     setSD(downloadOrShare);
   };
@@ -324,6 +340,14 @@ function Home() {
     setAllowShare(true);
   };
   const handlePreviewOpen = () => {
+    if(gender==='female'){
+      takeffScreenshot();
+      takefbScreenshot();
+    }
+    else{
+      takembScreenshot();
+      takemfScreenshot();
+    }
     setPreviewDialog(true);
   };
 
@@ -366,14 +390,14 @@ function Home() {
         aria-labelledby="simple-dialog-title"
         open={open}
       >
-        <Preview />
+        <Preview frontImg={gender==='female'?imageff:imagemf} backImg={gender==='female'?imagefb:imagemb}/>
       </Dialog>
     );
   }
 
   function DownloadForm(props) {
     const classes = useStyles();
-    const { onClose, selectedValue, open, image, insertVerifyCode } = props;
+    const { onClose, selectedValue, open, imagef, imageb, insertVerifyCode } = props;
     const handleClose = () => {
       onClose(selectedValue);
     };
@@ -382,13 +406,63 @@ function Home() {
       onClose(value);
     };
 
+    /* Download an img */
+    function download(img) {
+      var link = document.createElement("a");
+      link.href = img.src;
+      link.download = true;
+      link.style.display = "none";
+      var evt = new MouseEvent("click", {
+          "view": window,
+          "bubbles": true,
+          "cancelable": true
+      });
+
+      document.body.appendChild(link);
+      link.dispatchEvent(evt);
+      document.body.removeChild(link);
+      console.log("Downloading...");
+    }
+
+      /* Download all images in 'imgs'. 
+      * Optionaly filter them by extension (e.g. "jpg") and/or 
+      * download the 'limit' first only  */
+      function downloadAll(imgs, ext, limit) {
+        /* If specified, filter images by extension */
+        if (ext) {
+            ext = "." + ext;
+            imgs = [].slice.call(imgs).filter(function(img) {
+                var src = img.src;
+                return (src && (src.indexOf(ext, src.length - ext.length) !== -1));
+            });
+        }
+
+        /* Determine the number of images to download */
+        limit = (limit && (0 <= limit) && (limit <= imgs.length))
+                ? limit : imgs.length;
+
+        /* (Try to) download the images */
+        for (var i = 0; i < limit; i++) {
+            var img = imgs[i];
+            console.log("IMG: " + img.src + " (", img, ")");
+            download(img);
+        }
+      }
+
+    const doit = () => {
+      const imgs = document.querySelectorAll("img.dimage");
+      downloadAll(imgs, "png", -1);
+    }
+
     return (
       <Dialog
         onClose={handleClose}
         aria-labelledby="simple-dialog-title"
         open={open}
       >
-        {image ? <img src={image} /> : <CircularProgress />}
+        {imagef ? <img className="dimage" src={imagef} /> : <CircularProgress />}
+        <img className="dimage" src={imageb} />
+        <Button onClick={doit}></Button>
       </Dialog>
     );
   }
@@ -452,7 +526,7 @@ function Home() {
                     </Button>
                   </ButtonGroup>
                 </div>
-                <div className="part">
+                <div className="part d-sm-none" >
                   <ButtonGroup disableElevation variant="contained">
                     <Button color="primary">Send Scribble</Button>
                   </ButtonGroup>
@@ -480,6 +554,8 @@ function Home() {
                   selectedValue={downloadInput}
                   open={openDownloadDialog}
                   onClose={handleDownloadClose}
+                  imagef={gender==='female'?imageff:imagemf}
+                  imageb={gender==='female'?imagefb:imagemb}
                 />
                 <Button
                   variant="contained"
@@ -1030,6 +1106,8 @@ function Home() {
                 selectedValue={downloadInput}
                 open={openDownloadDialog}
                 onClose={handleDownloadClose}
+                imagef={gender==='female'?imageff:imagemf}
+                imageb={gender==='female'?imagefb:imagemb}
               />
               <Button
                 variant="contained"
@@ -1074,6 +1152,8 @@ function Home() {
                     selectedValue={downloadInput}
                     open={openDownloadDialog}
                     onClose={handleDownloadClose}
+                    imagef={gender==='female'?imageff:imagemf}
+                    imageb={gender==='female'?imagefb:imagemb}
                   />
                 </div>
               </div>
@@ -1093,7 +1173,8 @@ function Home() {
                     selectedValue={downloadInput}
                     open={openDownloadDialog}
                     onClose={handleDownloadClose}
-                    image={image}
+                    imagef={gender==='female'?imageff:imagemf}
+                    imageb={gender==='female'?imagefb:imagemb}
                   />
                 </div>
               </div>
@@ -1119,105 +1200,374 @@ function Home() {
           <div className={"column"}>
             {/* RIGHT COLUMN */}
 
-            <div className={"scribble-image1"} ref={imageRef}>
-              {gender === "female" ? (
-                <Image
-                  src={require(frontSide
-                    ? "../../assets/femalefront.png"
-                    : "../../assets/malefront.png")}
-                  className={"male-front"}
-                />
-              ) : (
-                <Image
-                  src={require(frontSide
-                    ? "../../assets/malefront.png"
-                    : "../../assets/maleback.png")}
-                  className={"male-front"}
-                />
-              )}
-              <div className={"university-logo"}>
-                <Image src={require("../../assets/lpu.png")} height="32px" />
-              </div>
-              <Draggable disabled={dragBool}>
-                <div
-                  className={"scribble-message1"}
-                  style={
-                    !dragBool
-                      ? {
-                          rotate: rotateValue + "deg",
-                          backgroundColor: "#e5fcff",
-                          border: "1px solid rgb(233, 233, 233)",
-                        }
-                      : {
-                          border: "none",
-                          rotate: rotateValue + "deg",
-                          backgroundColor: "transparent",
-                        }
-                  }
-                >
-                  <div
-                    style={{
-                      color: messageColor,
-                      fontSize: messageFont,
-                      cursor: dragBool ? "default" : "move",
-                    }}
-                  >
-                    <p>
-                      {message}
-                      <span>
-                        <br />~ {sendee}
-                      </span>
-                    </p>
-                  </div>
-                  {!dragBool ? (
-                    <>
-                      <div
-                        className={"actions"}
-                        onClick={() => {
-                          setDragBool(true);
-                        }}
-                      >
-                        fix
-                      </div>
-                      <div
-                        className={"actions"}
-                        onClick={() => setMessageFont(".4em")}
-                      >
-                        1
-                      </div>
-                      <div
-                        className={"actions"}
-                        onClick={() => setMessageFont(".5em")}
-                      >
-                        2
-                      </div>
-                      <div
-                        className={"actions"}
-                        onClick={() => setMessageFont(".6em")}
-                      >
-                        3
-                      </div>
-                      <div
-                        className={"actions"}
-                        onClick={() => setMessageFont(".7em")}
-                      >
-                        4
-                      </div>
-                    </>
-                  ) : (
-                    <div
-                      className={"actions"}
-                      onClick={() => {
-                        setDragBool(false);
-                        setMessageFont(".9em");
-                      }}
-                    >
-                      <AutorenewIcon style={{ fontSize: "0.9em" }} />
+            {
+              gender === "female" ?
+                frontSide?
+                <>
+                  <div className={"scribble-image1"} ref={imageFemaleFrontRef}>
+                    <Image
+                      src={require("../../assets/femalefront.png")}
+                      className={"male-front"}
+                    />
+                    <div className={"university-logo"}>
+                      <Image src={require("../../assets/lpu.png")} height="32px" />
                     </div>
-                  )}
-                </div>
-              </Draggable>
-            </div>
+                    <Draggable disabled={dragBool}>
+                      <div
+                        className={"scribble-message1"}
+                        style={
+                          !dragBool
+                            ? {
+                                rotate: rotateValue + "deg",
+                                backgroundColor: "#e5fcff",
+                                border: "1px solid rgb(233, 233, 233)",
+                              }
+                            : {
+                                border: "none",
+                                rotate: rotateValue + "deg",
+                                backgroundColor: "transparent",
+                              }
+                        }
+                      >
+                        <div
+                          style={{
+                            color: messageColor,
+                            fontSize: messageFont,
+                            cursor: dragBool ? "default" : "move",
+                          }}
+                        >
+                          <p>
+                            {message}
+                            <span>
+                              <br />~ {sendee}
+                            </span>
+                          </p>
+                        </div>
+                        {!dragBool ? (
+                          <>
+                            <div
+                              className={"actions"}
+                              onClick={() => {
+                                setDragBool(true);
+                              }}
+                            >
+                              fix
+                            </div>
+                            <div
+                              className={"actions"}
+                              onClick={() => setMessageFont(".4em")}
+                            >
+                              1
+                            </div>
+                            <div
+                              className={"actions"}
+                              onClick={() => setMessageFont(".5em")}
+                            >
+                              2
+                            </div>
+                            <div
+                              className={"actions"}
+                              onClick={() => setMessageFont(".6em")}
+                            >
+                              3
+                            </div>
+                            <div
+                              className={"actions"}
+                              onClick={() => setMessageFont(".7em")}
+                            >
+                              4
+                            </div>
+                          </>
+                        ) : (
+                          <div
+                            className={"actions"}
+                            onClick={() => {
+                              setDragBool(false);
+                              setMessageFont(".9em");
+                            }}
+                          >
+                            <AutorenewIcon style={{ fontSize: "0.9em" }} />
+                          </div>
+                        )}
+                      </div>
+                    </Draggable>
+                  </div>
+                </>
+                :
+                <>
+                  <div className={"scribble-image1"} ref={imageFemaleBackRef}>
+                    <Image
+                      src={require("../../assets/malefront.png")}
+                      className={"male-front"}
+                    />
+                    <div className={"university-logo"}>
+                      <Image src={require("../../assets/lpu.png")} height="32px" />
+                    </div>
+                    <Draggable disabled={dragBool}>
+                      <div
+                        className={"scribble-message1"}
+                        style={
+                          !dragBool
+                            ? {
+                                rotate: rotateValue + "deg",
+                                backgroundColor: "#e5fcff",
+                                border: "1px solid rgb(233, 233, 233)",
+                              }
+                            : {
+                                border: "none",
+                                rotate: rotateValue + "deg",
+                                backgroundColor: "transparent",
+                              }
+                        }
+                      >
+                        <div
+                          style={{
+                            color: messageColor,
+                            fontSize: messageFont,
+                            cursor: dragBool ? "default" : "move",
+                          }}
+                        >
+                          <p>
+                            {message}
+                            <span>
+                              <br />~ {sendee}
+                            </span>
+                          </p>
+                        </div>
+                        {!dragBool ? (
+                          <>
+                            <div
+                              className={"actions"}
+                              onClick={() => {
+                                setDragBool(true);
+                              }}
+                            >
+                              fix
+                            </div>
+                            <div
+                              className={"actions"}
+                              onClick={() => setMessageFont(".4em")}
+                            >
+                              1
+                            </div>
+                            <div
+                              className={"actions"}
+                              onClick={() => setMessageFont(".5em")}
+                            >
+                              2
+                            </div>
+                            <div
+                              className={"actions"}
+                              onClick={() => setMessageFont(".6em")}
+                            >
+                              3
+                            </div>
+                            <div
+                              className={"actions"}
+                              onClick={() => setMessageFont(".7em")}
+                            >
+                              4
+                            </div>
+                          </>
+                        ) : (
+                          <div
+                            className={"actions"}
+                            onClick={() => {
+                              setDragBool(false);
+                              setMessageFont(".9em");
+                            }}
+                          >
+                            <AutorenewIcon style={{ fontSize: "0.9em" }} />
+                          </div>
+                        )}
+                      </div>
+                    </Draggable>
+                  </div>
+                </>
+              :
+              frontSide?
+                <>
+                  <div className={"scribble-image1"} ref={imageMaleFrontRef}>
+                    <Image
+                      src={require("../../assets/malefront.png")}
+                      className={"male-front"}
+                    />
+                    <div className={"university-logo"}>
+                      <Image src={require("../../assets/lpu.png")} height="32px" />
+                    </div>
+                    <Draggable disabled={dragBool}>
+                      <div
+                        className={"scribble-message1"}
+                        style={
+                          !dragBool
+                            ? {
+                                rotate: rotateValue + "deg",
+                                backgroundColor: "#e5fcff",
+                                border: "1px solid rgb(233, 233, 233)",
+                              }
+                            : {
+                                border: "none",
+                                rotate: rotateValue + "deg",
+                                backgroundColor: "transparent",
+                              }
+                        }
+                      >
+                        <div
+                          style={{
+                            color: messageColor,
+                            fontSize: messageFont,
+                            cursor: dragBool ? "default" : "move",
+                          }}
+                        >
+                          <p>
+                            {message}
+                            <span>
+                              <br />~ {sendee}
+                            </span>
+                          </p>
+                        </div>
+                        {!dragBool ? (
+                          <>
+                            <div
+                              className={"actions"}
+                              onClick={() => {
+                                setDragBool(true);
+                              }}
+                            >
+                              fix
+                            </div>
+                            <div
+                              className={"actions"}
+                              onClick={() => setMessageFont(".4em")}
+                            >
+                              1
+                            </div>
+                            <div
+                              className={"actions"}
+                              onClick={() => setMessageFont(".5em")}
+                            >
+                              2
+                            </div>
+                            <div
+                              className={"actions"}
+                              onClick={() => setMessageFont(".6em")}
+                            >
+                              3
+                            </div>
+                            <div
+                              className={"actions"}
+                              onClick={() => setMessageFont(".7em")}
+                            >
+                              4
+                            </div>
+                          </>
+                        ) : (
+                          <div
+                            className={"actions"}
+                            onClick={() => {
+                              setDragBool(false);
+                              setMessageFont(".9em");
+                            }}
+                          >
+                            <AutorenewIcon style={{ fontSize: "0.9em" }} />
+                          </div>
+                        )}
+                      </div>
+                    </Draggable>
+                  </div>
+                </>
+                :
+                <>
+                  <div className={"scribble-image1"} ref={imageMaleBackRef}>
+                    <Image
+                      src={require("../../assets/maleback.png")}
+                      className={"male-front"}
+                    />
+                    <div className={"university-logo"}>
+                      <Image src={require("../../assets/lpu.png")} height="32px" />
+                    </div>
+                    <Draggable disabled={dragBool}>
+                      <div
+                        className={"scribble-message1"}
+                        style={
+                          !dragBool
+                            ? {
+                                rotate: rotateValue + "deg",
+                                backgroundColor: "#e5fcff",
+                                border: "1px solid rgb(233, 233, 233)",
+                              }
+                            : {
+                                border: "none",
+                                rotate: rotateValue + "deg",
+                                backgroundColor: "transparent",
+                              }
+                        }
+                      >
+                        <div
+                          style={{
+                            color: messageColor,
+                            fontSize: messageFont,
+                            cursor: dragBool ? "default" : "move",
+                          }}
+                        >
+                          <p>
+                            {message}
+                            <span>
+                              <br />~ {sendee}
+                            </span>
+                          </p>
+                        </div>
+                        {!dragBool ? (
+                          <>
+                            <div
+                              className={"actions"}
+                              onClick={() => {
+                                setDragBool(true);
+                              }}
+                            >
+                              fix
+                            </div>
+                            <div
+                              className={"actions"}
+                              onClick={() => setMessageFont(".4em")}
+                            >
+                              1
+                            </div>
+                            <div
+                              className={"actions"}
+                              onClick={() => setMessageFont(".5em")}
+                            >
+                              2
+                            </div>
+                            <div
+                              className={"actions"}
+                              onClick={() => setMessageFont(".6em")}
+                            >
+                              3
+                            </div>
+                            <div
+                              className={"actions"}
+                              onClick={() => setMessageFont(".7em")}
+                            >
+                              4
+                            </div>
+                          </>
+                        ) : (
+                          <div
+                            className={"actions"}
+                            onClick={() => {
+                              setDragBool(false);
+                              setMessageFont(".9em");
+                            }}
+                          >
+                            <AutorenewIcon style={{ fontSize: "0.9em" }} />
+                          </div>
+                        )}
+                      </div>
+                    </Draggable>
+                  </div>
+                </>
+            }
 
             {/* remove draggable from here to above */}
           </div>
