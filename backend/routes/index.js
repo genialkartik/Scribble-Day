@@ -77,7 +77,7 @@ rtr.post("/profile", async (req, res) => {
 
 rtr.post("/create", async (req, res) => {
   try {
-    console.log(req.body.formInput);
+    console.log(req.body);
     const user = await User.findOne({ email: req.body.email });
     if (user) {
       res.json({

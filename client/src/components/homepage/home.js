@@ -129,7 +129,7 @@ function Home() {
         setUserData(resp.data.userdata);
       }
     })();
-  }, [userdata]);
+  }, [userdata, landingPageBool]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -240,7 +240,7 @@ function Home() {
       let formData = new FormData();
       formData.set("formInput", JSON.stringify(signupFormInputs));
       formData.set("avatar", avatar);
-      formData.set("email", "kartik9756@gmail.com");
+      formData.set("email", inputEmail);
       const resp = await axios.post("/create", formData);
 
       setOpenSnackbar(true);
@@ -774,7 +774,10 @@ function Home() {
                               variant="filled"
                               className={classes.formControl}
                             >
-                              <InputLabel id="demo-simple-select-filled-label">
+                              <InputLabel
+                                id="demo-simple-select-filled-label"
+                                style={{ color: "white" }}
+                              >
                                 Select University
                               </InputLabel>
                               <Select
