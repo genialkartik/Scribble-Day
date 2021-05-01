@@ -148,7 +148,7 @@ function Home() {
   // const [sendScribbleButtonBool, setSendScribbleButtonBool] = useState(true);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [msgSnackbar, setMsgSnackbar] = useState("");
-  const [landingPageBool, setLandingPageBool] = useState(true);
+  const [landingPageBool, setLandingPageBool] = useState(false);
   const [userDetailsBool, setUserDetailsBool] = useState(false);
   const [enterEmailBool, setEnterEmailBool] = useState(false);
   const [
@@ -156,9 +156,9 @@ function Home() {
     setAskedForSendVerificationCode,
   ] = useState(false);
   const [enterPinOrCodeBool, setEnterPinOrCodeBool] = useState("pin");
-  const [signupFormBool, setSignUpformBool] = useState(false);
-  const [newUniversityBool, setNewUniversityBool] = useState(false);
-
+  const [signupFormBool, setSignUpformBool] = useState(true);
+  const [newUniversityBool, setNewUniversityBool] = useState(true); 
+ 
   const [inputEmail, setInputEmail] = useState("");
   const [pinCodeToVerify, setPinCodeToVerify] = useState("");
   const [codeToCheck, setCodeToCheck] = useState("");
@@ -554,7 +554,7 @@ function Home() {
                   {landingPageBool && (
                     <>
                       <div className="formAvatarGroup col-12 col-sm-8 col-md-9">
-                        <div style={{ position: "relative", width: '100%' }}>
+                        <div id="un" style={{ position: "relative", width: '100%' }}>
                           <Form.Control
                             className={" form"}
                             type="text"
@@ -563,7 +563,16 @@ function Home() {
                             maxLength={250}
                             value={university}
                             onFocus={() => setUlistInput(true)}
-                            onBlur={() => setUlistInput(false)}
+                            // onBlur={()=>{
+                            //   window.addEventListener('click',(e)=>{
+                            //     console.log('running')
+                            //     if(e.target.parentElement.offsetParent.id==='un'){
+                            //       console.log(e.target);
+                            //     }else{
+                            //       setUlistInput(false);
+                            //     }
+                            //   })
+                            // }}
                             onChange={(e) => {
                               setUniversity(e.target.value);
                               searchFilterFunction(
@@ -583,14 +592,14 @@ function Home() {
                                       className={classes.resultListItem}
                                       onClick={() => {
                                         setUniversity(uObj.name);
-                                        console.log(uObj.name);
+                                        setUlistInput(false);
                                       }}
                                     >
                                       {uObj.name}
                                     </div>
                                   ))
                                 ) : (
-                                  <div></div>
+                                  <div className={classes.resultListItem}>Other</div>
                                 )}
                               </>
                             )}
@@ -603,7 +612,7 @@ function Home() {
                         />
                       </div>
                       <div className="formAvatarGroup col-12 col-sm-8 col-md-9">
-                        <div style={{ position: "relative", width: '100%' }}>
+                        <div id="fd"  style={{ position: "relative", width: '100%' }}>
                           <Form.Control
                             className={" form"}
                             type="text"
@@ -615,7 +624,13 @@ function Home() {
                             col-md-9
                             value={friendname}
                             onFocus={() => setFriendInput(true)}
-                            onBlur={() => setFriendInput(false)}
+                            // onBlur={()=>{
+                            //   window.addEventListener('click',(e)=>{
+                            //     if(e.target.parentElement.offsetParent.id!=='fd'){
+                            //       setFriendInput(false);
+                            //     }
+                            //   })
+                            // }}
                             onChange={(e) => {
                               setFriendName(e.target.value);
                               searchFilterFunction(
@@ -630,12 +645,17 @@ function Home() {
                             {isFriendFocus &&
                               (friendList.length > 0 ? (
                                 friendList.map((uObj) => (
-                                  <div className={classes.resultListItem}>
+                                  <div className={classes.resultListItem}
+                                  onClick={()=>{
+                                    setFriendName(uObj.name);
+                                    setFriendInput(false);
+                                  }}
+                                  >
                                     {uObj.name}
                                   </div>
                                 ))
                               ) : (
-                                <div></div>
+                                <div className={classes.resultListItem}>Other</div>
                               ))}
                           </div>
                         </div>
