@@ -243,13 +243,12 @@ footer a:hover {
   top: 30%;
 } */
 
-
 .boxWrapper {
   width: 100%;
   display: grid;
   text-align: center;
   padding: 2rem;
-  background: rgba(234,234,234,0.1);
+  background: rgba(234, 234, 234, 0.1);
   border-radius: 8px;
   margin-bottom: 12px;
 }
@@ -259,7 +258,7 @@ footer a:hover {
 .detailWrapper {
   width: 100%;
   margin-bottom: 12px;
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
   padding: 4px 16px;
 }
 .detailWrapper label {
@@ -271,15 +270,24 @@ footer a:hover {
   color: #bbb;
 }
 
+.part Button {
+  margin-inline: 10px;
+}
 
-@media screen and (max-width: 567.99px){
+@media screen and (max-width: 567.99px) {
   .appbody .nav {
     display: none;
   }
-  .scribble-imgbox{padding: 0;}
-  .scribble-imgbox .row{width: auto !important;}
-  .column{ width: 100%;}
-  .scribble-imgbox .row .column > div > img{
+  .scribble-imgbox {
+    padding: 0;
+  }
+  .scribble-imgbox .row {
+    width: auto !important;
+  }
+  .column {
+    width: 100%;
+  }
+  .scribble-imgbox .row .column > div > img {
     margin: 0 auto;
     height: 132px;
     display: block;

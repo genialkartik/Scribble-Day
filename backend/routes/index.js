@@ -1,16 +1,27 @@
 const rtr = require("express").Router();
 const { v4: uuidv4 } = require("uuid");
-// const mv = require("mv");
+const mv = require("mv");
 const AWS = require("aws-sdk");
 const User = require("../models/Users");
-
-var s3 = new AWS.S3();
+const Institute = require("../models/Institutes");
 
 //configuring the AWS environment
 AWS.config.update({
   accessKeyId: "AKIAW54ITD376OQZGBVP",
   secretAccessKey: "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",
 });
+
+var s3 = new AWS.S3();
+
+const uploadToS3B = async (file) => {
+  var params = {
+    Bucket: "scribble2021",
+    Body: file.data,
+    Key: file.name.replace(/\s/g, ""),
+  };
+  const resp = await s3.upload(params).promise();
+  return resp ? resp.Location : null;
+};
 
 rtr.get("/check/session", async (req, res) => {
   res.json({
@@ -56,8 +67,7 @@ rtr.post("/login", async (req, res) => {
 // save Universities list
 rtr.post("/profile", async (req, res) => {
   try {
-    console.log(req.body);
-    const profile = await User.findOne({ email: req.body.email });
+    const profile = await User.findOne({ email: req.body.inputEmail });
     res.json({ profile: profile ? profile : null });
   } catch (error) {
     console.log(error);
@@ -75,53 +85,52 @@ rtr.post("/create", async (req, res) => {
         respMessage: "User with same email already exists",
       });
     } else {
-      // req.files.avatar.mv(
-      //   __dirname + `/${req.files.avatar.name}`,
-      //   async function (err) {
-      //     if (err) throw err;
-      //     else {
-      //       mv(
-      //         __dirname + "/" + req.files.avatar.name,
-      //         "client/public/assets/" +
-      //           req.files.avatar.name.replace(/\s/g, ""),
-      //         function (err) {
-      //           if (err) throw err;
-      //         }
-      //       );
-      //     }
-      const newUser = new User({
-        userId: uuidv4(),
-        name: req.body.name,
-        email: req.body.email,
-        pin: req.body.pin,
-        // avatar: req.files.avatar.name.replace(/\s/g, ""),
-        avatar: req.body.avatar,
-        university: req.body.university,
-        gender: req.body.gender,
-        scribbledBy: [],
-      });
-      const newUserResp = await newUser.save();
-      if (newUserResp) {
-        req.session.userdata = {
-          userId: newUserResp.userId,
-          email: newUserResp.email,
-          name: newUserResp.name,
-          avatar: newUserResp.avatar,
-          university: newUserResp.university,
-          gender: newUserResp.gender,
-        };
-        res.json({
-          signUp: true,
-          respMessage: "Signup Successful",
-        });
-      } else {
+      if (!req.files.avatar) {
         res.json({
           signUp: false,
-          respMessage: "Unable to Save",
+          respMessage: "avatar file missing",
         });
+      } else {
+        const avatarLocation = await uploadToS3B(req.files.avatar);
+        if (!avatarLocation) {
+          res.json({
+            signUp: false,
+            respMessage: "Avatar not uploaded",
+          });
+        } else {
+          const formdata = JSON.parse(req.body.formInput);
+          const newUser = new User({
+            userId: uuidv4(),
+            name: formdata.name,
+            email: req.body.email,
+            pin: formdata.pin,
+            avatar: avatarLocation,
+            university: formdata.university,
+            gender: formdata.gender,
+            scribbledBy: [],
+          });
+          const newUserResp = await newUser.save();
+          if (newUserResp) {
+            req.session.userdata = {
+              userId: newUserResp.userId,
+              email: newUserResp.email,
+              name: newUserResp.name,
+              avatar: newUserResp.avatar,
+              university: newUserResp.university,
+              gender: newUserResp.gender,
+            };
+            res.json({
+              signUp: true,
+              respMessage: "Saved",
+            });
+          } else {
+            res.json({
+              signUp: false,
+              respMessage: "Unable to Save",
+            });
+          }
+        }
       }
-      //   }
-      // );
     }
   } catch (error) {
     console.log(error);
@@ -131,20 +140,6 @@ rtr.post("/create", async (req, res) => {
     });
   }
 });
-
-const uploadToS2B = async (file) => {
-  // var params = {
-  //   Bucket: "scribble2021",
-  //   Body: req.files.,
-  //   Key: file.name.replace(/\s/g, ""),
-  // };
-  // s3.upload(params, (err, data) => {
-  //   callback(err ? null : data.Location);
-  // });
-  return {
-    uploaded: true,
-  };
-};
 
 rtr.post("/save/scribble", async (req, res) => {
   try {
@@ -208,6 +203,50 @@ rtr.post("/save/scribble", async (req, res) => {
       respMessage: "Something went wrongß",
     });
   }
+});
+
+rtr.post("/institute/add", async (req, res) => {
+  try {
+    if (!req.files.logo) {
+      res.json({
+        added: false,
+        respMessage: "No file selected",
+      });
+    } else {
+      const imageLocation = await uploadToS3B(req.files.logo);
+      if (imageLocation) {
+        const newInstitute = new Institute({
+          instituteId: uuidv4(),
+          instituteName: req.body.name,
+          instituteLogo: imageLocation,
+        });
+        const institute = await newInstitute.save();
+        res.json({
+          added: institute ? true : false,
+          institute: institute ? institute : {},
+          respMessage: "Saved",
+        });
+      } else {
+        res.json({
+          added: false,
+          institute: {},
+          respMessage: "Unable to upload Logo",
+        });
+      }
+    }
+  } catch (error) {
+    console.log(error);
+    res.json({
+      added: false,
+      institute: {},
+      respMessage: "Unable to Save",
+    });
+  }
+});
+
+rtr.get("/institute/list", async (req, res) => {
+  const respList = await Institute.find({});
+  res.json({ instituteList: respList && respList.length > 0 ? respList : [] });
 });
 
 module.exports = rtr;

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Draggable from "react-draggable";
 import axios from "axios";
 import PropTypes from "prop-types";
@@ -8,14 +8,19 @@ import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import FormControl from "@material-ui/core/FormControl";
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
+import MenuItem from "@material-ui/core/MenuItem";
+import Select from "@material-ui/core/Select";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import Dialog from "@material-ui/core/Dialog";
 import Avatar from "@material-ui/core/Avatar";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Slider from "@material-ui/core/Slider";
 import Typography from "@material-ui/core/Typography";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormLabel from "@material-ui/core/FormLabel";
+import Snackbar from "@material-ui/core/Snackbar";
 import HomeIcon from "@material-ui/icons/Home";
 import Tooltip from "@material-ui/core/Tooltip";
 import SendIcon from "@material-ui/icons/Send";
@@ -23,6 +28,7 @@ import VpnKeyIcon from "@material-ui/icons/VpnKey";
 import { blue } from "@material-ui/core/colors";
 import { Container, Row, Col, Form, Image } from "react-bootstrap";
 import AutorenewIcon from "@material-ui/icons/Autorenew";
+import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Button from "@material-ui/core/Button";
 import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
@@ -31,7 +37,7 @@ import "./home.css";
 import { useScreenshot } from "use-screenshot-hook";
 import Preview from "../preview";
 
-const useStyles = makeStyles((theme)=>({
+const useStyles = makeStyles((theme) => ({
   avatar: {
     backgroundColor: blue[100],
     color: blue[600],
@@ -39,8 +45,8 @@ const useStyles = makeStyles((theme)=>({
   formControl: {
     margin: theme.spacing(1),
     minWidth: 120,
-    color: '#fff',
-    borderColor: '#fff'
+    color: "#fff",
+    borderColor: "#fff",
   },
   selectEmpty: {
     marginTop: theme.spacing(2),
@@ -67,7 +73,7 @@ function Home() {
   const imageRef = useRef(null);
   const { image, takeScreenshot } = useScreenshot({ ref: imageRef });
   const classes = useStyles();
-  const [age, setAge] = React.useState('');
+  const [age, setAge] = useState("");
 
   const handleChange = (event) => {
     setAge(event.target.value);
@@ -91,10 +97,12 @@ function Home() {
   const [allowDownload, setAllowDownload] = useState(false);
   const [allowShare, setAllowShare] = useState(false);
   const [clickedOnShareOrDownload, setSD] = useState("download");
-  const [university, setUniversity] = React.useState("");
+  const [university, setUniversity] = useState("");
 
   // const [sendScribbleButtonBool, setSendScribbleButtonBool] = useState(true);
-  const [landingPageBool, setLandingPageBool] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [msgSnackbar, setMsgSnackbar] = useState("");
+  const [landingPageBool, setLandingPageBool] = useState(true);
   const [userDetailsBool, setUserDetailsBool] = useState(false);
   const [enterEmailBool, setEnterEmailBool] = useState(false);
   const [
@@ -102,12 +110,34 @@ function Home() {
     setAskedForSendVerificationCode,
   ] = useState(false);
   const [enterPinOrCodeBool, setEnterPinOrCodeBool] = useState("pin");
-  const [signupFormBool, setSignUpformBool] = useState(true);
+  const [signupFormBool, setSignUpformBool] = useState(false);
+  const [newUniversityBool, setNewUniversityBool] = useState(false);
 
   const [inputEmail, setInputEmail] = useState("");
   const [pinCodeToVerify, setPinCodeToVerify] = useState("");
   const [codeToCheck, setCodeToCheck] = useState("");
   const [signupFormInputs, setSignupFormInputs] = useState({});
+  const [activateLoadingIn, setActivateLoadingIn] = useState("");
+  const [newUnivesityName, setNewUniversityName] = useState("");
+  const [newUnivesityLogo, setNewUniversityLogo] = useState();
+  const [avatar, setAvatar] = useState();
+
+  useEffect(() => {
+    (async () => {
+      const resp = await axios.get("/check/session");
+      if (resp.data && resp.data.userdata) {
+        setUserData(resp.data.userdata);
+      }
+    })();
+  }, [userdata, landingPageBool]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setSignupFormInputs({
+      ...signupFormInputs,
+      [name]: value,
+    });
+  };
 
   const handleMyScribbleClick = async () => {
     if (userdata) {
@@ -131,16 +161,20 @@ function Home() {
 
   const handleSendVerificationCode = async () => {
     if (!inputEmail) alert("Insert Email");
-    const resp = await axios.post("/email/verify", {
-      email: inputEmail,
-    });
-    if (resp.data.sent) {
-      setAskedForSendVerificationCode(false);
-      setInsertVerifyCode(true);
-      setEnterPinOrCodeBool("code");
-      setCodeToCheck(resp.data.codeToCheck);
-    } else {
-      alert(resp.data.respMessage);
+    else {
+      setActivateLoadingIn("send-verification-code");
+      const resp = await axios.post("/email/verify", {
+        email: inputEmail,
+      });
+      setActivateLoadingIn("");
+      if (resp.data.sent) {
+        setAskedForSendVerificationCode(false);
+        setInsertVerifyCode(true);
+        setEnterPinOrCodeBool("code");
+        setCodeToCheck(resp.data.codeToCheck);
+      } else {
+        alert(resp.data.respMessage);
+      }
     }
   };
 
@@ -198,15 +232,23 @@ function Home() {
   };
 
   const handleSubmitSignupForm = async () => {
-    if (signupFormInputs == {}) {
-      alert("Enter all Inputs");
+    if (signupFormInputs == {} || signupFormInputs.university === "other") {
+      setOpenSnackbar(true);
+      setMsgSnackbar("Enter all Inputs");
+      setTimeout(() => setOpenSnackbar(false), 3000);
     } else {
-      const resp = await axios.post("/create", signupFormInputs);
+      let formData = new FormData();
+      formData.set("formInput", JSON.stringify(signupFormInputs));
+      formData.set("avatar", avatar);
+      formData.set("email", inputEmail);
+      const resp = await axios.post("/create", formData);
+
+      setOpenSnackbar(true);
+      setMsgSnackbar(resp.data.respMessage);
+      setTimeout(() => setOpenSnackbar(false), 3000);
       if (resp.data.signUp) {
         setSignUpformBool(false);
         setLandingPageBool(true);
-      } else {
-        alert(resp.data.respMessage);
       }
     }
   };
@@ -232,6 +274,25 @@ function Home() {
 
   const handlePreviewClose = () => {
     setPreviewDialog(false);
+  };
+
+  const handleNewUniversityForm = async () => {
+    if (!newUnivesityName || !newUnivesityLogo) {
+      setOpenSnackbar(true);
+      setMsgSnackbar("Fill all required Inputs");
+      setTimeout(() => setOpenSnackbar(false), 3000);
+    } else {
+      const formData = new FormData();
+      formData.set("name", newUnivesityName);
+      formData.set("logo", newUnivesityLogo);
+      const resp = await axios.post("/institute/add", formData);
+      setOpenSnackbar(true);
+      setTimeout(() => setOpenSnackbar(false), 3000);
+      setMsgSnackbar(resp.data.respMessage);
+      if (resp.data.added) {
+        setNewUniversityBool(false);
+      }
+    }
   };
 
   function PreviewDialog(props) {
@@ -336,39 +397,28 @@ function Home() {
                     </Button>
                   </ButtonGroup>
                 </div>
-                 <div className="part">
+                <div className="part">
                   <ButtonGroup disableElevation variant="contained">
-                    <Button
-                      color="primary"
-                    >
-                      Send Scribble
-                    </Button>
-                    </ButtonGroup>
-                  </div>
-                   {/* <Button
-                      color="secondary"
-                      onClick={() => {
-                        setGender("female");
-                      }}
-                    >
-                      Female
-                    </Button>
+                    <Button color="primary">Send Scribble</Button>
                   </ButtonGroup>
-                </div> */}
+                </div>
               </div>
 
-              <div style={{ textAlign: "center" }} className="d-none d-sm-block">
+              <div
+                style={{ textAlign: "center" }}
+                className="d-none d-sm-block"
+              >
                 <Button
                   variant="contained"
                   onClick={() => handleDownloadOpen("download")}
                   style={{
                     backgroundColor: "#0A0",
                     marginInline: 10,
+                    padding: 11,
                     color: "#fff",
                   }}
                 >
                   <span className={"fa fa-download"}></span>
-                  Download
                 </Button>
                 <DownloadForm
                   insertVerifyCode={insertVerifyCode}
@@ -407,15 +457,16 @@ function Home() {
               className={"row justify-content-center form1"}
             >
               <div className={"col-12 col-sm-10 col-lg-8 d-flex flex-column"}>
-                <div style={{padding: '1rem'}}>
-                <HomeIcon
-                  onClick={() => {
-                    setUserDetailsBool(false);
-                    setEnterEmailBool(false);
-                    setAskedForSendVerificationCode(false);
-                    setLandingPageBool(true);
-                  }}
-                />
+                <div style={{ padding: "1rem" }}>
+                  <HomeIcon
+                    onClick={() => {
+                      setUserDetailsBool(false);
+                      setEnterEmailBool(false);
+                      setAskedForSendVerificationCode(false);
+                      setLandingPageBool(true);
+                      setSignUpformBool(false);
+                    }}
+                  />
                 </div>
                 <div className="formBox row align-items-center">
                   <hr />
@@ -492,7 +543,7 @@ function Home() {
                         <div
                           className={"rotate-slider"}
                           style={{
-                            margin: '1rem 0'
+                            margin: "1rem 0",
                           }}
                         >
                           <Typography
@@ -512,17 +563,36 @@ function Home() {
                           />
                         </div>
                       </div>
-                      <div style={{display: 'flex', flexDirection: 'column',padding: '0 12px'}}>
-                        <FormControl variant="outlined" className={classes.formControl}>
-                          <InputLabel color="primary" classes={{
-                            outlined: {color: '#fff'}
-                          }} id="demo-simple-select-outlined-label">Age</InputLabel>
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          padding: "0 12px",
+                        }}
+                      >
+                        <FormControl
+                          variant="outlined"
+                          className={classes.formControl}
+                        >
+                          <InputLabel
+                            color="primary"
+                            classes={{
+                              outlined: { color: "#fff" },
+                            }}
+                            id="demo-simple-select-outlined-label"
+                            style={{ color: "#aaa" }}
+                          >
+                            Select Font
+                          </InputLabel>
                           <Select
                             labelId="demo-simple-select-outlined-label"
                             id="demo-simple-select-outlined"
                             value={age}
                             onChange={handleChange}
-                            label="Age"
+                            label="Font"
+                            style={{
+                              backgroundColor: "#1A354E",
+                            }}
                           >
                             <MenuItem value="">
                               <em>None</em>
@@ -535,15 +605,24 @@ function Home() {
                         <Button
                           variant="contained"
                           onClick={handleSendScribbleForm}
+                          style={{ backgroundColor: "#1A354E", color: "#fff" }}
                         >
                           Submit
                         </Button>
                       </div>
-                      <div style={{width: '100%', height: 1,margin: '12px 0 16px', backgroundColor: '#ccc'}}/>
+                      <div
+                        style={{
+                          width: "100%",
+                          height: 1,
+                          margin: "12px 0 16px",
+                          backgroundColor: "#ccc",
+                        }}
+                      />
                       <div className="boxWrapper">
                         <Button
                           variant="contained"
                           onClick={handleMyScribbleClick}
+                          style={{ backgroundColor: "#ED72C0", color: "#fff" }}
                         >
                           My Scribble
                         </Button>
@@ -575,7 +654,6 @@ function Home() {
                           style={{ backgroundColor: "#8A374A", color: "#fff" }}
                         >
                           <span className={"fa fa-instagram"}></span>
-                          Instagram
                         </Button>
                         <Button
                           variant="contained"
@@ -583,7 +661,6 @@ function Home() {
                           style={{ backgroundColor: "#2E73AD", color: "#fff" }}
                         >
                           <span className={"fa fa-linkedin"}></span>
-                          LinkedIn
                         </Button>
                         <Button
                           variant="contained"
@@ -591,7 +668,6 @@ function Home() {
                           style={{ backgroundColor: "#4095ED", color: "#fff" }}
                         >
                           <span className={"fa fa-facebook"}></span>
-                          Facebook
                         </Button>
                         <Button
                           variant="contained"
@@ -599,7 +675,6 @@ function Home() {
                           style={{ backgroundColor: "#05ABFF", color: "#fff" }}
                         >
                           <span className={"fa fa-twitter"}></span>
-                          Twitter
                         </Button>
                         <Button
                           variant="contained"
@@ -607,7 +682,6 @@ function Home() {
                           style={{ backgroundColor: "#0DC143", color: "#fff" }}
                         >
                           <span className={"fa fa-whatsapp"}></span>
-                          WhatsApp
                         </Button>
                       </div>
                     </>
@@ -655,7 +729,11 @@ function Home() {
                         variant="contained"
                         onClick={handleSendVerificationCode}
                       >
-                        Send Verification Code
+                        {activateLoadingIn === "send-verification-code" ? (
+                          <CircularProgress size={25} />
+                        ) : (
+                          "Send Verification Code"
+                        )}
                       </Button>
                       <span class="previewText">to {inputEmail}</span>
                     </div>
@@ -689,113 +767,185 @@ function Home() {
                   )}
                   {signupFormBool && (
                     <>
-                    <div className="col-12 col-sm-11 col-lg-9 row">
-                      <Form.Control
-                        className={"col-12 form"}
-                        type="text"
-                        placeholder="Fullname"
-                        name="name"
-                        maxLength={250}
-                        value={signupFormInputs?.name}
-                        onChange={(e) =>
-                          setSignupFormInputs({ name: e.target.value })
-                        }
-                        required
-                      />
-                      <Form.Control
-                        className={"col-12 form"}
-                        type="text"
-                        placeholder="University Name"
-                        name="university"
-                        maxLength={250}
-                        value={signupFormInputs?.university}
-                        onChange={(e) =>
-                          setSignupFormInputs({ university: e.target.value })
-                        }
-                        required
-                      />
-                      <Form.Control
-                        className={"col-12 form"}
-                        type="text"
-                        placeholder="Gender"
-                        name="gender"
-                        value={signupFormInputs?.gender}
-                        onChange={(e) =>
-                          setSignupFormInputs({ gender: e.target.value })
-                        }
-                        required
-                      />
-                      <Form.Control
-                        className={"col-12 form"}
-                        type="text"
-                        placeholder="Enter a 4 digit's PIN"
-                        name="pin"
-                        maxLength={4}
-                        value={signupFormInputs?.pin}
-                        onChange={(e) =>
-                          setSignupFormInputs({ pin: e.target.value })
-                        }
-                        required
-                      />
-                      <Form.Control
-                        className={"col-12 form"}
-                        type="text"
-                        placeholder="Avatar Link"
-                        name="avatar"
-                        value={signupFormInputs?.avatar}
-                        onChange={(e) =>
-                          setSignupFormInputs({ avatar: e.target.value })
-                        }
-                        required
-                      />
-                      <Button
-                        variant="contained"
-                        onClick={handleSubmitSignupForm}
-                      >
-                        Submit
-                      </Button>
+                      <div className="col-12 col-sm-11 col-lg-9 row">
+                        {!newUniversityBool ? (
+                          <>
+                            <FormControl
+                              variant="filled"
+                              className={classes.formControl}
+                            >
+                              <InputLabel
+                                id="demo-simple-select-filled-label"
+                                style={{ color: "white" }}
+                              >
+                                Select University
+                              </InputLabel>
+                              <Select
+                                labelId="demo-simple-select-filled-label"
+                                id="demo-simple-select-filled"
+                                name="university"
+                                value={signupFormInputs.university}
+                                onChange={handleInputChange}
+                              >
+                                <MenuItem value={"lpu"}>LPU</MenuItem>
+                                <MenuItem value={"Amity"}>Amity</MenuItem>
+                                <MenuItem
+                                  value={"other"}
+                                  onClick={() => {
+                                    setNewUniversityBool(true);
+                                  }}
+                                >
+                                  Other
+                                </MenuItem>
+                              </Select>
+                            </FormControl>
+                            <Form.Control
+                              className={"col-12 form"}
+                              type="text"
+                              placeholder="Your fullname"
+                              name="name"
+                              maxLength={250}
+                              name="name"
+                              value={signupFormInputs.name}
+                              onChange={handleInputChange}
+                              required
+                            />
+
+                            <FormControl component="fieldset">
+                              <FormLabel component="legend">Gender</FormLabel>
+                              <RadioGroup
+                                aria-label="gender"
+                                name="gender"
+                                value={signupFormInputs.gender}
+                                onChange={handleInputChange}
+                              >
+                                <FormControlLabel
+                                  value="female"
+                                  control={<Radio />}
+                                  label="Female"
+                                />
+                                <FormControlLabel
+                                  value="male"
+                                  control={<Radio />}
+                                  label="Male"
+                                />
+                              </RadioGroup>
+                            </FormControl>
+                            <Form.Control
+                              className={"col-12 form"}
+                              type="text"
+                              placeholder="Enter a 4 digit's PIN"
+                              name="pin"
+                              value={signupFormInputs.pin}
+                              onChange={handleInputChange}
+                              maxLength={4}
+                              required
+                            />
+
+                            <input
+                              type="file"
+                              accept="image/*"
+                              hidden="true"
+                              onChange={(e) => setAvatar(e.target.files[0])}
+                              id="avatar"
+                            />
+                            <label for="avatar">
+                              <div className="file-upload-control">
+                                <CloudUploadIcon />
+                                <span>upload profile picture</span>
+                              </div>
+                            </label>
+                            <Button
+                              variant="contained"
+                              onClick={handleSubmitSignupForm}
+                            >
+                              Submit
+                            </Button>
+                          </>
+                        ) : (
+                          <>
+                            <Form.Control
+                              className={"col-12 form"}
+                              type="text"
+                              placeholder="Univesity Name"
+                              name="newuniversity"
+                              maxLength={250}
+                              value={newUnivesityName}
+                              onChange={(e) =>
+                                setNewUniversityName(e.target.value)
+                              }
+                              required
+                            />
+                            <input
+                              type="file"
+                              accept="image/*"
+                              hidden="true"
+                              onChange={(e) =>
+                                setNewUniversityLogo(e.target.files[0])
+                              }
+                              id="newuniversitylogo"
+                            />
+                            <label for="newuniversitylogo">
+                              <div className="file-upload-control">
+                                <CloudUploadIcon />
+                                <span>Upload Logo</span>
+                              </div>
+                            </label>
+
+                            <Button
+                              variant="contained"
+                              color="primary"
+                              onClick={handleNewUniversityForm}
+                            >
+                              Save
+                            </Button>
+                          </>
+                        )}
                       </div>
                     </>
                   )}
                 </div>
               </div>
             </Form>
-            <div style={{ textAlign: "center", marginBottom: '1rem' }} className="d-block d-sm-none">
-                <Button
-                  variant="contained"
-                  onClick={() => handleDownloadOpen("download")}
-                  style={{
-                    backgroundColor: "#0A0",
-                    marginInline: 10,
-                    color: "#fff",
-                  }}
-                >
-                  <span className={"fa fa-download"}></span>
-                  Download
-                </Button>
-                <DownloadForm
-                  insertVerifyCode={insertVerifyCode}
-                  selectedValue={downloadInput}
-                  open={openDownloadDialog}
-                  onClose={handleDownloadClose}
-                />
-                <Button
-                  variant="contained"
-                  onClick={() => handlePreviewOpen("download")}
-                  style={{
-                    backgroundColor: "#05ABFF",
-                    marginInline: 10,
-                    color: "#fff",
-                  }}
-                >
-                  <span className={"fa fa-user"}></span>
-                  Preview
-                </Button>
-                <PreviewDialog
-                  open={openPreviewDialog}
-                  onClose={handlePreviewClose}
-                />
-              </div>
+            <div
+              style={{ textAlign: "center", marginBottom: "1rem" }}
+              className="d-block d-sm-none"
+            >
+              <Button
+                variant="contained"
+                onClick={() => handleDownloadOpen("download")}
+                style={{
+                  backgroundColor: "#0A0",
+                  marginInline: 10,
+                  color: "#fff",
+                }}
+              >
+                <span className={"fa fa-download"}></span>
+                Download
+              </Button>
+              <DownloadForm
+                insertVerifyCode={insertVerifyCode}
+                selectedValue={downloadInput}
+                open={openDownloadDialog}
+                onClose={handleDownloadClose}
+              />
+              <Button
+                variant="contained"
+                onClick={() => handlePreviewOpen("download")}
+                style={{
+                  backgroundColor: "#05ABFF",
+                  marginInline: 10,
+                  color: "#fff",
+                }}
+              >
+                <span className={"fa fa-user"}></span>
+                Preview
+              </Button>
+              <PreviewDialog
+                open={openPreviewDialog}
+                onClose={handlePreviewClose}
+              />
+            </div>
             <h3
               className={"center text-center"}
               style={{
@@ -807,20 +957,6 @@ function Home() {
               A Day worth Remembering
             </h3>
             <div className="details-of-site">
-              {/* Delete It later */}
-              {/* <div className="part">
-                <div>
-                  <Button
-                    variant="contained"
-                    onClick={() => handleDownloadOpen("download")}
-                    style={{ backgroundColor: "#0A0", color: "#fff" }}
-                  >
-                    <span className={"fa fa-download"}></span>
-                    Save
-                  </Button>
-                </div>
-              </div> */}
-
               <div className="part">
                 <div>
                   <Button
@@ -839,7 +975,7 @@ function Home() {
                   />
                 </div>
               </div>
-              
+
               <div className="part">
                 <div>
                   <Button
@@ -861,7 +997,10 @@ function Home() {
               </div>
             </div>
 
-            <footer className={"center"} style={{ textAlign: "center", padding:'0 2rem' }}>
+            <footer
+              className={"center"}
+              style={{ textAlign: "center", padding: "0 2rem" }}
+            >
               <p>
                 Spread the happiness among your friends, juniors, and
                 connections to celebrate this year's <br />
@@ -879,17 +1018,6 @@ function Home() {
             {/* RIGHT COLUMN */}
 
             <div className={"scribble-image1"} ref={imageRef}>
-              {/* <h2
-                style={{
-                  position: "absolute",
-                  top: "50%",
-                  left: "26%",
-                  color: "#000",
-                  zIndex: 1,
-                }}
-              >
-                I am madan
-              </h2> */}
               {gender === "female" ? (
                 <Image
                   src={require(frontSide
@@ -920,7 +1048,7 @@ function Home() {
                         }
                       : {
                           border: "none",
-                          rotate: "90deg",
+                          rotate: rotateValue + "deg",
                           backgroundColor: "transparent",
                         }
                   }
@@ -993,6 +1121,15 @@ function Home() {
           </div>
         </div>
       </div>
+      <Snackbar
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        open={openSnackbar}
+        autoHideDuration={1000}
+        message={msgSnackbar}
+      />
     </div>
   );
 }
