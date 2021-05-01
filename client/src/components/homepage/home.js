@@ -51,25 +51,25 @@ const useStyles = makeStyles((theme) => ({
   selectEmpty: {
     marginTop: theme.spacing(2),
   },
-  resultOfUlist:{
+  resultOfUlist: {
     top: 38,
-    position: 'absolute',
+    position: "absolute",
     zIndex: 1,
-    background: '#fff',
-    color: '#000',
-    width: '100%',
+    background: "#fff",
+    color: "#000",
+    width: "100%",
     maxHeight: 160,
-    overflow: 'hidden',
-    overflowY: 'auto'
+    overflow: "hidden",
+    overflowY: "auto",
   },
-  resultListItem:{
-    padding: '6px 12px',
-    borderBottom: '1px solid #ccc',
-    cursor: 'pointer',
-    '&:hover':{
-      backgroundColor: '#bbb'
-    }
-  }
+  resultListItem: {
+    padding: "6px 12px",
+    borderBottom: "1px solid #ccc",
+    cursor: "pointer",
+    "&:hover": {
+      backgroundColor: "#bbb",
+    },
+  },
 }));
 
 function ValueLabelComponent(props) {
@@ -98,20 +98,20 @@ function Home() {
     setAge(event.target.value);
   };
   const [duniversityList, setDUniversityList] = useState([
-    {name: 'IIT Delhi'},
-    {name: 'Poornima University'}
+    { name: "IIT Delhi" },
+    { name: "Poornima University" },
   ]);
   const [dfriendList, setDFriendList] = useState([
-    {name: 'Ramesh'},
-    {name: 'Dooper'}
+    { name: "Ramesh" },
+    { name: "Dooper" },
   ]);
   const [universityList, setUniversityList] = useState([
-    {name: 'IIT Delhi'},
-    {name: 'Poornima University'}
+    { name: "IIT Delhi" },
+    { name: "Poornima University" },
   ]);
   const [friendList, setFriendList] = useState([
-    {name: 'Ramesh'},
-    {name: 'Dooper'}
+    { name: "Ramesh" },
+    { name: "Dooper" },
   ]);
   const searchFilterFunction = (text, data, setData) => {
     // Check if searched text is not blank
@@ -184,7 +184,7 @@ function Home() {
         setUserData(resp.data.userdata);
       }
     })();
-  }, [userdata, landingPageBool]);
+  }, [landingPageBool]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -505,12 +505,7 @@ function Home() {
         <div className="row mb-view">
           {/* LEFT COLUMN */}
           <div className={"column"}>
-            <Form
-              // onSubmit={handleSubmit}
-              autoComplete="off"
-              inline
-              className={"row justify-content-center form1"}
-            >
+            <div className={"row justify-content-center form1"}>
               <div className={"col-12 col-sm-10 col-lg-8 d-flex flex-column"}>
                 <div style={{ padding: "1rem" }}>
                   <HomeIcon
@@ -527,82 +522,88 @@ function Home() {
                   <hr />
                   {landingPageBool && (
                     <>
-                    <div className="formAvatarGroup col-12 col-sm-8 col-md-9">
-                      <div style={{position: 'relative'}}>
-                        <Form.Control
-                          className={" form"}
-                          type="text"
-                          placeholder="University Name"
-                          name="message"
-                          maxLength={250}
-                          value={university}
-                          onFocus={()=>setUlistInput(true)}
-                          onBlur={()=>setUlistInput(false)}
-                          onChange={(e) => {
-                            setUniversity(e.target.value)
-                            searchFilterFunction(e.target.value,duniversityList,setUniversityList)
-                          }}
-                          required
+                      <div className="formAvatarGroup col-12 col-sm-8 col-md-9">
+                        <div style={{ position: "relative" }}>
+                          <Form.Control
+                            className={" form"}
+                            type="text"
+                            placeholder="University Name"
+                            name="message"
+                            maxLength={250}
+                            value={university}
+                            onFocus={() => setUlistInput(true)}
+                            onBlur={() => setUlistInput(false)}
+                            onChange={(e) => {
+                              setUniversity(e.target.value);
+                              searchFilterFunction(
+                                e.target.value,
+                                duniversityList,
+                                setUniversityList
+                              );
+                            }}
+                            required
+                          />
+                          <div className={classes.resultOfUlist}>
+                            {isUlistFocus &&
+                              (universityList.length > 0 ? (
+                                universityList.map((uObj) => (
+                                  <div className={classes.resultListItem}>
+                                    {uObj.name}
+                                  </div>
+                                ))
+                              ) : (
+                                <div></div>
+                              ))}
+                          </div>
+                        </div>
+                        <Avatar
+                          style={{ marginLeft: 12 }}
+                          alt="Remy Sharp"
+                          src={require("../../assets/lpu.png")}
                         />
-                        <div className={classes.resultOfUlist}>
-                          {
-                            isUlistFocus &&
-                            (
-                            universityList.length>0?
-                            universityList.map(uObj=>(
-                              <div className={classes.resultListItem}>
-                                {uObj.name}
-                              </div>
-                            ))
-                            :
-                            <div></div>
-                            )
-                          }
+                      </div>
+                      <div className="formAvatarGroup col-12 col-sm-8 col-md-9">
+                        <div style={{ position: "relative" }}>
+                          <Form.Control
+                            className={" form"}
+                            type="text"
+                            placeholder="Friend's Name"
+                            name="friendname"
+                            maxLength={250}
+                            col-12
+                            col-sm-8
+                            col-md-9
+                            value={friendname}
+                            onFocus={() => setFriendInput(true)}
+                            onBlur={() => setFriendInput(false)}
+                            onChange={(e) => {
+                              setFriendName(e.target.value);
+                              searchFilterFunction(
+                                e.target.value,
+                                dfriendList,
+                                setFriendList
+                              );
+                            }}
+                            required
+                          />
+                          <div className={classes.resultOfUlist}>
+                            {isFriendFocus &&
+                              (friendList.length > 0 ? (
+                                friendList.map((uObj) => (
+                                  <div className={classes.resultListItem}>
+                                    {uObj.name}
+                                  </div>
+                                ))
+                              ) : (
+                                <div></div>
+                              ))}
+                          </div>
                         </div>
-                      </div>
-                      <Avatar
-                        style={{ marginLeft: 12 }}
-                        alt="Remy Sharp"
-                        src={require("../../assets/lpu.png")}
-                      />
-                      </div>
-                    <div  className="formAvatarGroup col-12 col-sm-8 col-md-9">
-                      <div style={{position: 'relative'}}>
-                      <Form.Control
-                        className={" form"}
-                        type="text"
-                        placeholder="Friend's Name"
-                        name="friendname"
-                        maxLength={250}col-12 col-sm-8 col-md-9
-                        value={friendname}
-                        onFocus={()=>setFriendInput(true)}
-                        onBlur={()=>setFriendInput(false)}
-                        onChange={(e) => {
-                          setFriendName(e.target.value);
-                          searchFilterFunction(e.target.value,dfriendList,setFriendList)
-                        }}
-                        required
-                      />
-                      <div className={classes.resultOfUlist}>
-                          {
-                            isFriendFocus&&(
-                            friendList.length>0?
-                            friendList.map(uObj=>(
-                              <div className={classes.resultListItem}>
-                                {uObj.name}
-                              </div>
-                            ))
-                            :
-                            <div></div>
-                            )
-                          }
-                        </div>
-                      </div>
-                      <Avatar
-                        style={{ marginLeft: 12 }}
-                        alt="Remy Sharp"
-                        src={require("../../assets/logo192.png")}
-                      />
+                        <Avatar
+                          style={{ marginLeft: 12 }}
+                          alt="Remy Sharp"
+                          src={require("../../assets/logo192.png")}
+                        />
                       </div>
                       <Form.Control
                         className={"col-12 col-sm-8 col-md-9 form"}
@@ -1008,7 +1009,7 @@ function Home() {
                   )}
                 </div>
               </div>
-            </Form>
+            </div>
             <div
               style={{ textAlign: "center", marginBottom: "1rem" }}
               className="d-block d-sm-none"
@@ -1061,20 +1062,20 @@ function Home() {
             <div className="details-of-site">
               <div className="part">
                 <div>
-                  <Button
-                    variant="contained"
-                    onClick={() => handleDownloadOpen("download")}
-                    style={{ backgroundColor: "#0A0", color: "#fff" }}
+                  <a
+                    href={"https://rzp.io/l/Up18AjAWH"}
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
-                    <span className={"fa fa-shopping-cart"}></span>
-                    Place Order
-                  </Button>
-                  <DownloadForm
-                    insertVerifyCode={insertVerifyCode}
-                    selectedValue={downloadInput}
-                    open={openDownloadDialog}
-                    onClose={handleDownloadClose}
-                  />
+                    <Button
+                      variant="contained"
+                      onClick={() => handleDownloadOpen("download")}
+                      style={{ backgroundColor: "#0A0", color: "#fff" }}
+                    >
+                      <span className={"fa fa-shopping-cart"}></span>
+                      Place Order
+                    </Button>
+                  </a>
                 </div>
               </div>
 

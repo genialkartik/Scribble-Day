@@ -1,0 +1,33 @@
+{
+  "files": {
+    "main.css": "/static/css/main.61f3ee9e.chunk.css",
+    "main.js": "/static/js/main.3554b972.chunk.js",
+    "main.js.map": "/static/js/main.3554b972.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.f6673272.js",
+    "runtime-main.js.map": "/static/js/runtime-main.f6673272.js.map",
+    "static/css/2.2a86faee.chunk.css": "/static/css/2.2a86faee.chunk.css",
+    "static/js/2.63aa9beb.chunk.js": "/static/js/2.63aa9beb.chunk.js",
+    "static/js/2.63aa9beb.chunk.js.map": "/static/js/2.63aa9beb.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.6c9685473ebef52a6a324dac344f4e77.js": "/precache-manifest.6c9685473ebef52a6a324dac344f4e77.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/2.2a86faee.chunk.css.map": "/static/css/2.2a86faee.chunk.css.map",
+    "static/css/main.61f3ee9e.chunk.css.map": "/static/css/main.61f3ee9e.chunk.css.map",
+    "static/js/2.63aa9beb.chunk.js.LICENSE.txt": "/static/js/2.63aa9beb.chunk.js.LICENSE.txt",
+    "static/media/ScribbleDay.png": "/static/media/ScribbleDay.241eefb3.png",
+    "static/media/announcement.png": "/static/media/announcement.ea18e75f.png",
+    "static/media/femalefront.png": "/static/media/femalefront.c76b3019.png",
+    "static/media/lpu.png": "/static/media/lpu.5456eb90.png",
+    "static/media/maleback.png": "/static/media/maleback.5520076a.png",
+    "static/media/malefront.png": "/static/media/malefront.3b15893e.png",
+    "static/media/tshirt1.png": "/static/media/tshirt1.7ae50b19.png",
+    "static/media/tshirt2.png": "/static/media/tshirt2.7ae50b19.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.f6673272.js",
+    "static/css/2.2a86faee.chunk.css",
+    "static/js/2.63aa9beb.chunk.js",
+    "static/css/main.61f3ee9e.chunk.css",
+    "static/js/main.3554b972.chunk.js"
+  ]
+}
