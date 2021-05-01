@@ -11,7 +11,6 @@ import FormControl from "@material-ui/core/FormControl";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import AccountCircle from "@material-ui/icons/AccountCircle";
-import Popover from "@material-ui/core/Popover";
 import Dialog from "@material-ui/core/Dialog";
 import Avatar from "@material-ui/core/Avatar";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -94,27 +93,14 @@ function Home() {
   const imageRef = useRef(null);
   const { image, takeScreenshot } = useScreenshot({ ref: imageRef });
   const classes = useStyles();
-  const [age, setAge] = useState("");
 
-  const handleChange = (event) => {
-    setAge(event.target.value);
+  const handleFontChange = (event) => {
+    setFontFam(event.target.value);
   };
-  const [duniversityList, setDUniversityList] = useState([
-    { name: "IIT Delhi" },
-    { name: "Poornima University" },
-  ]);
-  const [dfriendList, setDFriendList] = useState([
-    { name: "Ramesh" },
-    { name: "Dooper" },
-  ]);
-  const [universityList, setUniversityList] = useState([
-    { name: "IIT Delhi" },
-    { name: "Poornima University" },
-  ]);
-  const [friendList, setFriendList] = useState([
-    { name: "Ramesh" },
-    { name: "Dooper" },
-  ]);
+  const [duniversityList, setDUniversityList] = useState([]);
+  const [dfriendList, setDFriendList] = useState([]);
+  const [universityList, setUniversityList] = useState([]);
+  const [friendList, setFriendList] = useState([]);
   const searchFilterFunction = (text, data, setData) => {
     // Check if searched text is not blank
     if (text) {
@@ -143,6 +129,7 @@ function Home() {
   const [rotateValue, setRotateValue] = useState(0);
   const [dragBool, setDragBool] = useState(false);
   const [messageFont, setMessageFont] = useState(".8em");
+  const [fontFam, setFontFam] = useState("Jazz LET, fantasy");
 
   const [gender, setGender] = useState("female");
   const [frontSide, setSide] = useState(true);
@@ -156,6 +143,7 @@ function Home() {
   const [allowShare, setAllowShare] = useState(false);
   const [clickedOnShareOrDownload, setSD] = useState("download");
   const [university, setUniversity] = useState("");
+  const [universityLogo, setUniversityLogo] = useState();
 
   // const [sendScribbleButtonBool, setSendScribbleButtonBool] = useState(true);
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -180,21 +168,25 @@ function Home() {
   const [newUnivesityLogo, setNewUniversityLogo] = useState();
   const [avatar, setAvatar] = useState();
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const handlePopOverClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handlePopOverClose = () => {
-    setAnchorEl(null);
-  };
-  const popOverOpen = Boolean(anchorEl);
-  const popOverId = popOverOpen ? "simple-popover" : undefined;
-
   useEffect(() => {
     (async () => {
       const resp = await axios.get("/check/session");
       if (resp.data && resp.data.userdata) {
         setUserData(resp.data.userdata);
+        setSendee(resp.data.userdata.name);
+      }
+    })();
+
+    // fecth university list
+    (async () => {
+      const resp = await axios.get("/institute/list");
+      if (resp.data && resp.data.instituteList) {
+        setUniversityList(
+          resp.data.instituteList.length > 0 ? resp.data.instituteList : []
+        );
+        setDUniversityList(
+          resp.data.instituteList.length > 0 ? resp.data.instituteList : []
+        );
       }
     })();
   }, [landingPageBool]);
@@ -269,6 +261,7 @@ function Home() {
         setInsertVerifyCode(false);
         setEnterPinOrCodeBool("pin");
         setUserData(resp.data.userdata ? resp.data.userdata : null);
+        setSendee(resp.data?.userdata?.name);
       } else {
         alert(resp.data.respMessage);
       }
@@ -372,6 +365,10 @@ function Home() {
         setNewUniversityBool(false);
       }
     }
+  };
+
+  const handleOnDragStart = () => {
+    // setRotateValue(0);
   };
 
   function PreviewDialog(props) {
@@ -489,7 +486,17 @@ function Home() {
               >
                 <Button
                   variant="contained"
-                  onClick={() => handleDownloadOpen("download")}
+                  onClick={() => {
+                    if (isFixed) {
+                      handleDownloadOpen("download");
+                    } else {
+                      setOpenSnackbar(true);
+                      setMsgSnackbar(
+                        "Click on 'fix' below the Message on tshirt to continue..."
+                      );
+                      setTimeout(() => setOpenSnackbar(false), 6000);
+                    }
+                  }}
                   style={{
                     backgroundColor: "#0A0",
                     marginInline: 10,
@@ -568,16 +575,25 @@ function Home() {
                             required
                           />
                           <div className={classes.resultOfUlist}>
-                            {isUlistFocus &&
-                              (universityList.length > 0 ? (
-                                universityList.map((uObj) => (
-                                  <div className={classes.resultListItem}>
-                                    {uObj.name}
-                                  </div>
-                                ))
-                              ) : (
-                                <div></div>
-                              ))}
+                            {isUlistFocus && (
+                              <>
+                                {universityList.length > 0 ? (
+                                  universityList.map((uObj) => (
+                                    <div
+                                      className={classes.resultListItem}
+                                      onClick={() => {
+                                        setUniversity(uObj.name);
+                                        console.log(uObj.name);
+                                      }}
+                                    >
+                                      {uObj.name}
+                                    </div>
+                                  ))
+                                ) : (
+                                  <div></div>
+                                )}
+                              </>
+                            )}
                           </div>
                         </div>
                         <Avatar
@@ -638,58 +654,75 @@ function Home() {
                         onChange={(e) => setMessage(e.target.value)}
                         required
                       />
-                      <div>
-                        <FiberManualRecordIcon
-                          onClick={() => setMessageColor("#f00000")}
-                          style={{ color: "#f00000" }}
-                        />
-                        <FiberManualRecordIcon
-                          onClick={() => setMessageColor("#07c603")}
-                          style={{ color: "#07c603" }}
-                        />
-                        <FiberManualRecordIcon
-                          onClick={() => setMessageColor("#05abff")}
-                          style={{ color: "#05abff" }}
-                        />
-                        <FiberManualRecordIcon
-                          onClick={() => setMessageColor("#ead300")}
-                          style={{ color: "#ead300" }}
-                        />
-                        <FiberManualRecordIcon
-                          onClick={() => setMessageColor("#ff8300")}
-                          style={{ color: "#ff8300" }}
-                        />
-                        <FiberManualRecordIcon
-                          onClick={() => setMessageColor("#9605ff")}
-                          style={{ color: "#9605ff" }}
-                        />
-                        <FiberManualRecordIcon
-                          onClick={() => setMessageColor("#ff05fa")}
-                          style={{ color: "#ff05fa" }}
-                        />
-                        <div
-                          className={"rotate-slider"}
-                          style={{
-                            margin: "1rem 0",
-                          }}
-                        >
-                          <Typography
-                            gutterBottom
-                            style={{ fontSize: "0.9em", color: "#FC88DF" }}
+                      {isFixed ? (
+                        <>
+                          <Button
+                            variant="contained"
+                            onClick={() => {
+                              setDragBool(false);
+                              setIsFixed(false);
+                            }}
+                            color="default"
                           >
-                            Rotate Scribble Message
-                          </Typography>
-                          <Slider
-                            ValueLabelComponent={ValueLabelComponent}
-                            aria-label="custom thumb label"
-                            value={rotateValue}
-                            min={-180}
-                            max={180}
-                            style={{ color: "white" }}
-                            onChange={handleRotateChange}
-                          />
-                        </div>
-                      </div>
+                            Edit Again
+                          </Button>
+                        </>
+                      ) : (
+                        <>
+                          <div>
+                            <FiberManualRecordIcon
+                              onClick={() => setMessageColor("#f00000")}
+                              style={{ color: "#f00000" }}
+                            />
+                            <FiberManualRecordIcon
+                              onClick={() => setMessageColor("#07c603")}
+                              style={{ color: "#07c603" }}
+                            />
+                            <FiberManualRecordIcon
+                              onClick={() => setMessageColor("#05abff")}
+                              style={{ color: "#05abff" }}
+                            />
+                            <FiberManualRecordIcon
+                              onClick={() => setMessageColor("#ead300")}
+                              style={{ color: "#ead300" }}
+                            />
+                            <FiberManualRecordIcon
+                              onClick={() => setMessageColor("#ff8300")}
+                              style={{ color: "#ff8300" }}
+                            />
+                            <FiberManualRecordIcon
+                              onClick={() => setMessageColor("#9605ff")}
+                              style={{ color: "#9605ff" }}
+                            />
+                            <FiberManualRecordIcon
+                              onClick={() => setMessageColor("#ff05fa")}
+                              style={{ color: "#ff05fa" }}
+                            />
+                            <div
+                              className={"rotate-slider"}
+                              style={{
+                                margin: "1rem 0",
+                              }}
+                            >
+                              <Typography
+                                gutterBottom
+                                style={{ fontSize: "0.9em", color: "#FC88DF" }}
+                              >
+                                Rotate Scribble Message
+                              </Typography>
+                              <Slider
+                                ValueLabelComponent={ValueLabelComponent}
+                                aria-label="custom thumb label"
+                                value={rotateValue}
+                                min={-180}
+                                max={180}
+                                style={{ color: "white" }}
+                                onChange={handleRotateChange}
+                              />
+                            </div>
+                          </div>
+                        </>
+                      )}
                       <div
                         style={{
                           display: "flex",
@@ -697,54 +730,117 @@ function Home() {
                           padding: "0 12px",
                         }}
                       >
-                        <FormControl
-                          variant="outlined"
-                          className={classes.formControl}
-                        >
-                          <InputLabel
-                            color="primary"
-                            classes={{
-                              outlined: { color: "#fff" },
-                            }}
-                            id="demo-simple-select-outlined-label"
-                            style={{ color: "#ddd" }}
+                        {!isFixed && (
+                          <FormControl
+                            variant="outlined"
+                            className={classes.formControl}
                           >
-                            Select Font
-                          </InputLabel>
-                          <Select
-                            labelId="demo-simple-select-outlined-label"
-                            id="demo-simple-select-outlined"
-                            value={age}
-                            onChange={handleChange}
-                            label="Font"
-                            style={{
-                              backgroundColor: "#1A354E",
-                            }}
-                          >
-                            <MenuItem value="">
-                              <em>None</em>
-                            </MenuItem>
-                            <MenuItem value={10}>Ten</MenuItem>
-                            <MenuItem value={20}>Twenty</MenuItem>
-                            <MenuItem value={30}>Thirty</MenuItem>
-                          </Select>
-                        </FormControl>
+                            <InputLabel
+                              color="primary"
+                              classes={{
+                                outlined: { color: "#fff" },
+                              }}
+                              id="demo-simple-select-outlined-label"
+                              style={{ color: "#ddd" }}
+                            >
+                              Select Font
+                            </InputLabel>
+                            <Select
+                              labelId="demo-simple-select-outlined-label"
+                              id="demo-simple-select-outlined"
+                              value={fontFam}
+                              onChange={handleFontChange}
+                              label="Font"
+                              style={{
+                                backgroundColor: "#1A354E",
+                              }}
+                            >
+                              <MenuItem value="">
+                                <em>Select form</em>
+                              </MenuItem>
+                              <MenuItem
+                                style={{
+                                  fontFamily:
+                                    "Comic Sans MS, Comic Sans, cursive",
+                                }}
+                                value={"Comic Sans MS, Comic Sans, cursive"}
+                              >
+                                Happy Scribble Day
+                              </MenuItem>
+                              <MenuItem
+                                style={{
+                                  fontFamily:
+                                    "Brush Script MT, Brush Script Std, cursive",
+                                }}
+                                value={
+                                  "Brush Script MT, Brush Script Std, cursive"
+                                }
+                              >
+                                Happy Scribble Day
+                              </MenuItem>
+                              <MenuItem
+                                style={{
+                                  fontFamily: "Trattatello, fantasy",
+                                }}
+                                value={"Trattatello, fantasy"}
+                              >
+                                Happy Scribble Day
+                              </MenuItem>
+                              <MenuItem
+                                style={{
+                                  fontFamily: "Jazz LET, fantasy",
+                                }}
+                                value={"Jazz LET, fantasy"}
+                              >
+                                Happy Scribble Day
+                              </MenuItem>
+                              <MenuItem
+                                style={{
+                                  fontFamily: "Courier New, monospace",
+                                }}
+                                value={"Courier New, monospace"}
+                              >
+                                Happy Scribble Day
+                              </MenuItem>
+                              <MenuItem
+                                style={{
+                                  fontFamily: "OCR A Std, monospace",
+                                }}
+                                value={"OCR A Std, monospace"}
+                              >
+                                Happy Scribble Day
+                              </MenuItem>
+                              <MenuItem
+                                style={{
+                                  fontFamily: "cursive",
+                                }}
+                                value={"cursive"}
+                              >
+                                Happy Scribble Day
+                              </MenuItem>
+                            </Select>
+                          </FormControl>
+                        )}
                         <Button
                           variant="contained"
-                          disabled={isFixed ? false : true}
                           onClick={() => {
-                            if (
-                              window.confirm(
-                                "You will not be able to edit furthur. Are you sure to continue?"
-                              )
-                            ) {
-                              handleSendScribbleForm();
+                            if (isFixed) {
+                              if (
+                                window.confirm(
+                                  "You won't be able to edit again. Are you sure to continue?"
+                                )
+                              ) {
+                                handleSendScribbleForm();
+                              }
+                            } else {
+                              setOpenSnackbar(true);
+                              setMsgSnackbar(
+                                "Click on 'fix' below the Message on tshirt to continue..."
+                              );
+                              setTimeout(() => setOpenSnackbar(false), 6000);
                             }
                           }}
-                          style={{
-                            backgroundColor: "#1A354E",
-                            color: isFixed ? "#fff" : "#aaa",
-                          }}
+                          color="primary"
                         >
                           Submit
                         </Button>
@@ -926,8 +1022,12 @@ function Home() {
                                 value={signupFormInputs.university}
                                 onChange={handleInputChange}
                               >
-                                <MenuItem value={"lpu"}>LPU</MenuItem>
-                                <MenuItem value={"Amity"}>Amity</MenuItem>
+                                {universityList.length > 0 &&
+                                  universityList.map((university) => (
+                                    <MenuItem value={university.name}>
+                                      {university.name}
+                                    </MenuItem>
+                                  ))}
                                 <MenuItem
                                   value={"other"}
                                   onClick={() => {
@@ -1175,27 +1275,26 @@ function Home() {
               <div className={"university-logo"}>
                 <Image src={require("../../assets/lpu.png")} height="32px" />
               </div>
-              <Draggable disabled={dragBool}>
+              <Draggable disabled={dragBool} onStart={handleOnDragStart}>
                 <div
                   className={"scribble-message1"}
                   style={
                     !dragBool
                       ? {
-                          rotate: rotateValue + "deg",
-                          backgroundColor: "#e5fcff",
                           border: "1px solid rgb(233, 233, 233)",
                         }
                       : {
                           border: "none",
-                          rotate: rotateValue + "deg",
                           backgroundColor: "transparent",
                         }
                   }
                 >
                   <div
                     style={{
+                      rotate: rotateValue + "deg",
                       color: messageColor,
                       fontSize: messageFont,
+                      fontFamily: fontFam,
                       cursor: dragBool ? "default" : "move",
                     }}
                   >
@@ -1206,16 +1305,13 @@ function Home() {
                       </span>
                     </p>
                   </div>
-                  {!dragBool ? (
+                  {!dragBool && (
                     <>
                       <div
                         className={"actions"}
-                        onClick={(e) => {
+                        onClick={() => {
                           setDragBool(true);
                           setIsFixed(true);
-                          // handlePopOverClick(e);
-                          setAnchorEl(e.currentTarget);
-                          console.log(e.currentTarget);
                         }}
                       >
                         fix
@@ -1245,17 +1341,6 @@ function Home() {
                         4
                       </div>
                     </>
-                  ) : (
-                    <div
-                      className={"actions"}
-                      onClick={() => {
-                        setDragBool(false);
-                        setMessageFont(".9em");
-                        setIsFixed(false);
-                      }}
-                    >
-                      <AutorenewIcon style={{ fontSize: "0.9em" }} />
-                    </div>
                   )}
                 </div>
               </Draggable>
@@ -1267,31 +1352,13 @@ function Home() {
       </div>
       <Snackbar
         anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
+          vertical: "top",
+          horizontal: "center",
         }}
         open={openSnackbar}
         autoHideDuration={1000}
         message={msgSnackbar}
       />
-      <Popover
-        id={popOverId}
-        open={popOverOpen}
-        anchorEl={anchorEl}
-        onClose={handlePopOverClose}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "center",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "center",
-        }}
-      >
-        <Typography className={classes.typography}>
-          The content of the Popover.
-        </Typography>
-      </Popover>
     </div>
   );
 }
