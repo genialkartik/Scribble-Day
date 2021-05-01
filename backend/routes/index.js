@@ -250,4 +250,11 @@ rtr.get("/institute/list", async (req, res) => {
   res.json({ instituteList: respList && respList.length > 0 ? respList : [] });
 });
 
+rtr.post("/friends/list", async (req, res) => {
+  const resp = await User.find({ university: req.body.university });
+  res.json({
+    friendsList: resp & (resp.length > 0) ? resp : [],
+  });
+});
+
 module.exports = rtr;

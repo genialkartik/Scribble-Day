@@ -564,22 +564,25 @@ function Home() {
                             required
                           />
                           <div className={classes.resultOfUlist}>
-                            {isUlistFocus &&
-                              (universityList.length > 0 ? (
-                                universityList.map((uObj) => (
-                                  <div
-                                    className={classes.resultListItem}
-                                    onClick={() => {
-                                      setUniversity(uObj.name);
-                                      console.log(uObj.name);
-                                    }}
-                                  >
-                                    {uObj.name}
-                                  </div>
-                                ))
-                              ) : (
-                                <div></div>
-                              ))}
+                            {isUlistFocus && (
+                              <>
+                                {universityList.length > 0 ? (
+                                  universityList.map((uObj) => (
+                                    <div
+                                      className={classes.resultListItem}
+                                      onClick={() => {
+                                        setUniversity(uObj.name);
+                                        console.log(uObj.name);
+                                      }}
+                                    >
+                                      {uObj.name}
+                                    </div>
+                                  ))
+                                ) : (
+                                  <div></div>
+                                )}
+                              </>
+                            )}
                           </div>
                         </div>
                         <Avatar
