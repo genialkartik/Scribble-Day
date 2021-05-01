@@ -138,9 +138,6 @@ function Home() {
   const [openPreviewDialog, setPreviewDialog] = useState(false);
   const [downloadInput, setDownloadInput] = useState();
   const [insertVerifyCode, setInsertVerifyCode] = useState(false);
-  const [allowDownload, setAllowDownload] = useState(false);
-  const [allowShare, setAllowShare] = useState(false);
-  const [clickedOnShareOrDownload, setSD] = useState("download");
   const [university, setUniversity] = useState("");
   const [universityLogo, setUniversityLogo] = useState();
 
@@ -317,20 +314,14 @@ function Home() {
   const handleRotateChange = (event, newValue) => {
     setRotateValue(newValue);
   };
-  const handleDownloadOpen = (downloadOrShare) => {
+  const handleDownloadOpen = () => {
     takeScreenshot();
     setDownloadDialog(true);
-    setSD(downloadOrShare);
   };
 
   const handleDownloadClose = (value) => {
     setDownloadDialog(false);
     setDownloadInput(value);
-    setAllowDownload(false);
-    setAllowShare(true);
-  };
-  const handlePreviewOpen = () => {
-    setPreviewDialog(true);
   };
 
   const handlePreviewClose = () => {
@@ -361,7 +352,6 @@ function Home() {
   };
 
   function PreviewDialog(props) {
-    const classes = useStyles();
     const { onClose, selectedValue, open } = props;
     const handlePreviewClose = () => {
       onClose(selectedValue);
@@ -399,6 +389,17 @@ function Home() {
         open={open}
       >
         {image ? <img src={image} /> : <CircularProgress />}
+        <Button
+          variant="contained"
+          style={{
+            backgroundColor: "#0A0",
+            marginInline: 10,
+            color: "#fff",
+          }}
+        >
+          <span className={"fa fa-download"}></span>
+          Download
+        </Button>
       </Dialog>
     );
   }
@@ -473,28 +474,30 @@ function Home() {
                 style={{ textAlign: "center" }}
                 className="d-none d-sm-block"
               >
-                <Button
-                  variant="contained"
-                  onClick={() => {
-                    if (isFixed) {
-                      handleDownloadOpen("download");
-                    } else {
-                      setOpenSnackbar(true);
-                      setMsgSnackbar(
-                        "Click on 'fix' below the Message on tshirt to continue..."
-                      );
-                      setTimeout(() => setOpenSnackbar(false), 6000);
-                    }
-                  }}
-                  style={{
-                    backgroundColor: "#0A0",
-                    marginInline: 10,
-                    padding: 11,
-                    color: "#fff",
-                  }}
-                >
-                  <span className={"fa fa-download"}></span>
-                </Button>
+                {userdata && (
+                  <Button
+                    variant="contained"
+                    onClick={() => {
+                      if (isFixed) {
+                        handleDownloadOpen("download");
+                      } else {
+                        setOpenSnackbar(true);
+                        setMsgSnackbar(
+                          "Click on 'fix' below the Message on tshirt to continue..."
+                        );
+                        setTimeout(() => setOpenSnackbar(false), 6000);
+                      }
+                    }}
+                    style={{
+                      backgroundColor: "#0A0",
+                      marginInline: 10,
+                      padding: 11,
+                      color: "#fff",
+                    }}
+                  >
+                    <span className={"fa fa-download"}></span>
+                  </Button>
+                )}
                 <DownloadForm
                   insertVerifyCode={insertVerifyCode}
                   selectedValue={downloadInput}
@@ -503,7 +506,7 @@ function Home() {
                 />
                 <Button
                   variant="contained"
-                  onClick={() => handlePreviewOpen("download")}
+                  onClick={() => setPreviewDialog(true)}
                   style={{
                     backgroundColor: "#05ABFF",
                     marginInline: 10,
@@ -547,7 +550,7 @@ function Home() {
                           <Form.Control
                             className={" form"}
                             type="text"
-                            placeholder="University Name"
+                            placeholder="Search University"
                             name="message"
                             maxLength={250}
                             value={university}
@@ -564,25 +567,22 @@ function Home() {
                             required
                           />
                           <div className={classes.resultOfUlist}>
-                            {isUlistFocus && (
-                              <>
-                                {universityList.length > 0 ? (
-                                  universityList.map((uObj) => (
-                                    <div
-                                      className={classes.resultListItem}
-                                      onClick={() => {
-                                        setUniversity(uObj.name);
-                                        console.log(uObj.name);
-                                      }}
-                                    >
-                                      {uObj.name}
-                                    </div>
-                                  ))
-                                ) : (
-                                  <div></div>
-                                )}
-                              </>
-                            )}
+                            {isUlistFocus &&
+                              (universityList.length > 0 ? (
+                                universityList.map((uObj) => (
+                                  <div
+                                    className={classes.resultListItem}
+                                    onClick={() => {
+                                      setUniversity(uObj.name);
+                                      console.log(uObj.name);
+                                    }}
+                                  >
+                                    {uObj.name}
+                                  </div>
+                                ))
+                              ) : (
+                                <div></div>
+                              ))}
                           </div>
                         </div>
                         <Avatar
@@ -596,7 +596,7 @@ function Home() {
                           <Form.Control
                             className={" form"}
                             type="text"
-                            placeholder="Friend's Name"
+                            placeholder="Search Friend"
                             name="friendname"
                             maxLength={250}
                             col-12
@@ -814,7 +814,11 @@ function Home() {
                           variant="contained"
                           onClick={() => {
                             if (isFixed) {
-                              if (
+                              if (!userdata) {
+                                setOpenSnackbar(true);
+                                setMsgSnackbar("Login first to give Scribble");
+                                setTimeout(() => setOpenSnackbar(false), 6000);
+                              } else if (
                                 window.confirm(
                                   "You won't be able to edit again. Are you sure to continue?"
                                 )
@@ -874,39 +878,76 @@ function Home() {
                       <div className="part">
                         <Button
                           variant="contained"
-                          // onClick={() => handleDownloadOpen("share")}
+                          onClick={() => handleDownloadOpen()}
                           style={{ backgroundColor: "#8A374A", color: "#fff" }}
                         >
                           <span className={"fa fa-instagram"}></span>
                         </Button>
-                        <Button
-                          variant="contained"
-                          // onClick={() => handleDownloadOpen("share")}
-                          style={{ backgroundColor: "#2E73AD", color: "#fff" }}
+                        <a
+                          target="_blank"
+                          href="https://www.linkedin.com/shareArticle?mini=true&url=https://thirsty-goldwasser-7273c9.netlify.app/&title=%20Scribble%20Day%202021%20%20Write%20a%20Scribble%20for%20me%20&summary=Pandemic%20could%20ruin%20your%20studies%20But%20not%20your%20last%20day%20of%20college%20|%20#scribbleday2021&source=thirsty-goldwasser-7273c9.netlify.app/"
                         >
-                          <span className={"fa fa-linkedin"}></span>
-                        </Button>
-                        <Button
-                          variant="contained"
-                          // onClick={() => handleDownloadOpen("share")}
-                          style={{ backgroundColor: "#4095ED", color: "#fff" }}
+                          <Button
+                            variant="contained"
+                            style={{
+                              backgroundColor: "#2E73AD",
+                              color: "#fff",
+                            }}
+                          >
+                            <span className={"fa fa-linkedin"}></span>
+                          </Button>
+                        </a>
+                        <a
+                          class="fb-share"
+                          onClick="window.open(this.href,'targetWindow','toolbar=no,location=0,status=no,menubar=no,scrollbars=yes,resizable=yes,width=600,height=250'); return false;"
+                          href=""
+                          target="_blank"
                         >
-                          <span className={"fa fa-facebook"}></span>
-                        </Button>
+                          <Button
+                            variant="contained"
+                            style={{
+                              backgroundColor: "#4095ED",
+                              color: "#fff",
+                            }}
+                          >
+                            <span className={"fa fa-facebook"}></span>
+                          </Button>
+                        </a>
                         <Button
                           variant="contained"
-                          // onClick={() => handleDownloadOpen("share")}
-                          style={{ backgroundColor: "#05ABFF", color: "#fff" }}
+                          onClick={() => {
+                            window.location.href =
+                              "https://twitter.com/share?url=" +
+                              encodeURIComponent(
+                                "www.thirsty-goldwasser-7273c9.netlify.app//"
+                              ) +
+                              "&text=" +
+                              document.title;
+                          }}
+                          style={{
+                            backgroundColor: "#05ABFF",
+                            color: "#fff",
+                          }}
                         >
                           <span className={"fa fa-twitter"}></span>
                         </Button>
-                        <Button
-                          variant="contained"
-                          // onClick={() => handleDownloadOpen("share")}
-                          style={{ backgroundColor: "#0DC143", color: "#fff" }}
+                        <a
+                          href="https://web.whatsapp.com/send?text=www.google.com"
+                          data-action="share/whatsapp/share"
+                          target="_blank"
+                          rel="noopener noreferrer"
                         >
-                          <span className={"fa fa-whatsapp"}></span>
-                        </Button>
+                          <Button
+                            variant="contained"
+                            // onClick={() => handleDownloadOpen("share")}
+                            style={{
+                              backgroundColor: "#0DC143",
+                              color: "#fff",
+                            }}
+                          >
+                            <span className={"fa fa-whatsapp"}></span>
+                          </Button>
+                        </a>
                       </div>
                     </>
                   )}
@@ -989,147 +1030,142 @@ function Home() {
                       />
                     </FormControl>
                   )}
-                  {signupFormBool && (
+                  {signupFormBool && !userdata && (
                     <>
                       <div className="col-12 col-sm-11 col-lg-9 row">
-                        {!newUniversityBool ? (
-                          <>
-                            <FormControl
-                              variant="filled"
-                              className={classes.formControl}
-                            >
-                              <InputLabel
-                                id="demo-simple-select-filled-label"
-                                style={{ color: "white" }}
-                              >
-                                Select University
-                              </InputLabel>
-                              <Select
-                                labelId="demo-simple-select-filled-label"
-                                id="demo-simple-select-filled"
-                                name="university"
-                                value={signupFormInputs.university}
-                                onChange={handleInputChange}
-                              >
-                                {universityList.length > 0 &&
-                                  universityList.map((university) => (
-                                    <MenuItem value={university.name}>
-                                      {university.name}
-                                    </MenuItem>
-                                  ))}
-                                <MenuItem
-                                  value={"other"}
-                                  onClick={() => {
-                                    setNewUniversityBool(true);
-                                  }}
-                                >
-                                  Other
+                        <FormControl
+                          variant="filled"
+                          className={classes.formControl}
+                        >
+                          <InputLabel
+                            id="demo-simple-select-filled-label"
+                            style={{ color: "white" }}
+                          >
+                            Select University
+                          </InputLabel>
+                          <Select
+                            labelId="demo-simple-select-filled-label"
+                            id="demo-simple-select-filled"
+                            name="university"
+                            value={signupFormInputs.university}
+                            onChange={handleInputChange}
+                          >
+                            {universityList.length > 0 &&
+                              universityList.map((university) => (
+                                <MenuItem value={university.name}>
+                                  {university.name}
                                 </MenuItem>
-                              </Select>
-                            </FormControl>
-                            <Form.Control
-                              className={"col-12 form"}
-                              type="text"
-                              placeholder="Your fullname"
-                              name="name"
-                              maxLength={250}
-                              name="name"
-                              value={signupFormInputs.name}
-                              onChange={handleInputChange}
-                              required
-                            />
-
-                            <FormControl component="fieldset">
-                              <FormLabel component="legend">Gender</FormLabel>
-                              <RadioGroup
-                                aria-label="gender"
-                                name="gender"
-                                value={signupFormInputs.gender}
-                                onChange={handleInputChange}
-                              >
-                                <FormControlLabel
-                                  value="female"
-                                  control={<Radio />}
-                                  label="Female"
-                                />
-                                <FormControlLabel
-                                  value="male"
-                                  control={<Radio />}
-                                  label="Male"
-                                />
-                              </RadioGroup>
-                            </FormControl>
-                            <Form.Control
-                              className={"col-12 form"}
-                              type="text"
-                              placeholder="Enter a 4 digit's PIN"
-                              name="pin"
-                              value={signupFormInputs.pin}
-                              onChange={handleInputChange}
-                              maxLength={4}
-                              required
-                            />
-
-                            <input
-                              type="file"
-                              accept="image/*"
-                              hidden="true"
-                              onChange={(e) => setAvatar(e.target.files[0])}
-                              id="avatar"
-                            />
-                            <label for="avatar">
-                              <div className="file-upload-control">
-                                <CloudUploadIcon />
-                                <span>upload profile picture</span>
-                              </div>
-                            </label>
-                            <Button
-                              variant="contained"
-                              onClick={handleSubmitSignupForm}
+                              ))}
+                            <MenuItem
+                              value={"other"}
+                              onClick={() => {
+                                setNewUniversityBool(true);
+                              }}
                             >
-                              Submit
-                            </Button>
-                          </>
-                        ) : (
-                          <>
-                            <Form.Control
-                              className={"col-12 form"}
-                              type="text"
-                              placeholder="Univesity Name"
-                              name="newuniversity"
-                              maxLength={250}
-                              value={newUnivesityName}
-                              onChange={(e) =>
-                                setNewUniversityName(e.target.value)
-                              }
-                              required
-                            />
-                            <input
-                              type="file"
-                              accept="image/*"
-                              hidden="true"
-                              onChange={(e) =>
-                                setNewUniversityLogo(e.target.files[0])
-                              }
-                              id="newuniversitylogo"
-                            />
-                            <label for="newuniversitylogo">
-                              <div className="file-upload-control">
-                                <CloudUploadIcon />
-                                <span>Upload Logo</span>
-                              </div>
-                            </label>
+                              Other
+                            </MenuItem>
+                          </Select>
+                        </FormControl>
+                        <Form.Control
+                          className={"col-12 form"}
+                          type="text"
+                          placeholder="Your fullname"
+                          name="name"
+                          maxLength={250}
+                          name="name"
+                          value={signupFormInputs.name}
+                          onChange={handleInputChange}
+                          required
+                        />
 
-                            <Button
-                              variant="contained"
-                              color="primary"
-                              onClick={handleNewUniversityForm}
-                            >
-                              Save
-                            </Button>
-                          </>
-                        )}
+                        <FormControl component="fieldset">
+                          <FormLabel component="legend">Gender</FormLabel>
+                          <RadioGroup
+                            aria-label="gender"
+                            name="gender"
+                            value={signupFormInputs.gender}
+                            onChange={handleInputChange}
+                          >
+                            <FormControlLabel
+                              value="female"
+                              control={<Radio />}
+                              label="Female"
+                            />
+                            <FormControlLabel
+                              value="male"
+                              control={<Radio />}
+                              label="Male"
+                            />
+                          </RadioGroup>
+                        </FormControl>
+                        <Form.Control
+                          className={"col-12 form"}
+                          type="text"
+                          placeholder="Enter a 4 digit's PIN"
+                          name="pin"
+                          value={signupFormInputs.pin}
+                          onChange={handleInputChange}
+                          maxLength={4}
+                          required
+                        />
+
+                        <input
+                          type="file"
+                          accept="image/*"
+                          hidden="true"
+                          onChange={(e) => setAvatar(e.target.files[0])}
+                          id="avatar"
+                        />
+                        <label for="avatar">
+                          <div className="file-upload-control">
+                            <CloudUploadIcon />
+                            <span>upload profile picture</span>
+                          </div>
+                        </label>
+                        <Button
+                          variant="contained"
+                          onClick={handleSubmitSignupForm}
+                        >
+                          Submit
+                        </Button>
                       </div>
+                    </>
+                  )}
+                  {newUniversityBool && (
+                    <>
+                      <Form.Control
+                        className={"col-12 form"}
+                        type="text"
+                        placeholder="Univesity Name"
+                        name="newuniversity"
+                        maxLength={250}
+                        value={newUnivesityName}
+                        onChange={(e) => setNewUniversityName(e.target.value)}
+                        required
+                      />
+                      <input
+                        type="file"
+                        accept="image/*"
+                        hidden="true"
+                        onChange={(e) =>
+                          setNewUniversityLogo(e.target.files[0])
+                        }
+                        id="newuniversitylogo"
+                      />
+                      <label for="newuniversitylogo">
+                        <div className="file-upload-control">
+                          <CloudUploadIcon />
+                          <span>Upload Logo</span>
+                        </div>
+                      </label>
+
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleNewUniversityForm}
+                      >
+                        Save
+                      </Button>
                     </>
                   )}
                 </div>
@@ -1159,7 +1195,7 @@ function Home() {
               />
               <Button
                 variant="contained"
-                onClick={() => handlePreviewOpen("download")}
+                onClick={() => setPreviewDialog(true)}
                 style={{
                   backgroundColor: "#05ABFF",
                   marginInline: 10,
@@ -1212,7 +1248,7 @@ function Home() {
                     style={{ backgroundColor: "#05ABFF", color: "#fff" }}
                   >
                     <span className={"fa fa-share"}></span>
-                    Share
+                    Invite Friend
                   </Button>
                   <DownloadForm
                     insertVerifyCode={insertVerifyCode}
