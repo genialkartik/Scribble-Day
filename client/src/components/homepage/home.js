@@ -527,9 +527,10 @@ function Home() {
                   <hr />
                   {landingPageBool && (
                     <>
+                    <div className="formAvatarGroup col-12 col-sm-8 col-md-9">
                       <div style={{position: 'relative'}}>
                         <Form.Control
-                          className={"col-12 col-sm-8 col-md-9 form"}
+                          className={" form"}
                           type="text"
                           placeholder="University Name"
                           name="message"
@@ -564,13 +565,15 @@ function Home() {
                         alt="Remy Sharp"
                         src={require("../../assets/lpu.png")}
                       />
+                      </div>
+                    <div  className="formAvatarGroup col-12 col-sm-8 col-md-9">
                       <div style={{position: 'relative'}}>
                       <Form.Control
-                        className={"col-12 col-sm-8 col-md-9 form"}
+                        className={" form"}
                         type="text"
                         placeholder="Friend's Name"
                         name="friendname"
-                        maxLength={250}
+                        maxLength={250}col-12 col-sm-8 col-md-9
                         value={friendname}
                         onFocus={()=>setFriendInput(true)}
                         onBlur={()=>setFriendInput(false)}
@@ -600,6 +603,7 @@ function Home() {
                         alt="Remy Sharp"
                         src={require("../../assets/logo192.png")}
                       />
+                      </div>
                       <Form.Control
                         className={"col-12 col-sm-8 col-md-9 form"}
                         type="text"
