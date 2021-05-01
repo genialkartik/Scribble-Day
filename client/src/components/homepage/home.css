@@ -273,3 +273,36 @@ footer a:hover {
 .part Button {
   margin-inline: 10px;
 }
+
+@media screen and (max-width: 567.99px) {
+  .appbody .nav {
+    display: none;
+  }
+  .scribble-imgbox {
+    padding: 0;
+  }
+  .scribble-imgbox .row {
+    width: auto !important;
+  }
+  .column {
+    width: 100%;
+  }
+  .scribble-imgbox .row .column > div > img {
+    margin: 0 auto;
+    height: 132px;
+    display: block;
+  }
+  .details-of-site {
+    margin: 0 !important;
+  }
+  .form1 {
+    margin: 2rem 0;
+    padding: 0.5rem;
+  }
+  .row.mb-view {
+    flex-direction: column-reverse;
+  }
+  .formBox {
+    justify-content: center;
+  }
+}

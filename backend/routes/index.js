@@ -19,9 +19,6 @@ const uploadToS3B = async (file) => {
     Body: file.data,
     Key: file.name.replace(/\s/g, ""),
   };
-  // s3.upload(params, (err, data) => {
-  //   callback(err ? null : data.Location);
-  // });
   const resp = await s3.upload(params).promise();
   return resp ? resp.Location : null;
 };
