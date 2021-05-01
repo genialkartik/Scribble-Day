@@ -11,6 +11,7 @@ import FormControl from "@material-ui/core/FormControl";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import AccountCircle from "@material-ui/icons/AccountCircle";
+import Popover from "@material-ui/core/Popover";
 import Dialog from "@material-ui/core/Dialog";
 import Avatar from "@material-ui/core/Avatar";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -144,6 +145,7 @@ function Home() {
 
   const [gender, setGender] = useState("female");
   const [frontSide, setSide] = useState(true);
+  const [isFixed, setIsFixed] = useState(false);
 
   const [openDownloadDialog, setDownloadDialog] = useState(false);
   const [openPreviewDialog, setPreviewDialog] = useState(false);
@@ -177,6 +179,16 @@ function Home() {
   const [newUnivesityLogo, setNewUniversityLogo] = useState();
   const [avatar, setAvatar] = useState();
 
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const handlePopOverClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handlePopOverClose = () => {
+    setAnchorEl(null);
+  };
+  const popOverOpen = Boolean(anchorEl);
+  const popOverId = popOverOpen ? "simple-popover" : undefined;
+
   useEffect(() => {
     (async () => {
       const resp = await axios.get("/check/session");
@@ -206,6 +218,7 @@ function Home() {
   };
 
   const handleSendScribbleForm = async () => {
+    console.log(userdata);
     if (userdata) {
       // save details to db
     } else {
@@ -683,7 +696,7 @@ function Home() {
                               outlined: { color: "#fff" },
                             }}
                             id="demo-simple-select-outlined-label"
-                            style={{ color: "#aaa" }}
+                            style={{ color: "#ddd" }}
                           >
                             Select Font
                           </InputLabel>
@@ -707,8 +720,20 @@ function Home() {
                         </FormControl>
                         <Button
                           variant="contained"
-                          onClick={handleSendScribbleForm}
-                          style={{ backgroundColor: "#1A354E", color: "#fff" }}
+                          disabled={isFixed ? false : true}
+                          onClick={() => {
+                            if (
+                              window.confirm(
+                                "You will not be able to edit furthur. Are you sure to continue?"
+                              )
+                            ) {
+                              handleSendScribbleForm();
+                            }
+                          }}
+                          style={{
+                            backgroundColor: "#1A354E",
+                            color: isFixed ? "#fff" : "#aaa",
+                          }}
                         >
                           Submit
                         </Button>
@@ -1174,8 +1199,12 @@ function Home() {
                     <>
                       <div
                         className={"actions"}
-                        onClick={() => {
+                        onClick={(e) => {
                           setDragBool(true);
+                          setIsFixed(true);
+                          // handlePopOverClick(e);
+                          setAnchorEl(e.currentTarget);
+                          console.log(e.currentTarget);
                         }}
                       >
                         fix
@@ -1211,6 +1240,7 @@ function Home() {
                       onClick={() => {
                         setDragBool(false);
                         setMessageFont(".9em");
+                        setIsFixed(false);
                       }}
                     >
                       <AutorenewIcon style={{ fontSize: "0.9em" }} />
@@ -1233,6 +1263,24 @@ function Home() {
         autoHideDuration={1000}
         message={msgSnackbar}
       />
+      <Popover
+        id={popOverId}
+        open={popOverOpen}
+        anchorEl={anchorEl}
+        onClose={handlePopOverClose}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "center",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "center",
+        }}
+      >
+        <Typography className={classes.typography}>
+          The content of the Popover.
+        </Typography>
+      </Popover>
     </div>
   );
 }
