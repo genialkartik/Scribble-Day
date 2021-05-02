@@ -141,10 +141,45 @@ rtr.post("/create", async (req, res) => {
   }
 });
 
+const uploadScribble = async (fileData) => {
+  var params = {
+    Bucket: "scribble2021",
+    Body: fileData,
+    Key: "/scribbles/testing.png",
+  };
+  const resp = await s3.upload(params).promise();
+  console.log(resp);
+  return resp ? resp.Location : null;
+};
+
 rtr.post("/save/scribble", async (req, res) => {
   try {
-    console.log(req.files);
-    console.log(req.body);
+    // console.log(req.files);
+    // console.log(req.body);
+    const base64 = req.body.imageBase64;
+    const base64Data = new Buffer.from(
+      base64.replace(/^data:image\/\w+;base64,/, ""),
+      "base64"
+    );
+    const type = base64.split(";")[0].split("/")[1];
+    // const resp = uploadScribble(req.body.imageBase64);
+    const params = {
+      Bucket: "scribble2021",
+      Key: `${1234}.${type}`, // type is not required
+      Body: base64Data,
+      ACL: "public-read",
+      ContentEncoding: "base64", // required
+      ContentType: `image/${type}`, // required. Notice the back ticks
+    };
+    try {
+      const { Location, Key } = await s3.upload(params).promise();
+      console.log(Location);
+      console.log(Key);
+    } catch (error) {
+      console.log(error);
+    }
+    // res.json({ image: resp });
+
     // find scribble to
     // const scribbleToUser = await User.findOne({
     //   email: req.body.scribbleToEmail,
@@ -208,7 +243,7 @@ rtr.post("/save/scribble", async (req, res) => {
 rtr.post("/institute/add", async (req, res) => {
   try {
     console.log(req.body);
-    console.log(req.files);
+    console.log(req.files.logo);
     if (!req.files.logo) {
       res.json({
         added: false,
@@ -253,7 +288,7 @@ rtr.get("/institute/list", async (req, res) => {
 rtr.post("/friends/list", async (req, res) => {
   const resp = await User.find({ university: req.body.university });
   res.json({
-    friendsList: resp & (resp.length > 0) ? resp : [],
+    friendsList: resp && resp.length > 0 ? resp : [],
   });
 });
 

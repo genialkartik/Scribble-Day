@@ -89,6 +89,7 @@ ValueLabelComponent.propTypes = {
 };
 
 function Home() {
+  const [fixside, setFixSide] = useState("front");
   const imageRef = useRef(null);
   const { image, takeScreenshot } = useScreenshot({ ref: imageRef });
   const classes = useStyles();
@@ -123,6 +124,7 @@ function Home() {
   const [userdata, setUserData] = useState(null);
   const [message, setMessage] = useState("Scribble Message");
   const [sendee, setSendee] = useState("Your Name");
+  const [sendeeLogo, setSendeeLogo] = useState();
   const [friendname, setFriendName] = useState("");
   const [messageColor, setMessageColor] = useState("#000000");
   const [rotateValue, setRotateValue] = useState(0);
@@ -170,6 +172,7 @@ function Home() {
       if (resp.data && resp.data.userdata) {
         setUserData(resp.data.userdata);
         setSendee(resp.data.userdata.name);
+        setGender(resp.data.userdata.gender);
       }
     })();
 
@@ -207,9 +210,20 @@ function Home() {
   };
 
   const handleSendScribbleForm = async () => {
-    console.log(userdata);
+    setSide(fixside);
+    const ss = await takeScreenshot();
     if (userdata) {
-      // save details to db
+      if (fixside === null && !ss) {
+        setOpenSnackbar(true);
+        setMsgSnackbar("Something went wrong!! Re-edit your scribble message");
+        setTimeout(() => setOpenSnackbar(false), 3000);
+      } else {
+        const formdata = new FormData();
+        formdata.set("side", fixside === "front" ? "front" : "back");
+        formdata.set("imageBase64", ss);
+        const response = await axios.post("/save/scribble", formdata);
+        console.log(response.data);
+      }
     } else {
       setLandingPageBool(false);
       setEnterEmailBool(true);
@@ -259,7 +273,7 @@ function Home() {
     if (!pinCodeToVerify) alert("Insert Code to verify");
     else if (!inputEmail) alert("Insert Email first");
     else {
-      if (codeToCheck == pinCodeToVerify) {
+      if (codeToCheck === pinCodeToVerify) {
         setInsertVerifyCode(false);
         setEnterPinOrCodeBool("");
         setSignUpformBool(true);
@@ -278,7 +292,6 @@ function Home() {
         inputEmail,
       });
       const res = resp.data;
-      console.log(res);
       if (!res.profile) {
         setAskedForSendVerificationCode(true);
       } else {
@@ -290,7 +303,7 @@ function Home() {
   };
 
   const handleSubmitSignupForm = async () => {
-    if (signupFormInputs == {} || signupFormInputs.university === "other") {
+    if (signupFormInputs === {} || signupFormInputs.university === "other") {
       setOpenSnackbar(true);
       setMsgSnackbar("Enter all Inputs");
       setTimeout(() => setOpenSnackbar(false), 3000);
@@ -323,6 +336,10 @@ function Home() {
     setDownloadDialog(false);
     setDownloadInput(value);
   };
+  const handlePreviewOpen = () => {
+    takeScreenshot();
+    setPreviewDialog(true);
+  };
 
   const handlePreviewClose = () => {
     setPreviewDialog(false);
@@ -347,8 +364,22 @@ function Home() {
     }
   };
 
+  const handleSearchForStudents = async (uni) => {
+    const resp = await axios.post("/friends/list", {
+      university: uni,
+    });
+    if (resp.data && resp.data.friendsList) {
+      setFriendList(
+        resp.data.friendsList.length > 0 ? resp.data.friendsList : []
+      );
+      setDFriendList(
+        resp.data.friendsList.length > 0 ? resp.data.friendsList : []
+      );
+    }
+  };
+
   const handleOnDragStart = () => {
-    // setRotateValue(0);
+    // set
   };
 
   function PreviewDialog(props) {
@@ -357,29 +388,21 @@ function Home() {
       onClose(selectedValue);
     };
 
-    const handleListItemClick = (value) => {
-      onClose(value);
-    };
     return (
       <Dialog
         onClose={handlePreviewClose}
         aria-labelledby="simple-dialog-title"
         open={open}
       >
-        <Preview />
+        <Preview img={image} face={frontSide ? "front" : "back"} />
       </Dialog>
     );
   }
 
   function DownloadForm(props) {
-    const classes = useStyles();
-    const { onClose, selectedValue, open, image, insertVerifyCode } = props;
+    const { onClose, selectedValue, open, image } = props;
     const handleClose = () => {
       onClose(selectedValue);
-    };
-
-    const handleListItemClick = (value) => {
-      onClose(value);
     };
 
     return (
@@ -388,7 +411,11 @@ function Home() {
         aria-labelledby="simple-dialog-title"
         open={open}
       >
-        {image ? <img src={image} /> : <CircularProgress />}
+        {image ? (
+          <img src={image} alt="Scribble Preview" />
+        ) : (
+          <CircularProgress />
+        )}
         <Button
           variant="contained"
           style={{
@@ -438,6 +465,7 @@ function Home() {
                   style={{ left: 100 }}
                   src={require("../../assets/ScribbleDay.png")}
                   height="190px"
+                  alt="logo"
                 />
               </div>
             </div>
@@ -463,9 +491,11 @@ function Home() {
                     </Button>
                   </ButtonGroup>
                 </div>
-                <div className="part">
+                <div className="part d-sm-none">
                   <ButtonGroup disableElevation variant="contained">
-                    <Button color="primary">Send Scribble</Button>
+                    <Button href="#formboxbysend" color="primary">
+                      Send Scribble
+                    </Button>
                   </ButtonGroup>
                 </div>
               </div>
@@ -479,7 +509,7 @@ function Home() {
                     variant="contained"
                     onClick={() => {
                       if (isFixed) {
-                        handleDownloadOpen("download");
+                        handleDownloadOpen();
                       } else {
                         setOpenSnackbar(true);
                         setMsgSnackbar(
@@ -538,15 +568,23 @@ function Home() {
                       setAskedForSendVerificationCode(false);
                       setLandingPageBool(true);
                       setSignUpformBool(false);
+                      setNewUniversityBool(false);
+                      setEnterPinOrCodeBool(false);
                     }}
                   />
                 </div>
-                <div className="formBox row align-items-center">
+                <div
+                  className="formBox row align-items-center"
+                  id="formboxbysend"
+                >
                   <hr />
                   {landingPageBool && (
                     <>
                       <div className="formAvatarGroup col-12 col-sm-8 col-md-9">
-                        <div style={{ position: "relative" }}>
+                        <div
+                          id="un"
+                          style={{ position: "relative", width: "100%" }}
+                        >
                           <Form.Control
                             className={" form"}
                             type="text"
@@ -555,7 +593,16 @@ function Home() {
                             maxLength={250}
                             value={university}
                             onFocus={() => setUlistInput(true)}
-                            onBlur={() => setUlistInput(false)}
+                            // onBlur={()=>{
+                            //   window.addEventListener('click',(e)=>{
+                            //     console.log('running')
+                            //     if(e.target.parentElement.offsetParent.id==='un'){
+                            //       console.log(e.target);
+                            //     }else{
+                            //       setUlistInput(false);
+                            //     }
+                            //   })
+                            // }}
                             onChange={(e) => {
                               setUniversity(e.target.value);
                               searchFilterFunction(
@@ -567,32 +614,46 @@ function Home() {
                             required
                           />
                           <div className={classes.resultOfUlist}>
-                            {isUlistFocus &&
-                              (universityList.length > 0 ? (
-                                universityList.map((uObj) => (
-                                  <div
-                                    className={classes.resultListItem}
-                                    onClick={() => {
-                                      setUniversity(uObj.name);
-                                      console.log(uObj.name);
-                                    }}
-                                  >
-                                    {uObj.name}
+                            {isUlistFocus && (
+                              <>
+                                {universityList.length > 0 ? (
+                                  universityList.map((uObj) => (
+                                    <div
+                                      className={classes.resultListItem}
+                                      onClick={() => {
+                                        setUniversity(uObj.name);
+                                        setUlistInput(false);
+                                        setUniversityLogo(uObj.logo);
+                                        handleSearchForStudents(uObj.name);
+                                      }}
+                                    >
+                                      {uObj.name}
+                                    </div>
+                                  ))
+                                ) : (
+                                  <div className={classes.resultListItem}>
+                                    Other
                                   </div>
-                                ))
-                              ) : (
-                                <div></div>
-                              ))}
+                                )}
+                              </>
+                            )}
                           </div>
                         </div>
                         <Avatar
                           style={{ marginLeft: 12 }}
-                          alt="Remy Sharp"
-                          src={require("../../assets/lpu.png")}
+                          alt="U"
+                          src={
+                            universityLogo
+                              ? universityLogo
+                              : "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn0.iconfinder.com%2Fdata%2Ficons%2Fbuildings-1%2F128%2F29-512.png&f=1&nofb=1"
+                          }
                         />
                       </div>
                       <div className="formAvatarGroup col-12 col-sm-8 col-md-9">
-                        <div style={{ position: "relative" }}>
+                        <div
+                          id="fd"
+                          style={{ position: "relative", width: "100%" }}
+                        >
                           <Form.Control
                             className={" form"}
                             type="text"
@@ -603,8 +664,16 @@ function Home() {
                             col-sm-8
                             col-md-9
                             value={friendname}
-                            onFocus={() => setFriendInput(true)}
-                            onBlur={() => setFriendInput(false)}
+                            onFocus={() => {
+                              setFriendInput(true);
+                            }}
+                            // onBlur={()=>{
+                            //   window.addEventListener('click',(e)=>{
+                            //     if(e.target.parentElement.offsetParent.id!=='fd'){
+                            //       setFriendInput(false);
+                            //     }
+                            //   })
+                            // }}
                             onChange={(e) => {
                               setFriendName(e.target.value);
                               searchFilterFunction(
@@ -619,19 +688,32 @@ function Home() {
                             {isFriendFocus &&
                               (friendList.length > 0 ? (
                                 friendList.map((uObj) => (
-                                  <div className={classes.resultListItem}>
+                                  <div
+                                    className={classes.resultListItem}
+                                    onClick={() => {
+                                      setSendeeLogo(uObj.avatar);
+                                      setFriendName(uObj.name);
+                                      setFriendInput(false);
+                                    }}
+                                  >
                                     {uObj.name}
                                   </div>
                                 ))
                               ) : (
-                                <div></div>
+                                <div className={classes.resultListItem}>
+                                  Other
+                                </div>
                               ))}
                           </div>
                         </div>
                         <Avatar
                           style={{ marginLeft: 12 }}
-                          alt="Remy Sharp"
-                          src={require("../../assets/logo192.png")}
+                          alt="F"
+                          src={
+                            sendeeLogo
+                              ? sendeeLogo
+                              : "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.k6V8n31jhsNraAUlXqwNgQHaHa%26pid%3DApi&f=1"
+                          }
                         />
                       </div>
                       <Form.Control
@@ -817,6 +899,8 @@ function Home() {
                               if (!userdata) {
                                 setOpenSnackbar(true);
                                 setMsgSnackbar("Login first to give Scribble");
+                                setLandingPageBool(false);
+                                setEnterEmailBool(true);
                                 setTimeout(() => setOpenSnackbar(false), 6000);
                               } else if (
                                 window.confirm(
@@ -885,6 +969,7 @@ function Home() {
                         </Button>
                         <a
                           target="_blank"
+                          rel="noopener noreferrer"
                           href="https://www.linkedin.com/shareArticle?mini=true&url=https://thirsty-goldwasser-7273c9.netlify.app/&title=%20Scribble%20Day%202021%20%20Write%20a%20Scribble%20for%20me%20&summary=Pandemic%20could%20ruin%20your%20studies%20But%20not%20your%20last%20day%20of%20college%20|%20#scribbleday2021&source=thirsty-goldwasser-7273c9.netlify.app/"
                         >
                           <Button
@@ -897,29 +982,30 @@ function Home() {
                             <span className={"fa fa-linkedin"}></span>
                           </Button>
                         </a>
-                        <a
-                          class="fb-share"
-                          onClick="window.open(this.href,'targetWindow','toolbar=no,location=0,status=no,menubar=no,scrollbars=yes,resizable=yes,width=600,height=250'); return false;"
-                          href=""
-                          target="_blank"
+                        <Button
+                          variant="contained"
+                          style={{
+                            backgroundColor: "#4095ED",
+                            color: "#fff",
+                          }}
+                          onClick={() => {
+                            window.open(
+                              "www.thirsty-goldwasser-7273c9.netlify.app/",
+                              "targetWindow",
+                              "toolbar=no,location=0,status=no,menubar=no,scrollbars=yes,resizable=yes,width=600,height=250"
+                            );
+                            return false;
+                          }}
                         >
-                          <Button
-                            variant="contained"
-                            style={{
-                              backgroundColor: "#4095ED",
-                              color: "#fff",
-                            }}
-                          >
-                            <span className={"fa fa-facebook"}></span>
-                          </Button>
-                        </a>
+                          <span className={"fa fa-facebook"}></span>
+                        </Button>
                         <Button
                           variant="contained"
                           onClick={() => {
                             window.location.href =
                               "https://twitter.com/share?url=" +
                               encodeURIComponent(
-                                "www.thirsty-goldwasser-7273c9.netlify.app//"
+                                "www.thirsty-goldwasser-7273c9.netlify.app/"
                               ) +
                               "&text=" +
                               document.title;
@@ -1070,7 +1156,6 @@ function Home() {
                           className={"col-12 form"}
                           type="text"
                           placeholder="Your fullname"
-                          name="name"
                           maxLength={250}
                           name="name"
                           value={signupFormInputs.name}
@@ -1177,7 +1262,7 @@ function Home() {
             >
               <Button
                 variant="contained"
-                onClick={() => handleDownloadOpen("download")}
+                onClick={() => handleDownloadOpen()}
                 style={{
                   backgroundColor: "#0A0",
                   marginInline: 10,
@@ -1284,21 +1369,27 @@ function Home() {
             <div className={"scribble-image1"} ref={imageRef}>
               {gender === "female" ? (
                 <Image
+                  alt="tshirt demo"
                   src={require(frontSide
-                    ? "../../assets/femalefront.png"
-                    : "../../assets/malefront.png")}
+                    ? "../../assets/female1.png"
+                    : "../../assets/female2.png")}
                   className={"male-front"}
                 />
               ) : (
                 <Image
+                  alt="tshirt demo"
                   src={require(frontSide
-                    ? "../../assets/malefront.png"
-                    : "../../assets/maleback.png")}
+                    ? "../../assets/male1.png"
+                    : "../../assets/male2.png")}
                   className={"male-front"}
                 />
               )}
               <div className={"university-logo"}>
-                <Image src={require("../../assets/lpu.png")} height="32px" />
+                <Image
+                  src={require("../../assets/lpu.png")}
+                  alt="U"
+                  height="32px"
+                />
               </div>
               <Draggable disabled={dragBool} onStart={handleOnDragStart}>
                 <div
@@ -1337,6 +1428,7 @@ function Home() {
                         onClick={() => {
                           setDragBool(true);
                           setIsFixed(true);
+                          setFixSide(frontSide ? "front" : "back");
                         }}
                       >
                         fix
