@@ -47,6 +47,8 @@ rtr.post("/login", async (req, res) => {
         avatar: user.avatar,
         university: user.university,
         gender: user.gender,
+        scribbleImageFront: user.scribbleImageFront,
+        scribbleImageBack: user.scribbleImageBack,
       };
       res.json({
         loggedIn: true,
@@ -77,7 +79,6 @@ rtr.post("/profile", async (req, res) => {
 
 rtr.post("/create", async (req, res) => {
   try {
-    console.log(req.body);
     const user = await User.findOne({ email: req.body.email });
     if (user) {
       res.json({
@@ -107,6 +108,14 @@ rtr.post("/create", async (req, res) => {
             avatar: avatarLocation,
             university: formdata.university,
             gender: formdata.gender,
+            scribbleImageFront:
+              formdata.gender == "male"
+                ? "https://scribble2021.s3.ap-south-1.amazonaws.com/male1.png"
+                : ".https://scribble2021.s3.ap-south-1.amazonaws.com/female1.png",
+            scribbleImageBack:
+              formdata.gender == "male"
+                ? "https://scribble2021.s3.ap-south-1.amazonaws.com/male2.png"
+                : "https://scribble2021.s3.ap-south-1.amazonaws.com/female2.png",
             scribbledBy: [],
           });
           const newUserResp = await newUser.save();
@@ -118,6 +127,8 @@ rtr.post("/create", async (req, res) => {
               avatar: newUserResp.avatar,
               university: newUserResp.university,
               gender: newUserResp.gender,
+              scribbleImageFront: newUserResp.scribbleImageFront,
+              scribbleImageBack: newUserResp.scribbleImageBack,
             };
             res.json({
               signUp: true,
@@ -141,101 +152,71 @@ rtr.post("/create", async (req, res) => {
   }
 });
 
-const uploadScribble = async (fileData) => {
-  var params = {
-    Bucket: "scribble2021",
-    Body: fileData,
-    Key: "/scribbles/testing.png",
-  };
-  const resp = await s3.upload(params).promise();
-  console.log(resp);
-  return resp ? resp.Location : null;
-};
-
 rtr.post("/save/scribble", async (req, res) => {
   try {
-    // console.log(req.files);
-    // console.log(req.body);
+    if (!req.session.userdata) {
+      throw "Login first! by clicking on My Scribble";
+    }
     const base64 = req.body.imageBase64;
     const base64Data = new Buffer.from(
       base64.replace(/^data:image\/\w+;base64,/, ""),
       "base64"
     );
     const type = base64.split(";")[0].split("/")[1];
-    // const resp = uploadScribble(req.body.imageBase64);
-    const params = {
-      Bucket: "scribble2021",
-      Key: `${1234}.${type}`, // type is not required
-      Body: base64Data,
-      ACL: "public-read",
-      ContentEncoding: "base64", // required
-      ContentType: `image/${type}`, // required. Notice the back ticks
-    };
-    try {
-      const { Location, Key } = await s3.upload(params).promise();
-      console.log(Location);
-      console.log(Key);
-    } catch (error) {
-      console.log(error);
+    let params = {};
+    if (req.body.userId && req.body.side) {
+      params = {
+        Bucket: "scribble2021",
+        Key: `scribbles/${req.body.userId}${req.body.side}.${type}`, // type is not required
+        Body: base64Data,
+        ACL: "public-read",
+        ContentEncoding: "base64", // required
+        ContentType: `image/${type}`, // required. Notice the back ticks
+      };
+    } else {
+      throw "Invalid Input";
     }
-    // res.json({ image: resp });
-
-    // find scribble to
-    // const scribbleToUser = await User.findOne({
-    //   email: req.body.scribbleToEmail,
-    // });
-    // if (scribbleToUser) {
-    //   // upload scribble
-    //   const [uploadedFront, uploadedBack] = new Promise.all(
-    //     uploadToS2B(req.files[0].front),
-    //     uploadToS2B(req.files[0].back)
-    //   );
-    //   console.log(uploadedFront);
-    //   console.log(uploadedBack);
-    //   if (uploadedFront && uploadedBack) {
-    //     // save details in to scribbledBy
-    //     const updateScribblee = await User.updateOne(
-    //       { email: req.body.scribbleToEmail },
-    //       {
-    //         scribbleImageFront: uploadedFront,
-    //         scribbleImageBack: uploadedBack,
-    //         $push: {
-    //           scribbledBy: {
-    //             userId: scribbleToUser.userId,
-    //             name: scribbleToUser.name,
-    //             avatar: scribbleToUser.avatar,
-    //           },
-    //         },
-    //       }
-    //     );
-    //     if (updateScribblee.nModified == 1) {
-    //       res.json({
-    //         saved: true,
-    //         respMessage: "Scribble Saved",
-    //       });
-    //     } else {
-    //       res.json({
-    //         saved: false,
-    //         respMessage: "Unable to Save Scribble",
-    //       });
-    //     }
-    //   } else {
-    //     res.json({
-    //       saved: false,
-    //       respMessage: "Scribble not uploaded",
-    //     });
-    //   }
-    // } else {
-    //   res.json({
-    //     saved: false,
-    //     respMessage: "User not found",
-    //   });
-    // }
+    const { Location } = await s3.upload(params).promise();
+    console.log(Location);
+    if (!Location) throw "Error in saving...";
+    const updateResp = await User.updateOne(
+      { userId: req.body.userId },
+      req.body.side == "front"
+        ? {
+            scribbleImageFront: Location,
+            $push: {
+              scribbleBy: {
+                userId: req.session.userdata.userId,
+                name: req.session.userdata.name,
+                avatar: req.session.userdata.avatar,
+              },
+            },
+          }
+        : {
+            scribbleImageBack: Location,
+            $push: {
+              scribbleBy: {
+                userId: req.session.userdata.userId,
+                name: req.session.userdata.name,
+                avatar: req.session.userdata.avatar,
+              },
+            },
+          }
+    );
+    console.log(updateResp);
+    if (updateResp.nModified == 1) {
+      res.json({
+        saved: true,
+        respMessage: "saved",
+      });
+    } else {
+      throw "Error updating";
+    }
   } catch (error) {
     console.log(error);
     res.json({
       saved: false,
-      respMessage: "Something went wrongß",
+      respMessage: error,
     });
   }
 });

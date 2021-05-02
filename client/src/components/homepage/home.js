@@ -123,16 +123,17 @@ function Home() {
   const [isUlistFocus, setUlistInput] = useState(false);
   const [userdata, setUserData] = useState(null);
   const [message, setMessage] = useState("Scribble Message");
-  const [sendee, setSendee] = useState("Your Name");
-  const [sendeeLogo, setSendeeLogo] = useState();
+  const [friendLogo, setFriendLogo] = useState();
   const [friendname, setFriendName] = useState("");
+  const [friendUserId, setFriendUserId] = useState("");
+  const [friendFrontTshirt, setFriendFrontTshirt] = useState(null);
+  const [friendBackTshirt, setFriendBackTshirt] = useState(null);
   const [messageColor, setMessageColor] = useState("#000000");
   const [rotateValue, setRotateValue] = useState(0);
   const [dragBool, setDragBool] = useState(false);
   const [messageFont, setMessageFont] = useState(".8em");
   const [fontFam, setFontFam] = useState("Jazz LET, fantasy");
 
-  const [gender, setGender] = useState("female");
   const [frontSide, setSide] = useState(true);
   const [isFixed, setIsFixed] = useState(false);
 
@@ -143,7 +144,6 @@ function Home() {
   const [university, setUniversity] = useState("");
   const [universityLogo, setUniversityLogo] = useState();
 
-  // const [sendScribbleButtonBool, setSendScribbleButtonBool] = useState(true);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [msgSnackbar, setMsgSnackbar] = useState("");
   const [landingPageBool, setLandingPageBool] = useState(true);
@@ -156,6 +156,11 @@ function Home() {
   const [enterPinOrCodeBool, setEnterPinOrCodeBool] = useState("pin");
   const [signupFormBool, setSignUpformBool] = useState(false);
   const [newUniversityBool, setNewUniversityBool] = useState(false);
+
+  const [currentTshirtOf, setCurrentTshirtOf] = useState("user");
+  const [currentFrontTshirt, setCurrentFrontTshirt] = useState("");
+  const [currentBackTshirt, setCurrentBackTshirt] = useState("");
+  const [imageChanged, setImageChanged] = useState("");
 
   const [inputEmail, setInputEmail] = useState("");
   const [pinCodeToVerify, setPinCodeToVerify] = useState("");
@@ -171,8 +176,9 @@ function Home() {
       const resp = await axios.get("/check/session");
       if (resp.data && resp.data.userdata) {
         setUserData(resp.data.userdata);
-        setSendee(resp.data.userdata.name);
-        setGender(resp.data.userdata.gender);
+        setCurrentTshirtOf("user");
+        setCurrentFrontTshirt(resp.data.userdata.scribbleImageFront);
+        setCurrentBackTshirt(resp.data.userdata.scribbleImageBack);
       }
     })();
 
@@ -200,7 +206,9 @@ function Home() {
 
   const handleMyScribbleClick = async () => {
     if (userdata) {
-      // send to users details
+      setCurrentTshirtOf("user");
+      setCurrentFrontTshirt(userdata.scribbleImageFront);
+      setCurrentBackTshirt(userdata.scribbleImageBack);
       setUserDetailsBool(true);
       setLandingPageBool(false);
     } else {
@@ -220,9 +228,12 @@ function Home() {
       } else {
         const formdata = new FormData();
         formdata.set("side", fixside === "front" ? "front" : "back");
+        formdata.set("userId", friendUserId);
         formdata.set("imageBase64", ss);
         const response = await axios.post("/save/scribble", formdata);
-        console.log(response.data);
+        setOpenSnackbar(true);
+        setMsgSnackbar(response.data.respMessage.toString());
+        setTimeout(() => setOpenSnackbar(false), 3000);
       }
     } else {
       setLandingPageBool(false);
@@ -262,7 +273,10 @@ function Home() {
         setInsertVerifyCode(false);
         setEnterPinOrCodeBool("pin");
         setUserData(resp.data.userdata ? resp.data.userdata : null);
-        setSendee(resp.data?.userdata?.name);
+        setCurrentTshirtOf("user");
+        setCurrentFrontTshirt(resp.data.userdata.scribbleImageFront);
+        setCurrentBackTshirt(resp.data.userdata.scribbleImageBack);
+        console.log(resp.data.userdata.scribbleImageFront);
       } else {
         alert(resp.data.respMessage);
       }
@@ -273,7 +287,7 @@ function Home() {
     if (!pinCodeToVerify) alert("Insert Code to verify");
     else if (!inputEmail) alert("Insert Email first");
     else {
-      if (codeToCheck === pinCodeToVerify) {
+      if (codeToCheck == pinCodeToVerify) {
         setInsertVerifyCode(false);
         setEnterPinOrCodeBool("");
         setSignUpformBool(true);
@@ -691,8 +705,22 @@ function Home() {
                                   <div
                                     className={classes.resultListItem}
                                     onClick={() => {
-                                      setSendeeLogo(uObj.avatar);
+                                      setFriendLogo(uObj.avatar);
                                       setFriendName(uObj.name);
+                                      setFriendUserId(uObj.userId);
+                                      setCurrentFrontTshirt(
+                                        uObj.scribbleImageFront
+                                      );
+                                      setCurrentBackTshirt(
+                                        uObj.scribbleImageBack
+                                      );
+                                      setFriendFrontTshirt(
+                                        uObj.scribbleImageFront
+                                      );
+                                      setFriendBackTshirt(
+                                        uObj.scribbleImageBack
+                                      );
+                                      setCurrentTshirtOf("friend");
                                       setFriendInput(false);
                                     }}
                                   >
@@ -710,8 +738,8 @@ function Home() {
                           style={{ marginLeft: 12 }}
                           alt="F"
                           src={
-                            sendeeLogo
-                              ? sendeeLogo
+                            friendLogo
+                              ? friendLogo
                               : "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.k6V8n31jhsNraAUlXqwNgQHaHa%26pid%3DApi&f=1"
                           }
                         />
@@ -1367,23 +1395,12 @@ function Home() {
             {/* RIGHT COLUMN */}
 
             <div className={"scribble-image1"} ref={imageRef}>
-              {gender === "female" ? (
-                <Image
-                  alt="tshirt demo"
-                  src={require(frontSide
-                    ? "../../assets/female1.png"
-                    : "../../assets/female2.png")}
-                  className={"male-front"}
-                />
-              ) : (
-                <Image
-                  alt="tshirt demo"
-                  src={require(frontSide
-                    ? "../../assets/male1.png"
-                    : "../../assets/male2.png")}
-                  className={"male-front"}
-                />
-              )}
+              <Image
+                alt="tshirt demo"
+                src={require("../../assets/female1.png")}
+                // src={frontSide ? currentFrontTshirt : currentBackTshirt}
+                className={"male-front"}
+              />
               <div className={"university-logo"}>
                 <Image
                   src={require("../../assets/lpu.png")}
@@ -1417,7 +1434,7 @@ function Home() {
                     <p>
                       {message}
                       <span>
-                        <br />~ {sendee}
+                        <br />~ {userdata ? userdata.name : "Your name"}
                       </span>
                     </p>
                   </div>
