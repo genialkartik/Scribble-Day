@@ -27,7 +27,6 @@ import SendIcon from "@material-ui/icons/Send";
 import VpnKeyIcon from "@material-ui/icons/VpnKey";
 import { blue } from "@material-ui/core/colors";
 import { Container, Row, Col, Form, Image } from "react-bootstrap";
-import AutorenewIcon from "@material-ui/icons/Autorenew";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Button from "@material-ui/core/Button";
@@ -157,10 +156,9 @@ function Home() {
   const [signupFormBool, setSignUpformBool] = useState(false);
   const [newUniversityBool, setNewUniversityBool] = useState(false);
 
-  const [currentTshirtOf, setCurrentTshirtOf] = useState("user");
-  const [currentFrontTshirt, setCurrentFrontTshirt] = useState("");
-  const [currentBackTshirt, setCurrentBackTshirt] = useState("");
-  const [imageChanged, setImageChanged] = useState("");
+  const [currentTshirtOf, setCurrentTshirtOf] = useState(null);
+  const [currentFrontTshirt, setCurrentFrontTshirt] = useState(null);
+  const [currentBackTshirt, setCurrentBackTshirt] = useState(null);
 
   const [inputEmail, setInputEmail] = useState("");
   const [pinCodeToVerify, setPinCodeToVerify] = useState("");
@@ -219,21 +217,30 @@ function Home() {
 
   const handleSendScribbleForm = async () => {
     setSide(fixside);
-    const ss = await takeScreenshot();
+    // await takeScreenshot();
+    // const image64Data = new Buffer.from(
+    //   ss.replace(/^data:image\/\w+;base64,/, ""),
+    //   "ss"
+    // );
+    // const type = ss.split(";")[0].split("/")[1];
     if (userdata) {
-      if (fixside === null && !ss) {
+      if (fixside === null) {
         setOpenSnackbar(true);
         setMsgSnackbar("Something went wrong!! Re-edit your scribble message");
         setTimeout(() => setOpenSnackbar(false), 3000);
       } else {
-        const formdata = new FormData();
-        formdata.set("side", fixside === "front" ? "front" : "back");
-        formdata.set("userId", friendUserId);
-        formdata.set("imageBase64", ss);
-        const response = await axios.post("/save/scribble", formdata);
-        setOpenSnackbar(true);
-        setMsgSnackbar(response.data.respMessage.toString());
-        setTimeout(() => setOpenSnackbar(false), 3000);
+        console.log(image);
+        if (image) {
+          const formdata = new FormData();
+          formdata.set("side", fixside);
+          formdata.set("userId", friendUserId);
+          formdata.set("imageBase64", image);
+          // formdata.set("type", type);
+          const response = await axios.post("/save/scribble", formdata);
+          setOpenSnackbar(true);
+          setMsgSnackbar(response.data.respMessage.toString());
+          setTimeout(() => setOpenSnackbar(false), 3000);
+        }
       }
     } else {
       setLandingPageBool(false);
@@ -1395,12 +1402,27 @@ function Home() {
             {/* RIGHT COLUMN */}
 
             <div className={"scribble-image1"} ref={imageRef}>
-              <Image
-                alt="tshirt demo"
-                src={require("../../assets/female1.png")}
-                // src={frontSide ? currentFrontTshirt : currentBackTshirt}
-                className={"male-front"}
-              />
+              {frontSide ? (
+                <Image
+                  alt="tshirt demo"
+                  src={
+                    currentFrontTshirt
+                      ? currentFrontTshirt
+                      : require("../../assets/malefront.png")
+                  }
+                  className={"male-front"}
+                />
+              ) : (
+                <Image
+                  alt="tshirt demo"
+                  src={
+                    currentBackTshirt
+                      ? currentBackTshirt
+                      : require("../../assets/maleback.png")
+                  }
+                  className={"male-front"}
+                />
+              )}
               <div className={"university-logo"}>
                 <Image
                   src={require("../../assets/lpu.png")}
@@ -1446,6 +1468,7 @@ function Home() {
                           setDragBool(true);
                           setIsFixed(true);
                           setFixSide(frontSide ? "front" : "back");
+                          takeScreenshot();
                         }}
                       >
                         fix

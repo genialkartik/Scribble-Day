@@ -154,15 +154,17 @@ rtr.post("/create", async (req, res) => {
 
 rtr.post("/save/scribble", async (req, res) => {
   try {
+    // console.log(req.body);
     if (!req.session.userdata) {
       throw "Login first! by clicking on My Scribble";
     }
     const base64 = req.body.imageBase64;
-    const base64Data = new Buffer.from(
+    const base64Data = await new Buffer.from(
       base64.replace(/^data:image\/\w+;base64,/, ""),
       "base64"
     );
-    const type = base64.split(";")[0].split("/")[1];
+    const type = await base64.split(";")[0].split("/")[1];
+    console.log(type);
     let params = {};
     if (req.body.userId && req.body.side) {
       params = {
