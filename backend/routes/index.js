@@ -4,6 +4,7 @@ const mv = require("mv");
 const AWS = require("aws-sdk");
 const User = require("../models/Users");
 const Institute = require("../models/Institutes");
+const Scribble = require("../models/Scribbles");
 
 //configuring the AWS environment
 AWS.config.update({
@@ -27,6 +28,15 @@ rtr.get("/check/session", async (req, res) => {
   res.json({
     userdata: req.session.userdata ? req.session.userdata : null,
   });
+});
+
+rtr.get("/get/scribbles", async (req, res) => {
+  if (req.session.userdata) {
+    const resp = await Scribble.find({ userId: req.session.userdata.userId });
+    res.json({
+      scribbleList: resp ? resp : [],
+    });
+  }
 });
 
 rtr.post("/login", async (req, res) => {
@@ -108,14 +118,6 @@ rtr.post("/create", async (req, res) => {
             avatar: avatarLocation,
             university: formdata.university,
             gender: formdata.gender,
-            scribbleImageFront:
-              formdata.gender == "male"
-                ? "https://scribble2021.s3.ap-south-1.amazonaws.com/male1.png"
-                : ".https://scribble2021.s3.ap-south-1.amazonaws.com/female1.png",
-            scribbleImageBack:
-              formdata.gender == "male"
-                ? "https://scribble2021.s3.ap-south-1.amazonaws.com/male2.png"
-                : "https://scribble2021.s3.ap-south-1.amazonaws.com/female2.png",
             scribbledBy: [],
           });
           const newUserResp = await newUser.save();
@@ -127,8 +129,6 @@ rtr.post("/create", async (req, res) => {
               avatar: newUserResp.avatar,
               university: newUserResp.university,
               gender: newUserResp.gender,
-              scribbleImageFront: newUserResp.scribbleImageFront,
-              scribbleImageBack: newUserResp.scribbleImageBack,
             };
             res.json({
               signUp: true,
@@ -158,66 +158,28 @@ rtr.post("/save/scribble", async (req, res) => {
     if (!req.session.userdata) {
       throw "Login first! by clicking on My Scribble";
     }
-    const base64 = req.body.imageBase64;
-    const base64Data = await new Buffer.from(
-      base64.replace(/^data:image\/\w+;base64,/, ""),
-      "base64"
-    );
-    const type = await base64.split(";")[0].split("/")[1];
-    console.log(type);
-    let params = {};
-    if (req.body.userId && req.body.side) {
-      params = {
-        Bucket: "scribble2021",
-        Key: `scribbles/${req.body.userId}${req.body.side}.${type}`, // type is not required
-        Body: base64Data,
-        ACL: "public-read",
-        ContentEncoding: "base64", // required
-        ContentType: `image/${type}`, // required. Notice the back ticks
-      };
-    } else {
-      throw "Invalid Input";
-    }
-    const { Location } = await s3.upload(params).promise();
-    console.log(Location);
-    if (!Location) throw "Error in saving...";
-    const updateResp = await User.updateOne(
-      { userId: req.body.userId },
-      req.body.side == "front"
-        ? {
-            scribbleImageFront: Location,
-            $push: {
-              scribbleBy: {
-                userId: req.session.userdata.userId,
-                name: req.session.userdata.name,
-                avatar: req.session.userdata.avatar,
-              },
-            },
-          }
-        : {
-            scribbleImageBack: Location,
-            $push: {
-              scribbleBy: {
-                userId: req.session.userdata.userId,
-                name: req.session.userdata.name,
-                avatar: req.session.userdata.avatar,
-              },
-            },
-          }
-    );
-    console.log(updateResp);
-    if (updateResp.nModified == 1) {
-      res.json({
-        saved: true,
-        respMessage: "saved",
-      });
-    } else {
-      throw "Error updating";
-    }
+    const newScribble = new Scribble({
+      scribbleId: uuidv4(),
+      userId: req.session.userdata.userId,
+      senderUserId: req.body.friendUserId,
+      senderName: req.body.friendName,
+      senderAvatar: req.body.friendAvatar,
+      dimensions: req.body.dimensions,
+      message: req.body.message,
+      angle: req.body.angle,
+      colorCode: req.body.colorCode,
+      fontStyle: req.body.fontStyle,
+      fontSize: req.body.fontSize,
+    });
+    const scribbleResp = await newScribble.save();
+    res.json({
+      scibbled: scribbleResp ? scribbleResp : null,
+      respMessage: "saved",
+    });
   } catch (error) {
     console.log(error);
     res.json({
-      saved: false,
+      scribbled: null,
       respMessage: error,
     });
   }

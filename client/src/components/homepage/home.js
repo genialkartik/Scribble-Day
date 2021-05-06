@@ -33,7 +33,6 @@ import Button from "@material-ui/core/Button";
 import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
 import announcement from "../../assets/announcement.png";
 import "./home.css";
-import { useScreenshot } from "use-screenshot-hook";
 import Preview from "../preview";
 
 const useStyles = makeStyles((theme) => ({
@@ -88,10 +87,9 @@ ValueLabelComponent.propTypes = {
 };
 
 function Home() {
-  const [fixside, setFixSide] = useState("front");
-  const imageRef = useRef(null);
-  const { image, takeScreenshot } = useScreenshot({ ref: imageRef });
+  // const imageRef = useRef(null);
   const classes = useStyles();
+  const messageRef = React.createRef();
 
   const handleFontChange = (event) => {
     setFontFam(event.target.value);
@@ -120,13 +118,10 @@ function Home() {
   };
   const [isFriendFocus, setFriendInput] = useState(false);
   const [isUlistFocus, setUlistInput] = useState(false);
+  const [scribbleList, setScribbleList] = useState([]);
   const [userdata, setUserData] = useState(null);
+  const [friendData, setFriendData] = useState({});
   const [message, setMessage] = useState("Scribble Message");
-  const [friendLogo, setFriendLogo] = useState();
-  const [friendname, setFriendName] = useState("");
-  const [friendUserId, setFriendUserId] = useState("");
-  const [friendFrontTshirt, setFriendFrontTshirt] = useState(null);
-  const [friendBackTshirt, setFriendBackTshirt] = useState(null);
   const [messageColor, setMessageColor] = useState("#000000");
   const [rotateValue, setRotateValue] = useState(0);
   const [dragBool, setDragBool] = useState(false);
@@ -135,6 +130,7 @@ function Home() {
 
   const [frontSide, setSide] = useState(true);
   const [isFixed, setIsFixed] = useState(false);
+  const [dimensions, setDimensions] = useState({});
 
   const [openDownloadDialog, setDownloadDialog] = useState(false);
   const [openPreviewDialog, setPreviewDialog] = useState(false);
@@ -142,6 +138,8 @@ function Home() {
   const [insertVerifyCode, setInsertVerifyCode] = useState(false);
   const [university, setUniversity] = useState("");
   const [universityLogo, setUniversityLogo] = useState();
+  const [enterFriendName, setEnterFriendName] = useState("");
+  const [friendLogo, setFriendLogo] = useState();
 
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [msgSnackbar, setMsgSnackbar] = useState("");
@@ -156,10 +154,6 @@ function Home() {
   const [signupFormBool, setSignUpformBool] = useState(false);
   const [newUniversityBool, setNewUniversityBool] = useState(false);
 
-  const [currentTshirtOf, setCurrentTshirtOf] = useState(null);
-  const [currentFrontTshirt, setCurrentFrontTshirt] = useState(null);
-  const [currentBackTshirt, setCurrentBackTshirt] = useState(null);
-
   const [inputEmail, setInputEmail] = useState("");
   const [pinCodeToVerify, setPinCodeToVerify] = useState("");
   const [codeToCheck, setCodeToCheck] = useState("");
@@ -172,11 +166,14 @@ function Home() {
   useEffect(() => {
     (async () => {
       const resp = await axios.get("/check/session");
+      console.log(resp.data);
       if (resp.data && resp.data.userdata) {
         setUserData(resp.data.userdata);
-        setCurrentTshirtOf("user");
-        setCurrentFrontTshirt(resp.data.userdata.scribbleImageFront);
-        setCurrentBackTshirt(resp.data.userdata.scribbleImageBack);
+        const scribbleResp = await axios.get("/get/scribbles");
+        if (scribbleResp.data) {
+          setScribbleList(scribbleResp.data.scribbleList);
+          console.log(scribbleResp.data.scribbleList);
+        }
       }
     })();
 
@@ -194,6 +191,20 @@ function Home() {
     })();
   }, [landingPageBool]);
 
+  const handleFixClick = () => {
+    if (!friendData || !message) {
+      setOpenSnackbar(true);
+      setMsgSnackbar(
+        "Please Select a Friend and must write a Scribble message"
+      );
+      setTimeout(() => setOpenSnackbar(false), 3000);
+    } else {
+      setDimensions(messageRef.current.getBoundingClientRect());
+      setDragBool(true);
+      setIsFixed(true);
+    }
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setSignupFormInputs({
@@ -204,9 +215,6 @@ function Home() {
 
   const handleMyScribbleClick = async () => {
     if (userdata) {
-      setCurrentTshirtOf("user");
-      setCurrentFrontTshirt(userdata.scribbleImageFront);
-      setCurrentBackTshirt(userdata.scribbleImageBack);
       setUserDetailsBool(true);
       setLandingPageBool(false);
     } else {
@@ -216,31 +224,25 @@ function Home() {
   };
 
   const handleSendScribbleForm = async () => {
-    setSide(fixside);
-    // await takeScreenshot();
-    // const image64Data = new Buffer.from(
-    //   ss.replace(/^data:image\/\w+;base64,/, ""),
-    //   "ss"
-    // );
-    // const type = ss.split(";")[0].split("/")[1];
     if (userdata) {
-      if (fixside === null) {
-        setOpenSnackbar(true);
-        setMsgSnackbar("Something went wrong!! Re-edit your scribble message");
-        setTimeout(() => setOpenSnackbar(false), 3000);
+      if (friendData && message && dimensions) {
+        // save scribble message to db
+        const resp = await axios.post("/save/scribble", {
+          friendUserId: friendData.friendUserId,
+          friendName: friendData.friendName,
+          friendAvatar: friendData.friendAvatar,
+          dimensions,
+          message,
+          angle: rotateValue,
+          colorCode: messageColor,
+          fontStyle: fontFam,
+          fontSize: messageFont,
+        });
+        console.log(resp.data);
       } else {
-        console.log(image);
-        if (image) {
-          const formdata = new FormData();
-          formdata.set("side", fixside);
-          formdata.set("userId", friendUserId);
-          formdata.set("imageBase64", image);
-          // formdata.set("type", type);
-          const response = await axios.post("/save/scribble", formdata);
-          setOpenSnackbar(true);
-          setMsgSnackbar(response.data.respMessage.toString());
-          setTimeout(() => setOpenSnackbar(false), 3000);
-        }
+        setOpenSnackbar(true);
+        setMsgSnackbar("Enter all inputs");
+        setTimeout(() => setOpenSnackbar(false), 3000);
       }
     } else {
       setLandingPageBool(false);
@@ -280,10 +282,6 @@ function Home() {
         setInsertVerifyCode(false);
         setEnterPinOrCodeBool("pin");
         setUserData(resp.data.userdata ? resp.data.userdata : null);
-        setCurrentTshirtOf("user");
-        setCurrentFrontTshirt(resp.data.userdata.scribbleImageFront);
-        setCurrentBackTshirt(resp.data.userdata.scribbleImageBack);
-        console.log(resp.data.userdata.scribbleImageFront);
       } else {
         alert(resp.data.respMessage);
       }
@@ -349,7 +347,6 @@ function Home() {
     setRotateValue(newValue);
   };
   const handleDownloadOpen = () => {
-    takeScreenshot();
     setDownloadDialog(true);
   };
 
@@ -358,7 +355,6 @@ function Home() {
     setDownloadInput(value);
   };
   const handlePreviewOpen = () => {
-    takeScreenshot();
     setPreviewDialog(true);
   };
 
@@ -415,7 +411,10 @@ function Home() {
         aria-labelledby="simple-dialog-title"
         open={open}
       >
-        <Preview img={image} face={frontSide ? "front" : "back"} />
+        <Preview
+          img={require("../../assets/malefront.png")}
+          face={frontSide ? "front" : "back"}
+        />
       </Dialog>
     );
   }
@@ -625,6 +624,8 @@ function Home() {
                             //   })
                             // }}
                             onChange={(e) => {
+                              setIsFixed(false);
+                              setDragBool(false);
                               setUniversity(e.target.value);
                               searchFilterFunction(
                                 e.target.value,
@@ -684,19 +685,12 @@ function Home() {
                             col-12
                             col-sm-8
                             col-md-9
-                            value={friendname}
+                            value={enterFriendName}
                             onFocus={() => {
                               setFriendInput(true);
                             }}
-                            // onBlur={()=>{
-                            //   window.addEventListener('click',(e)=>{
-                            //     if(e.target.parentElement.offsetParent.id!=='fd'){
-                            //       setFriendInput(false);
-                            //     }
-                            //   })
-                            // }}
                             onChange={(e) => {
-                              setFriendName(e.target.value);
+                              setEnterFriendName(e.target.value);
                               searchFilterFunction(
                                 e.target.value,
                                 dfriendList,
@@ -712,22 +706,12 @@ function Home() {
                                   <div
                                     className={classes.resultListItem}
                                     onClick={() => {
+                                      setFriendData({
+                                        friendUserId: uObj.userId,
+                                        friendName: uObj.name,
+                                        friendAvatar: uObj.avatar,
+                                      });
                                       setFriendLogo(uObj.avatar);
-                                      setFriendName(uObj.name);
-                                      setFriendUserId(uObj.userId);
-                                      setCurrentFrontTshirt(
-                                        uObj.scribbleImageFront
-                                      );
-                                      setCurrentBackTshirt(
-                                        uObj.scribbleImageBack
-                                      );
-                                      setFriendFrontTshirt(
-                                        uObj.scribbleImageFront
-                                      );
-                                      setFriendBackTshirt(
-                                        uObj.scribbleImageBack
-                                      );
-                                      setCurrentTshirtOf("friend");
                                       setFriendInput(false);
                                     }}
                                   >
@@ -1370,13 +1354,6 @@ function Home() {
                     <span className={"fa fa-share"}></span>
                     Invite Friend
                   </Button>
-                  <DownloadForm
-                    insertVerifyCode={insertVerifyCode}
-                    selectedValue={downloadInput}
-                    open={openDownloadDialog}
-                    onClose={handleDownloadClose}
-                    image={image}
-                  />
                 </div>
               </div>
             </div>
@@ -1401,25 +1378,17 @@ function Home() {
           <div className={"column"}>
             {/* RIGHT COLUMN */}
 
-            <div className={"scribble-image1"} ref={imageRef}>
+            <div className={"scribble-image1"}>
               {frontSide ? (
                 <Image
                   alt="tshirt demo"
-                  src={
-                    currentFrontTshirt
-                      ? currentFrontTshirt
-                      : require("../../assets/malefront.png")
-                  }
+                  src={require("../../assets/malefront.png")}
                   className={"male-front"}
                 />
               ) : (
                 <Image
                   alt="tshirt demo"
-                  src={
-                    currentBackTshirt
-                      ? currentBackTshirt
-                      : require("../../assets/maleback.png")
-                  }
+                  src={require("../../assets/maleback.png")}
                   className={"male-front"}
                 />
               )}
@@ -1430,6 +1399,30 @@ function Home() {
                   height="32px"
                 />
               </div>
+              {scribbleList.map((scribble) => (
+                <p
+                  key={scribble._id}
+                  style={{
+                    rotate: scribble.angle + "deg",
+                    color: scribble.colorCode,
+                    fontSize: scribble.fontSize,
+                    fontFamily: scribble.fontStyle,
+                    x: 779.5833129882812,
+                    y: 329.6000061035156,
+                    width: 116.81666564941406,
+                    height: 108.63333129882812,
+                    top: 329.6000061035156,
+                    right: 896.3999786376953,
+                    bottom: 438.23333740234375,
+                    left: 779.5833129882812,
+                  }}
+                >
+                  {scribble.message}
+                  <span>
+                    <br />~ {scribble.senderName}
+                  </span>
+                </p>
+              ))}
               <Draggable disabled={dragBool} onStart={handleOnDragStart}>
                 <div
                   className={"scribble-message1"}
@@ -1453,7 +1446,7 @@ function Home() {
                       cursor: dragBool ? "default" : "move",
                     }}
                   >
-                    <p>
+                    <p ref={messageRef}>
                       {message}
                       <span>
                         <br />~ {userdata ? userdata.name : "Your name"}
@@ -1464,12 +1457,7 @@ function Home() {
                     <>
                       <div
                         className={"actions"}
-                        onClick={() => {
-                          setDragBool(true);
-                          setIsFixed(true);
-                          setFixSide(frontSide ? "front" : "back");
-                          takeScreenshot();
-                        }}
+                        onClick={() => handleFixClick()}
                       >
                         fix
                       </div>
