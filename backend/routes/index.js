@@ -170,6 +170,7 @@ rtr.post("/save/scribble", async (req, res) => {
       colorCode: req.body.colorCode,
       fontStyle: req.body.fontStyle,
       fontSize: req.body.fontSize,
+      side: req.body.side,
     });
     const scribbleResp = await newScribble.save();
     res.json({

@@ -22,6 +22,7 @@ const scribbleSchema = mongoose.Schema({
   colorCode: String,
   fontStyle: String,
   fontSize: String,
+  side: String,
   date_created: {
     type: Date,
     default: Date.now,

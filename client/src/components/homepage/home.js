@@ -34,8 +34,13 @@ import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
 import announcement from "../../assets/announcement.png";
 import "./home.css";
 import Preview from "../preview";
-import { getLeft, getTop, getConstantLeft, getFontSize } from "../useGetPosition";
-import useWindowDimensions from '../dimension';
+import {
+  getLeft,
+  getTop,
+  getConstantLeft,
+  getFontSize,
+} from "../useGetPosition";
+import useWindowDimensions from "../dimension";
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
@@ -96,7 +101,7 @@ function Home() {
   const [imageRefHeight, setImageRefHeight] = useState(0);
   const messageRef = React.createRef();
   // const getPositions = useGetPosition(imageRef, messageRef);
-  const {width: windowWidth} = useWindowDimensions();
+  const { width: windowWidth } = useWindowDimensions();
 
   const handleFontChange = (event) => {
     setFontFam(event.target.value);
@@ -170,10 +175,10 @@ function Home() {
   const [newUnivesityLogo, setNewUniversityLogo] = useState();
   const [avatar, setAvatar] = useState();
 
-  useEffect(()=>{
+  useEffect(() => {
     setImageRefWidth(imageRef.current.getBoundingClientRect().width);
     setImageRefHeight(imageRef.current.getBoundingClientRect().height);
-  },[imageRef, imageRef.current, windowWidth]);
+  }, [imageRef, imageRef.current, windowWidth]);
 
   useEffect(() => {
     (async () => {
@@ -212,7 +217,12 @@ function Home() {
       setTimeout(() => setOpenSnackbar(false), 3000);
     } else {
       // setDimensions(getPositions);
-      setDimensions(GetPosition(imageRef.current.getBoundingClientRect(), messageRef.current.getBoundingClientRect()))
+      setDimensions(
+        GetPosition(
+          imageRef.current.getBoundingClientRect(),
+          messageRef.current.getBoundingClientRect()
+        )
+      );
       // console.log(getPositions);
       // setDimensions(messageRef.current.getBoundingClientRect());
       // console.log(useGetPosition(getImgWrapperDimensions, getMsgDimensions));
@@ -221,7 +231,7 @@ function Home() {
     }
   };
 
-  function GetPosition(rootDimensions, selfDimensions){
+  function GetPosition(rootDimensions, selfDimensions) {
     const rootWidth = rootDimensions.width;
     const rootHeight = rootDimensions.height;
     const rootX = rootDimensions.x;
@@ -230,14 +240,17 @@ function Home() {
     const selfX = selfDimensions.x;
     const selfY = selfDimensions.y;
 
-    const xHelperConstant = (((selfX - rootX)/rootWidth)-(0.0001864*rootWidth));
-    const yHelperConstant = (((selfY - rootY)/rootWidth)-(0.0002864*rootWidth));
-    const left = ((100/rootWidth)*(selfX - rootX))+3;
-    const top = ((100/rootHeight)*(selfY - rootY));
+    const xHelperConstant = (selfX - rootX) / rootWidth - 0.0001864 * rootWidth;
+    const yHelperConstant = (selfY - rootY) / rootWidth - 0.0002864 * rootWidth;
+    const left = (100 / rootWidth) * (selfX - rootX) + 3;
+    const top = (100 / rootHeight) * (selfY - rootY);
 
     return {
-      xHelperConstant, yHelperConstant, left, top
-    }
+      xHelperConstant,
+      yHelperConstant,
+      left,
+      top,
+    };
   }
 
   // useEffect(()=>{
@@ -284,6 +297,7 @@ function Home() {
           colorCode: messageColor,
           fontStyle: fontFam,
           fontSize: messageFont,
+          side: frontSide ? "front" : "back",
         });
         console.log(resp.data);
       } else {
@@ -539,7 +553,11 @@ function Home() {
             <div className={"column"}>
               <div className="details-of-site" style={{ marginTop: "50px" }}>
                 <div className="part">
-                  <ButtonGroup disableElevation aria-label="contained">
+                  <ButtonGroup
+                    disableElevation
+                    aria-label="contained"
+                    disabled={isFixed ? true : false}
+                  >
                     <Button
                       color="primary"
                       onClick={() => {
@@ -571,52 +589,62 @@ function Home() {
                 style={{ textAlign: "center" }}
                 className="d-none d-sm-block"
               >
-                {userdata && (
-                  <Button
-                    variant="contained"
-                    onClick={() => {
-                      if (isFixed) {
-                        handleDownloadOpen();
-                      } else {
-                        setOpenSnackbar(true);
+                {userdata && userDetailsBool && (
+                  <div>
+                    <Button
+                      variant="contained"
+                      onClick={() => {
+                        if (isFixed) {
+                          handleDownloadOpen();
+                        } else {
+                          setOpenSnackbar(true);
+                          setMsgSnackbar(
+                            "Click on 'fix' below the Message on tshirt to continue..."
+                          );
+                          setTimeout(() => setOpenSnackbar(false), 6000);
+                        }
+                      }}
+                      style={{
+                        backgroundColor: "#0A0",
+                        marginInline: 10,
+                        padding: 11,
+                        color: "#fff",
+                      }}
+                    >
+                      <span className={"fa fa-download"}></span>
+                    </Button>
+                    <DownloadForm
+                      insertVerifyCode={insertVerifyCode}
+                      selectedValue={downloadInput}
+                      open={openDownloadDialog}
+                      onClose={handleDownloadClose}
+                    />
+                    <Button
+                      variant="contained"
+                      onClick={() => {
+                        isFixed
+                          ? setPreviewDialog(true)
+                          : setOpenSnackbar(true);
                         setMsgSnackbar(
-                          "Click on 'fix' below the Message on tshirt to continue..."
+                          "Click on 'fix' below the Message on tshirt to show Preview "
                         );
-                        setTimeout(() => setOpenSnackbar(false), 6000);
-                      }
-                    }}
-                    style={{
-                      backgroundColor: "#0A0",
-                      marginInline: 10,
-                      padding: 11,
-                      color: "#fff",
-                    }}
-                  >
-                    <span className={"fa fa-download"}></span>
-                  </Button>
+                        setTimeout(() => setOpenSnackbar(false), 3000);
+                      }}
+                      style={{
+                        backgroundColor: "#05ABFF",
+                        marginInline: 10,
+                        color: "#fff",
+                      }}
+                    >
+                      <span className={"fa fa-user"}></span>
+                      Preview
+                    </Button>
+                    <PreviewDialog
+                      open={openPreviewDialog}
+                      onClose={handlePreviewClose}
+                    />
+                  </div>
                 )}
-                <DownloadForm
-                  insertVerifyCode={insertVerifyCode}
-                  selectedValue={downloadInput}
-                  open={openDownloadDialog}
-                  onClose={handleDownloadClose}
-                />
-                <Button
-                  variant="contained"
-                  onClick={() => setPreviewDialog(true)}
-                  style={{
-                    backgroundColor: "#05ABFF",
-                    marginInline: 10,
-                    color: "#fff",
-                  }}
-                >
-                  <span className={"fa fa-user"}></span>
-                  Preview
-                </Button>
-                <PreviewDialog
-                  open={openPreviewDialog}
-                  onClose={handlePreviewClose}
-                />
               </div>
             </div>
           </div>
@@ -647,6 +675,20 @@ function Home() {
                   <hr />
                   {landingPageBool && (
                     <>
+                      <div>
+                        <Typography
+                          gutterBottom
+                          style={{
+                            fontSize: "0.8em",
+                            color: "#71E2F0",
+                          }}
+                          onClick={() => {
+                            setNewUniversityBool(true);
+                          }}
+                        >
+                          Didn't find University?
+                        </Typography>
+                      </div>
                       <div className="formAvatarGroup col-12 col-sm-8 col-md-9">
                         <div
                           id="un"
@@ -718,6 +760,18 @@ function Home() {
                           }
                         />
                       </div>
+
+                      <div>
+                        <Typography
+                          gutterBottom
+                          style={{
+                            fontSize: "0.8em",
+                            color: "#71E2F0",
+                          }}
+                        >
+                          Didn't find your friend?
+                        </Typography>
+                      </div>
                       <div className="formAvatarGroup col-12 col-sm-8 col-md-9">
                         <div
                           id="fd"
@@ -737,7 +791,6 @@ function Home() {
                               setFriendInput(true);
                             }}
                             onChange={(e) => {
-                              setEnterFriendName(e.target.value);
                               searchFilterFunction(
                                 e.target.value,
                                 dfriendList,
@@ -758,6 +811,7 @@ function Home() {
                                         friendName: uObj.name,
                                         friendAvatar: uObj.avatar,
                                       });
+                                      setEnterFriendName(uObj.name);
                                       setFriendLogo(uObj.avatar);
                                       setFriendInput(false);
                                     }}
@@ -1002,7 +1056,7 @@ function Home() {
                           onClick={handleMyScribbleClick}
                           style={{ backgroundColor: "#ED72C0", color: "#fff" }}
                         >
-                          My Scribble
+                          {userdata ? "My Scribble" : "Sign In"}
                         </Button>
                       </div>
                     </>
@@ -1010,20 +1064,52 @@ function Home() {
                   {userDetailsBool && userdata && (
                     <>
                       <div className="detailWrapper">
-                        <label>Name</label>
-                        <span>{userdata.name}</span>
+                        <label>{userdata.name}</label>
+                        <label>{userdata.email}</label>
+                        <label>{userdata.university}</label>
                       </div>
                       <div className="detailWrapper">
-                        <label>Email</label>
-                        <span>{userdata.email}</span>
-                      </div>
-                      <div className="detailWrapper">
-                        <label>Gender</label>
-                        <span>{userdata.gender}</span>
-                      </div>
-                      <div className="detailWrapper">
-                        <label>University</label>
-                        <span>{userdata.university}</span>
+                        <label>Scribbles Messages Received</label>
+                        <div
+                          style={{
+                            width: "100%",
+                            height: 1,
+                            margin: "12px 0 16px",
+                            backgroundColor: "#999",
+                          }}
+                        />
+                        <div
+                          style={{
+                            overflowY: "scroll",
+                            maxHeight: "200px",
+                          }}
+                        >
+                          {scribbleList.map((scribble) => (
+                            <div
+                              key={scribble._id}
+                              style={{
+                                fontSize: "14px",
+                              }}
+                            >
+                              <span>{scribble.message}</span>
+                              <span
+                                style={{
+                                  color: "#aaa",
+                                }}
+                              >
+                                <br />~ {scribble.senderName}
+                              </span>
+                              <div
+                                style={{
+                                  width: "100%",
+                                  height: 1,
+                                  margin: "12px 0 16px",
+                                  backgroundColor: "#555",
+                                }}
+                              />
+                            </div>
+                          ))}
+                        </div>
                       </div>
                       <div className="part">
                         <Button
@@ -1452,15 +1538,17 @@ function Home() {
                 <p
                   key={scribble._id}
                   style={{
-                    textAlign: 'center',
+                    textAlign: "center",
                     rotate: scribble.angle + "deg",
                     color: scribble.colorCode,
                     fontSize: getFontSize(scribble.fontSize, imageRefWidth),
                     fontFamily: scribble.fontStyle,
-                    position: 'absolute',
+                    position: "absolute",
                     // transform: `scale(${(imageRefWidth/616)+0.204})`,
                     top: `${scribble.dimensions.top}%`,
                     left: `${scribble.dimensions.left}%`,
+                    maxWidth: "25%",
+                    minWidth: "20%",
                   }}
                 >
                   {scribble.message}
@@ -1483,55 +1571,70 @@ function Home() {
                         }
                   }
                 >
-                  <div
-                    style={{
-                      rotate: rotateValue + "deg",
-                      color: messageColor,
-                      fontSize: messageFont,
-                      fontFamily: fontFam,
-                      cursor: dragBool ? "default" : "move",
-                    }}
-                  >
-                    <p ref={messageRef}>
-                      {message}
-                      <span>
-                        <br />~ {userdata ? userdata.name : "Your name"}
-                      </span>
-                    </p>
-                  </div>
-                  {!dragBool && (
+                  {enterFriendName ? (
                     <>
                       <div
-                        className={"actions"}
-                        onClick={() => handleFixClick()}
+                        style={{
+                          rotate: rotateValue + "deg",
+                          color: messageColor,
+                          fontSize: messageFont,
+                          fontFamily: fontFam,
+                          cursor: dragBool ? "default" : "move",
+                        }}
                       >
-                        fix
+                        <p ref={messageRef}>
+                          {message}
+                          <span>
+                            <br />~ {userdata ? userdata.name : "Your name"}
+                          </span>
+                        </p>
                       </div>
-                      <div
-                        className={"actions"}
-                        onClick={() => setMessageFont(".4em")}
-                      >
-                        1
-                      </div>
-                      <div
-                        className={"actions"}
-                        onClick={() => setMessageFont(".5em")}
-                      >
-                        2
-                      </div>
-                      <div
-                        className={"actions"}
-                        onClick={() => setMessageFont(".6em")}
-                      >
-                        3
-                      </div>
-                      <div
-                        className={"actions"}
-                        onClick={() => setMessageFont(".7em")}
-                      >
-                        4
-                      </div>
+                      {!dragBool && (
+                        <>
+                          <div
+                            className={"actions"}
+                            onClick={() => handleFixClick()}
+                          >
+                            fix
+                          </div>
+                          <div
+                            className={"actions"}
+                            onClick={() => setMessageFont(".4em")}
+                          >
+                            1
+                          </div>
+                          <div
+                            className={"actions"}
+                            onClick={() => setMessageFont(".5em")}
+                          >
+                            2
+                          </div>
+                          <div
+                            className={"actions"}
+                            onClick={() => setMessageFont(".6em")}
+                          >
+                            3
+                          </div>
+                          <div
+                            className={"actions"}
+                            onClick={() => setMessageFont(".7em")}
+                          >
+                            4
+                          </div>
+                        </>
+                      )}
                     </>
+                  ) : (
+                    <div
+                      style={{
+                        rotate: rotateValue + "deg",
+                        color: messageColor,
+                        fontSize: messageFont,
+                        cursor: dragBool ? "default" : "move",
+                      }}
+                    >
+                      <p>Select a Friend to write a Scribble message</p>
+                    </div>
                   )}
                 </div>
               </Draggable>
