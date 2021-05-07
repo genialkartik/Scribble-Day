@@ -34,6 +34,8 @@ import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
 import announcement from "../../assets/announcement.png";
 import "./home.css";
 import Preview from "../preview";
+import { getLeft, getTop, getConstantLeft, getFontSize } from "../useGetPosition";
+import useWindowDimensions from '../dimension';
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
@@ -89,7 +91,11 @@ ValueLabelComponent.propTypes = {
 function Home() {
   // const imageRef = useRef(null);
   const classes = useStyles();
+  const imageRef = React.createRef(null);
+  const [imageRefWidth, setImageRefWidth] = useState(0);
   const messageRef = React.createRef();
+  // const getPositions = useGetPosition(imageRef, messageRef);
+  const {width: windowWidth} = useWindowDimensions();
 
   const handleFontChange = (event) => {
     setFontFam(event.target.value);
@@ -163,6 +169,10 @@ function Home() {
   const [newUnivesityLogo, setNewUniversityLogo] = useState();
   const [avatar, setAvatar] = useState();
 
+  useEffect(()=>{
+    setImageRefWidth(imageRef.current.getBoundingClientRect().width);
+  },[imageRef, imageRef.current, windowWidth]);
+
   useEffect(() => {
     (async () => {
       const resp = await axios.get("/check/session");
@@ -199,11 +209,43 @@ function Home() {
       );
       setTimeout(() => setOpenSnackbar(false), 3000);
     } else {
-      setDimensions(messageRef.current.getBoundingClientRect());
+      // setDimensions(getPositions);
+      setDimensions(GetPosition(imageRef.current.getBoundingClientRect(), messageRef.current.getBoundingClientRect()))
+      // console.log(getPositions);
+      // setDimensions(messageRef.current.getBoundingClientRect());
+      // console.log(useGetPosition(getImgWrapperDimensions, getMsgDimensions));
       setDragBool(true);
       setIsFixed(true);
     }
   };
+
+  function GetPosition(rootDimensions, selfDimensions){
+    const rootWidth = rootDimensions.width;
+    const rootX = rootDimensions.x;
+    const rootY = rootDimensions.y;
+    const selfWidth = selfDimensions.width;
+    const selfX = selfDimensions.x;
+    const selfY = selfDimensions.y;
+
+    const xHelperConstant = (((selfX - rootX)/rootWidth)-(0.0001864*rootWidth));
+    const yHelperConstant = (((selfY - rootY)/rootWidth)-(0.0002864*rootWidth));
+    
+    return {
+      xHelperConstant, yHelperConstant
+    }
+  }
+
+  // useEffect(()=>{
+  //   console.log(useGetPosition(imageRef.current.getBoundingClientRect(), messageRef.current.getBoundingClientRect()))
+  // },[messageRef]);
+
+  // const [getMsgDimensions, setMsgDimensions] = useState(null);
+  // const [getImgWrapperDimensions, setImgWrapperDimensions] = useState(null);
+
+  // useEffect(()=>{
+  //   setMsgDimensions(messageRef.current.getBoundingClientRect());
+  //   setImgWrapperDimensions(imageRef.current.getBoundingClientRect());
+  // }, [windowWidth]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -1384,12 +1426,14 @@ function Home() {
                   alt="tshirt demo"
                   src={require("../../assets/malefront.png")}
                   className={"male-front"}
+                  ref={imageRef}
                 />
               ) : (
                 <Image
                   alt="tshirt demo"
                   src={require("../../assets/maleback.png")}
                   className={"male-front"}
+                  ref={imageRef}
                 />
               )}
               <div className={"university-logo"}>
@@ -1405,16 +1449,12 @@ function Home() {
                   style={{
                     rotate: scribble.angle + "deg",
                     color: scribble.colorCode,
-                    fontSize: scribble.fontSize,
+                    fontSize: getFontSize(scribble.fontSize, imageRefWidth),
                     fontFamily: scribble.fontStyle,
-                    x: 779.5833129882812,
-                    y: 329.6000061035156,
-                    width: 116.81666564941406,
-                    height: 108.63333129882812,
-                    top: 329.6000061035156,
-                    right: 896.3999786376953,
-                    bottom: 438.23333740234375,
-                    left: 779.5833129882812,
+                    position: 'absolute',
+                    // transform: `scale(${(imageRefWidth/616)+0.204})`,
+                    top: getFontSize(scribble.fontSize, imageRefWidth)<parseFloat(scribble.fontSize.slice(0,-2))*16? Math.abs((getFontSize(scribble.fontSize, imageRefWidth)-parseFloat(scribble.fontSize.slice(0,-2))*16)*4) + getTop(scribble.dimensions.yHelperConstant,imageRefWidth):getTop(scribble.dimensions.yHelperConstant,imageRefWidth),
+                    left: getFontSize(scribble.fontSize, imageRefWidth)<parseFloat(scribble.fontSize.slice(0,-2))*16? Math.abs((getFontSize(scribble.fontSize, imageRefWidth)-parseFloat(scribble.fontSize.slice(0,-2))*16)*4) + getLeft(scribble.dimensions.xHelperConstant,imageRefWidth):getLeft(scribble.dimensions.xHelperConstant,imageRefWidth),
                   }}
                 >
                   {scribble.message}
