@@ -93,6 +93,7 @@ function Home() {
   const classes = useStyles();
   const imageRef = React.createRef(null);
   const [imageRefWidth, setImageRefWidth] = useState(0);
+  const [imageRefHeight, setImageRefHeight] = useState(0);
   const messageRef = React.createRef();
   // const getPositions = useGetPosition(imageRef, messageRef);
   const {width: windowWidth} = useWindowDimensions();
@@ -171,6 +172,7 @@ function Home() {
 
   useEffect(()=>{
     setImageRefWidth(imageRef.current.getBoundingClientRect().width);
+    setImageRefHeight(imageRef.current.getBoundingClientRect().height);
   },[imageRef, imageRef.current, windowWidth]);
 
   useEffect(() => {
@@ -221,6 +223,7 @@ function Home() {
 
   function GetPosition(rootDimensions, selfDimensions){
     const rootWidth = rootDimensions.width;
+    const rootHeight = rootDimensions.height;
     const rootX = rootDimensions.x;
     const rootY = rootDimensions.y;
     const selfWidth = selfDimensions.width;
@@ -229,9 +232,11 @@ function Home() {
 
     const xHelperConstant = (((selfX - rootX)/rootWidth)-(0.0001864*rootWidth));
     const yHelperConstant = (((selfY - rootY)/rootWidth)-(0.0002864*rootWidth));
-    
+    const left = ((100/rootWidth)*(selfX - rootX))+3;
+    const top = ((100/rootHeight)*(selfY - rootY));
+
     return {
-      xHelperConstant, yHelperConstant
+      xHelperConstant, yHelperConstant, left, top
     }
   }
 
@@ -1447,14 +1452,15 @@ function Home() {
                 <p
                   key={scribble._id}
                   style={{
+                    textAlign: 'center',
                     rotate: scribble.angle + "deg",
                     color: scribble.colorCode,
                     fontSize: getFontSize(scribble.fontSize, imageRefWidth),
                     fontFamily: scribble.fontStyle,
                     position: 'absolute',
                     // transform: `scale(${(imageRefWidth/616)+0.204})`,
-                    top: getFontSize(scribble.fontSize, imageRefWidth)<parseFloat(scribble.fontSize.slice(0,-2))*16? Math.abs((getFontSize(scribble.fontSize, imageRefWidth)-parseFloat(scribble.fontSize.slice(0,-2))*16)*4) + getTop(scribble.dimensions.yHelperConstant,imageRefWidth):getTop(scribble.dimensions.yHelperConstant,imageRefWidth),
-                    left: getFontSize(scribble.fontSize, imageRefWidth)<parseFloat(scribble.fontSize.slice(0,-2))*16? Math.abs((getFontSize(scribble.fontSize, imageRefWidth)-parseFloat(scribble.fontSize.slice(0,-2))*16)*4) + getLeft(scribble.dimensions.xHelperConstant,imageRefWidth):getLeft(scribble.dimensions.xHelperConstant,imageRefWidth),
+                    top: `${scribble.dimensions.top}%`,
+                    left: `${scribble.dimensions.left}%`,
                   }}
                 >
                   {scribble.message}

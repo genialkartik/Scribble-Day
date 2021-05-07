@@ -6,7 +6,12 @@ export function getFontSize(fontsize, width){
     fontsize = parseFloat(fontsize.slice(0,-2))*16;
   }
   const getWidthPercen = ((100*width)/616);
-  return ((fontsize*getWidthPercen)/100);
+  const newSize = ((fontsize*getWidthPercen)/100);
+  if(newSize>fontsize){
+    return fontsize;
+  }else{
+    return newSize;
+  }
 }
 
 export function getConstantLeft(xHelperConstant, width){
@@ -17,12 +22,12 @@ export function getLeft(xHelperConstant, width){
   return (width*getConstantLeft(xHelperConstant,width));
 }
 
-export function getConstantTop(yHelperConstant, width){
-  return ((0.0002864*width)+yHelperConstant);
+export function getConstantTop(yHelperConstant, height){
+  return ((0.0002864*height)+yHelperConstant);
 }
 
-export function getTop(yHelperConstant, width){
-  return (width*getConstantTop(yHelperConstant,width));
+export function getTop(yHelperConstant, height){
+  return (height*getConstantTop(yHelperConstant,height));
 }
 
 export default function useGetPosition(rootRef, selfRef){
@@ -44,14 +49,19 @@ export default function useGetPosition(rootRef, selfRef){
   }
 
   function getYHelperConstant(){
-    const rootWidth = rootDimensions ? rootDimensions.width : 0;
+    const rootHeight = rootDimensions ? rootDimensions.height : 0;
     const rootY = rootDimensions ? rootDimensions.y : 0;
     const selfY = selfDimensions ? selfDimensions.y : 0;
-    return (((selfY - rootY)/rootWidth)-(0.0002864*rootWidth));
+    return (((selfY - rootY)/rootHeight)-(0.0002864*rootHeight));
+  }
+
+  function getValue(rootStart, selfStart, rootDim){
+    return ((100/rootDim)*(selfStart - rootStart));
   }
 
   return {
-    xHelperConstant: getXHelperConstant(), yHelperConstant: getYHelperConstant()
+    xHelperConstant: getXHelperConstant(), yHelperConstant: getYHelperConstant(),
+    left: getValue(rootDimensions.x, selfDimensions.x, rootDimensions.width)
   }
 
 }
