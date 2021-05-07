@@ -34,6 +34,7 @@ import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
 import announcement from "../../assets/announcement.png";
 import "./home.css";
 import Preview from "../preview";
+<<<<<<< HEAD
 import {
   getLeft,
   getTop,
@@ -41,6 +42,11 @@ import {
   getFontSize,
 } from "../useGetPosition";
 import useWindowDimensions from "../dimension";
+=======
+import { getLeft, getTop, getConstantLeft, getFontSize } from "../useGetPosition";
+import useWindowDimensions from '../dimension';
+import {useScreenshot} from 'use-screenshot-hook';
+>>>>>>> 7a8439b5391244a111945e374eb04548547af00a
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
@@ -94,14 +100,20 @@ ValueLabelComponent.propTypes = {
 };
 
 function Home() {
-  // const imageRef = useRef(null);
   const classes = useStyles();
   const imageRef = React.createRef(null);
   const [imageRefWidth, setImageRefWidth] = useState(0);
   const [imageRefHeight, setImageRefHeight] = useState(0);
+<<<<<<< HEAD
   const messageRef = React.createRef();
   // const getPositions = useGetPosition(imageRef, messageRef);
   const { width: windowWidth } = useWindowDimensions();
+=======
+  const messageRef = React.createRef(null);
+  const imageWrap = useRef(null);
+  const {image, takeScreenshot} = useScreenshot({ref:imageWrap});
+  const {width: windowWidth} = useWindowDimensions();
+>>>>>>> 7a8439b5391244a111945e374eb04548547af00a
 
   const handleFontChange = (event) => {
     setFontFam(event.target.value);
@@ -209,6 +221,7 @@ function Home() {
   }, [landingPageBool]);
 
   const handleFixClick = () => {
+    takeScreenshot();
     if (!friendData || !message) {
       setOpenSnackbar(true);
       setMsgSnackbar(
@@ -491,11 +504,15 @@ function Home() {
         onClose={handleClose}
         aria-labelledby="simple-dialog-title"
         open={open}
+        
       >
+        <div style={{padding: 12,
+        display: 'flex',
+flexDirection: 'column'}}>
         {image ? (
           <img src={image} alt="Scribble Preview" />
         ) : (
-          <CircularProgress />
+          <CircularProgress style={{margin: '9px auto'}} />
         )}
         <Button
           variant="contained"
@@ -508,6 +525,7 @@ function Home() {
           <span className={"fa fa-download"}></span>
           Download
         </Button>
+        </div>
       </Dialog>
     );
   }
@@ -589,62 +607,58 @@ function Home() {
                 style={{ textAlign: "center" }}
                 className="d-none d-sm-block"
               >
-                {userdata && userDetailsBool && (
-                  <div>
-                    <Button
-                      variant="contained"
-                      onClick={() => {
-                        if (isFixed) {
-                          handleDownloadOpen();
-                        } else {
-                          setOpenSnackbar(true);
-                          setMsgSnackbar(
-                            "Click on 'fix' below the Message on tshirt to continue..."
-                          );
-                          setTimeout(() => setOpenSnackbar(false), 6000);
-                        }
-                      }}
-                      style={{
-                        backgroundColor: "#0A0",
-                        marginInline: 10,
-                        padding: 11,
-                        color: "#fff",
-                      }}
-                    >
-                      <span className={"fa fa-download"}></span>
-                    </Button>
-                    <DownloadForm
-                      insertVerifyCode={insertVerifyCode}
-                      selectedValue={downloadInput}
-                      open={openDownloadDialog}
-                      onClose={handleDownloadClose}
-                    />
-                    <Button
-                      variant="contained"
-                      onClick={() => {
-                        isFixed
-                          ? setPreviewDialog(true)
-                          : setOpenSnackbar(true);
-                        setMsgSnackbar(
-                          "Click on 'fix' below the Message on tshirt to show Preview "
-                        );
-                        setTimeout(() => setOpenSnackbar(false), 3000);
-                      }}
-                      style={{
-                        backgroundColor: "#05ABFF",
-                        marginInline: 10,
-                        color: "#fff",
-                      }}
-                    >
-                      <span className={"fa fa-user"}></span>
-                      Preview
-                    </Button>
-                    <PreviewDialog
-                      open={openPreviewDialog}
-                      onClose={handlePreviewClose}
-                    />
-                  </div>
+                {userdata && (
+                  <>
+                  <a
+                    href={image}
+                    download="tshirtpreview"
+                    // onClick={() => {
+                    //   if (isFixed) {
+                    //     handleDownloadOpen();
+                    //   } else {
+                    //     setOpenSnackbar(true);
+                    //     setMsgSnackbar(
+                    //       "Click on 'fix' below the Message on tshirt to continue..."
+                    //     );
+                    //     setTimeout(() => setOpenSnackbar(false), 6000);
+                    //   }
+                    // }}
+                    style={{
+                      backgroundColor: "#0A0",
+                      marginInline: 10,
+                      padding: 11,
+                      color: "#fff",
+                    }}
+                  >
+                    <span className={"fa fa-download"}></span>
+                  </a>
+                <DownloadForm
+                  insertVerifyCode={insertVerifyCode}
+                  selectedValue={downloadInput}
+                  open={openDownloadDialog}
+                  onClose={handleDownloadClose}
+                  image={image}
+                />
+                <Button
+                  variant="contained"
+                  // onClick={() => setPreviewDialog(true)}\
+                  onClick={() => handleDownloadOpen()}
+                  style={{
+                    backgroundColor: "#05ABFF",
+                    marginInline: 10,
+                    color: "#fff",
+                  }}
+                >
+                  <span className={"fa fa-user"}></span>
+                  Preview
+                </Button>
+                <PreviewDialog
+                  open={openPreviewDialog}
+                  onClose={handlePreviewClose}
+                />
+                </>
                 )}
+
               </div>
             </div>
           </div>
@@ -798,7 +812,7 @@ function Home() {
                               );
                             }}
                             required
-                          />
+                          />download
                           <div className={classes.resultOfUlist}>
                             {isFriendFocus &&
                               (friendList.length > 0 ? (
@@ -1414,7 +1428,7 @@ function Home() {
             >
               <Button
                 variant="contained"
-                onClick={() => handleDownloadOpen()}
+                // onClick={() => handleDownloadOpen()}
                 style={{
                   backgroundColor: "#0A0",
                   marginInline: 10,
@@ -1424,15 +1438,15 @@ function Home() {
                 <span className={"fa fa-download"}></span>
                 Download
               </Button>
-              <DownloadForm
+              {/* <DownloadForm
                 insertVerifyCode={insertVerifyCode}
                 selectedValue={downloadInput}
                 open={openDownloadDialog}
                 onClose={handleDownloadClose}
-              />
+              /> */}
               <Button
                 variant="contained"
-                onClick={() => setPreviewDialog(true)}
+                onClick={() => handleDownloadOpen()}
                 style={{
                   backgroundColor: "#05ABFF",
                   marginInline: 10,
@@ -1511,7 +1525,7 @@ function Home() {
           <div className={"column"}>
             {/* RIGHT COLUMN */}
 
-            <div className={"scribble-image1"}>
+            <div className={"scribble-image1"} ref={imageWrap}>
               {frontSide ? (
                 <Image
                   alt="tshirt demo"
@@ -1557,7 +1571,7 @@ function Home() {
                   </span>
                 </p>
               ))}
-              <Draggable disabled={dragBool} onStart={handleOnDragStart}>
+              <Draggable bounds="parent" disabled={dragBool} onStart={handleOnDragStart}>
                 <div
                   className={"scribble-message1"}
                   style={
