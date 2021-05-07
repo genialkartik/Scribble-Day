@@ -34,7 +34,6 @@ import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
 import announcement from "../../assets/announcement.png";
 import "./home.css";
 import Preview from "../preview";
-<<<<<<< HEAD
 import {
   getLeft,
   getTop,
@@ -42,11 +41,7 @@ import {
   getFontSize,
 } from "../useGetPosition";
 import useWindowDimensions from "../dimension";
-=======
-import { getLeft, getTop, getConstantLeft, getFontSize } from "../useGetPosition";
-import useWindowDimensions from '../dimension';
-import {useScreenshot} from 'use-screenshot-hook';
->>>>>>> 7a8439b5391244a111945e374eb04548547af00a
+import { useScreenshot } from "use-screenshot-hook";
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
@@ -104,16 +99,10 @@ function Home() {
   const imageRef = React.createRef(null);
   const [imageRefWidth, setImageRefWidth] = useState(0);
   const [imageRefHeight, setImageRefHeight] = useState(0);
-<<<<<<< HEAD
-  const messageRef = React.createRef();
-  // const getPositions = useGetPosition(imageRef, messageRef);
-  const { width: windowWidth } = useWindowDimensions();
-=======
   const messageRef = React.createRef(null);
   const imageWrap = useRef(null);
-  const {image, takeScreenshot} = useScreenshot({ref:imageWrap});
-  const {width: windowWidth} = useWindowDimensions();
->>>>>>> 7a8439b5391244a111945e374eb04548547af00a
+  const { image, takeScreenshot } = useScreenshot({ ref: imageWrap });
+  const { width: windowWidth } = useWindowDimensions();
 
   const handleFontChange = (event) => {
     setFontFam(event.target.value);
@@ -504,27 +493,24 @@ function Home() {
         onClose={handleClose}
         aria-labelledby="simple-dialog-title"
         open={open}
-        
       >
-        <div style={{padding: 12,
-        display: 'flex',
-flexDirection: 'column'}}>
-        {image ? (
-          <img src={image} alt="Scribble Preview" />
-        ) : (
-          <CircularProgress style={{margin: '9px auto'}} />
-        )}
-        <Button
-          variant="contained"
-          style={{
-            backgroundColor: "#0A0",
-            marginInline: 10,
-            color: "#fff",
-          }}
-        >
-          <span className={"fa fa-download"}></span>
-          Download
-        </Button>
+        <div style={{ padding: 12, display: "flex", flexDirection: "column" }}>
+          {image ? (
+            <img src={image} alt="Scribble Preview" />
+          ) : (
+            <CircularProgress style={{ margin: "9px auto" }} />
+          )}
+          <Button
+            variant="contained"
+            style={{
+              backgroundColor: "#0A0",
+              marginInline: 10,
+              color: "#fff",
+            }}
+          >
+            <span className={"fa fa-download"}></span>
+            Download
+          </Button>
         </div>
       </Dialog>
     );
@@ -609,56 +595,55 @@ flexDirection: 'column'}}>
               >
                 {userdata && (
                   <>
-                  <a
-                    href={image}
-                    download="tshirtpreview"
-                    // onClick={() => {
-                    //   if (isFixed) {
-                    //     handleDownloadOpen();
-                    //   } else {
-                    //     setOpenSnackbar(true);
-                    //     setMsgSnackbar(
-                    //       "Click on 'fix' below the Message on tshirt to continue..."
-                    //     );
-                    //     setTimeout(() => setOpenSnackbar(false), 6000);
-                    //   }
-                    // }}
-                    style={{
-                      backgroundColor: "#0A0",
-                      marginInline: 10,
-                      padding: 11,
-                      color: "#fff",
-                    }}
-                  >
-                    <span className={"fa fa-download"}></span>
-                  </a>
-                <DownloadForm
-                  insertVerifyCode={insertVerifyCode}
-                  selectedValue={downloadInput}
-                  open={openDownloadDialog}
-                  onClose={handleDownloadClose}
-                  image={image}
-                />
-                <Button
-                  variant="contained"
-                  // onClick={() => setPreviewDialog(true)}\
-                  onClick={() => handleDownloadOpen()}
-                  style={{
-                    backgroundColor: "#05ABFF",
-                    marginInline: 10,
-                    color: "#fff",
-                  }}
-                >
-                  <span className={"fa fa-user"}></span>
-                  Preview
-                </Button>
-                <PreviewDialog
-                  open={openPreviewDialog}
-                  onClose={handlePreviewClose}
-                />
-                </>
+                    <a
+                      href={image}
+                      download="tshirtpreview"
+                      // onClick={() => {
+                      //   if (isFixed) {
+                      //     handleDownloadOpen();
+                      //   } else {
+                      //     setOpenSnackbar(true);
+                      //     setMsgSnackbar(
+                      //       "Click on 'fix' below the Message on tshirt to continue..."
+                      //     );
+                      //     setTimeout(() => setOpenSnackbar(false), 6000);
+                      //   }
+                      // }}
+                      style={{
+                        backgroundColor: "#0A0",
+                        marginInline: 10,
+                        padding: 11,
+                        color: "#fff",
+                      }}
+                    >
+                      <span className={"fa fa-download"}></span>
+                    </a>
+                    <DownloadForm
+                      insertVerifyCode={insertVerifyCode}
+                      selectedValue={downloadInput}
+                      open={openDownloadDialog}
+                      onClose={handleDownloadClose}
+                      image={image}
+                    />
+                    <Button
+                      variant="contained"
+                      // onClick={() => setPreviewDialog(true)}\
+                      onClick={() => handleDownloadOpen()}
+                      style={{
+                        backgroundColor: "#05ABFF",
+                        marginInline: 10,
+                        color: "#fff",
+                      }}
+                    >
+                      <span className={"fa fa-user"}></span>
+                      Preview
+                    </Button>
+                    <PreviewDialog
+                      open={openPreviewDialog}
+                      onClose={handlePreviewClose}
+                    />
+                  </>
                 )}
-
               </div>
             </div>
           </div>
@@ -812,7 +797,8 @@ flexDirection: 'column'}}>
                               );
                             }}
                             required
-                          />download
+                          />
+                          download
                           <div className={classes.resultOfUlist}>
                             {isFriendFocus &&
                               (friendList.length > 0 ? (
@@ -1571,7 +1557,11 @@ flexDirection: 'column'}}>
                   </span>
                 </p>
               ))}
-              <Draggable bounds="parent" disabled={dragBool} onStart={handleOnDragStart}>
+              <Draggable
+                bounds="parent"
+                disabled={dragBool}
+                onStart={handleOnDragStart}
+              >
                 <div
                   className={"scribble-message1"}
                   style={
