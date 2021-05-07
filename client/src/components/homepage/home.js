@@ -159,6 +159,7 @@ function Home() {
   const [landingPageBool, setLandingPageBool] = useState(true);
   const [userDetailsBool, setUserDetailsBool] = useState(false);
   const [enterEmailBool, setEnterEmailBool] = useState(false);
+  const [loadingBool, setLoadingBool] = useState(false);
   const [
     askedForSendVerificationCode,
     setAskedForSendVerificationCode,
@@ -184,14 +185,8 @@ function Home() {
   useEffect(() => {
     (async () => {
       const resp = await axios.get("/check/session");
-      console.log(resp.data);
       if (resp.data && resp.data.userdata) {
         setUserData(resp.data.userdata);
-        const scribbleResp = await axios.get("/get/scribbles");
-        if (scribbleResp.data) {
-          setScribbleList(scribbleResp.data.scribbleList);
-          console.log(scribbleResp.data.scribbleList);
-        }
       }
     })();
 
@@ -276,11 +271,17 @@ function Home() {
   };
 
   const handleMyScribbleClick = async () => {
+    setLandingPageBool(false);
+    setEnterFriendName("");
     if (userdata) {
+      setLoadingBool(true);
+      const scribbleResp = await axios.get("/get/scribbles");
+      setLoadingBool(false);
+      if (scribbleResp.data) {
+        setScribbleList(scribbleResp.data.scribbleList);
+      }
       setUserDetailsBool(true);
-      setLandingPageBool(false);
     } else {
-      setLandingPageBool(false);
       setEnterEmailBool(true);
     }
   };
@@ -390,12 +391,13 @@ function Home() {
       setMsgSnackbar("Enter all Inputs");
       setTimeout(() => setOpenSnackbar(false), 3000);
     } else {
+      setLoadingBool(true);
       let formData = new FormData();
       formData.set("formInput", JSON.stringify(signupFormInputs));
       formData.set("avatar", avatar);
       formData.set("email", inputEmail);
       const resp = await axios.post("/create", formData);
-
+      setLoadingBool(false);
       setOpenSnackbar(true);
       setMsgSnackbar(resp.data.respMessage);
       setTimeout(() => setOpenSnackbar(false), 3000);
@@ -431,14 +433,21 @@ function Home() {
       setMsgSnackbar("Fill all required Inputs");
       setTimeout(() => setOpenSnackbar(false), 3000);
     } else {
+      setLoadingBool(true);
       const formData = new FormData();
       formData.set("name", newUnivesityName);
       formData.set("logo", newUnivesityLogo);
       const resp = await axios.post("/institute/add", formData);
+      setLoadingBool(false);
       setOpenSnackbar(true);
       setTimeout(() => setOpenSnackbar(false), 3000);
       setMsgSnackbar(resp.data.respMessage);
-      if (resp.data.added) {
+      if (resp.data.added && resp.data.institute) {
+        setUniversityList((instituteList) => [
+          ...instituteList,
+          resp.data.institute,
+        ]);
+        setSignUpformBool(true);
         setNewUniversityBool(false);
       }
     }
@@ -593,22 +602,12 @@ function Home() {
                 style={{ textAlign: "center" }}
                 className="d-none d-sm-block"
               >
-                {userdata && (
+                {userdata && userDetailsBool && (
                   <>
                     <a
                       href={image}
                       download="tshirtpreview"
-                      // onClick={() => {
-                      //   if (isFixed) {
-                      //     handleDownloadOpen();
-                      //   } else {
-                      //     setOpenSnackbar(true);
-                      //     setMsgSnackbar(
-                      //       "Click on 'fix' below the Message on tshirt to continue..."
-                      //     );
-                      //     setTimeout(() => setOpenSnackbar(false), 6000);
-                      //   }
-                      // }}
+                      // onClick={handleDownloadOpen}
                       style={{
                         backgroundColor: "#0A0",
                         marginInline: 10,
@@ -664,6 +663,7 @@ function Home() {
                       setSignUpformBool(false);
                       setNewUniversityBool(false);
                       setEnterPinOrCodeBool(false);
+                      setScribbleList([]);
                     }}
                   />
                 </div>
@@ -726,7 +726,7 @@ function Home() {
                           <div className={classes.resultOfUlist}>
                             {isUlistFocus && (
                               <>
-                                {universityList.length > 0 ? (
+                                {universityList.length > 0 &&
                                   universityList.map((uObj) => (
                                     <div
                                       className={classes.resultListItem}
@@ -739,12 +739,7 @@ function Home() {
                                     >
                                       {uObj.name}
                                     </div>
-                                  ))
-                                ) : (
-                                  <div className={classes.resultListItem}>
-                                    Other
-                                  </div>
-                                )}
+                                  ))}
                               </>
                             )}
                           </div>
@@ -801,27 +796,22 @@ function Home() {
                           download
                           <div className={classes.resultOfUlist}>
                             {isFriendFocus &&
-                              (friendList.length > 0 ? (
-                                friendList.map((uObj) => (
-                                  <div
-                                    className={classes.resultListItem}
-                                    onClick={() => {
-                                      setFriendData({
-                                        friendUserId: uObj.userId,
-                                        friendName: uObj.name,
-                                        friendAvatar: uObj.avatar,
-                                      });
-                                      setEnterFriendName(uObj.name);
-                                      setFriendLogo(uObj.avatar);
-                                      setFriendInput(false);
-                                    }}
-                                  >
-                                    {uObj.name}
-                                  </div>
-                                ))
-                              ) : (
-                                <div className={classes.resultListItem}>
-                                  Other
+                              friendList.length > 0 &&
+                              friendList.map((uObj) => (
+                                <div
+                                  className={classes.resultListItem}
+                                  onClick={() => {
+                                    setFriendData({
+                                      friendUserId: uObj.userId,
+                                      friendName: uObj.name,
+                                      friendAvatar: uObj.avatar,
+                                    });
+                                    setEnterFriendName(uObj.name);
+                                    setFriendLogo(uObj.avatar);
+                                    setFriendInput(false);
+                                  }}
+                                >
+                                  {uObj.name}
                                 </div>
                               ))}
                           </div>
@@ -1039,7 +1029,11 @@ function Home() {
                           }}
                           color="primary"
                         >
-                          Submit
+                          {loadingBool ? (
+                            <CircularProgress style={{ margin: "9px auto" }} />
+                          ) : (
+                            "Submit"
+                          )}
                         </Button>
                       </div>
                       <div
@@ -1219,7 +1213,13 @@ function Home() {
                                   : handleVerifyCode
                               }
                             >
-                              <SendIcon />
+                              {loadingBool ? (
+                                <CircularProgress
+                                  style={{ margin: "9px auto" }}
+                                />
+                              ) : (
+                                <SendIcon style={{ cursor: "pointer" }} />
+                              )}
                             </InputAdornment>
                           }
                         />
@@ -1262,7 +1262,13 @@ function Home() {
                             position="end"
                             onClick={checkUserAccountWithEmail}
                           >
-                            <SendIcon style={{ cursor: "pointer" }} />
+                            {loadingBool ? (
+                              <CircularProgress
+                                style={{ margin: "9px auto" }}
+                              />
+                            ) : (
+                              <SendIcon style={{ cursor: "pointer" }} />
+                            )}
                           </InputAdornment>
                         }
                       />
@@ -1298,6 +1304,7 @@ function Home() {
                               value={"other"}
                               onClick={() => {
                                 setNewUniversityBool(true);
+                                setSignUpformBool(false);
                               }}
                             >
                               Other
@@ -1363,7 +1370,11 @@ function Home() {
                           variant="contained"
                           onClick={handleSubmitSignupForm}
                         >
-                          Submit
+                          {loadingBool ? (
+                            <CircularProgress style={{ margin: "9px auto" }} />
+                          ) : (
+                            "Submit"
+                          )}
                         </Button>
                       </div>
                     </>
@@ -1401,13 +1412,18 @@ function Home() {
                         color="primary"
                         onClick={handleNewUniversityForm}
                       >
-                        Save
+                        {loadingBool ? (
+                          <CircularProgress style={{ margin: "9px auto" }} />
+                        ) : (
+                          "Save"
+                        )}
                       </Button>
                     </>
                   )}
                 </div>
               </div>
             </div>
+            {}
             <div
               style={{ textAlign: "center", marginBottom: "1rem" }}
               className="d-block d-sm-none"
@@ -1565,7 +1581,7 @@ function Home() {
                 <div
                   className={"scribble-message1"}
                   style={
-                    !dragBool
+                    !dragBool && !userDetailsBool
                       ? {
                           border: "1px solid rgb(233, 233, 233)",
                         }
@@ -1628,6 +1644,8 @@ function Home() {
                         </>
                       )}
                     </>
+                  ) : userDetailsBool ? (
+                    <></>
                   ) : (
                     <div
                       style={{

@@ -188,8 +188,6 @@ rtr.post("/save/scribble", async (req, res) => {
 
 rtr.post("/institute/add", async (req, res) => {
   try {
-    console.log(req.body);
-    console.log(req.files.logo);
     if (!req.files.logo) {
       res.json({
         added: false,
@@ -203,6 +201,7 @@ rtr.post("/institute/add", async (req, res) => {
           logo: imageLocation,
         });
         const institute = await newInstitute.save();
+        console.log(institute);
         res.json({
           added: institute ? true : false,
           institute: institute ? institute : {},
