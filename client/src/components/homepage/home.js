@@ -309,14 +309,14 @@ function Home() {
     setLandingPageBool(false);
     setEnterFriendName("");
     if (userdata) {
-      setUniversityLogo(userdata.universityLogo);
       setLoadingBool(true);
+      setUserDetailsBool(true);
+      setUniversityLogo(userdata.universityLogo);
       const scribbleResp = await axios.get("/get/scribbles");
-      setLoadingBool(false);
       if (scribbleResp.data) {
         setScribbleList(scribbleResp.data.scribbleList);
       }
-      setUserDetailsBool(true);
+      setLoadingBool(false);
       const universityResp = await axios.post("/university/detail", {
         university: userdata.university,
       });
@@ -333,26 +333,49 @@ function Home() {
       if (friendData && message && dimensions) {
         setLoadingBool(true);
         // save scribble message to db
-        const resp = await axios.post("/save/scribble", {
-          friendUserId: friendData.friendUserId,
-          friendName: friendData.friendName,
-          friendAvatar: friendData.friendAvatar,
-          dimensions,
-          message,
-          angle: rotateValue,
-          colorCode: messageColor,
-          fontStyle: fontFam,
-          fontSize: messageFont,
-          side: tshirtSide,
-        });
-        setLoadingBool(false);
-        setOpenSnackbar(true);
-        setTimeout(() => setOpenSnackbar(false), 1000);
-        if (resp.data && resp.data.scribbled) {
-          setMsgSnackbar("Send Scribble Successfully");
+        if (friendData.friendName === userdata.name) {
+          setUserDetailsBool(false);
+          setEnterEmailBool(false);
+          setAskedForSendVerificationCode(false);
+          setLandingPageBool(true);
+          setSignUpformBool(false);
+          setNewUniversityBool(false);
+          setEnterPinOrCodeBool(false);
+          setScribbleList([]);
+          setInsertVerifyCode(false);
+          setFriendFocus(false);
+          setUlistFocus(false);
+          setFriendData({});
+          setEnterFriendName("");
+          setFriendLogo();
+          setUniversityLogo();
+          setUniversity("");
+          setMessage("");
+          setOpenSnackbar(true);
+          setMsgSnackbar("You cannot send scribble message to yourself");
+          setTimeout(() => setOpenSnackbar(false), 3000);
         } else {
-          setMsgSnackbar("Something went wrong");
-          setTimeout(() => window.location.reload(), 3000);
+          const resp = await axios.post("/save/scribble", {
+            friendUserId: friendData.friendUserId,
+            friendName: friendData.friendName,
+            friendAvatar: friendData.friendAvatar,
+            dimensions,
+            message,
+            angle: rotateValue,
+            colorCode: messageColor,
+            fontStyle: fontFam,
+            fontSize: messageFont,
+            side: tshirtSide,
+          });
+          setLoadingBool(false);
+          setOpenSnackbar(true);
+          setTimeout(() => setOpenSnackbar(false), 1000);
+          if (resp.data && resp.data.scribbled) {
+            setMsgSnackbar("Send Scribble Successfully");
+          } else {
+            setMsgSnackbar("Something went wrong");
+            setTimeout(() => window.location.reload(), 3000);
+          }
         }
       } else {
         setOpenSnackbar(true);
@@ -519,7 +542,6 @@ function Home() {
     const resp = await axios.post("/friends/list", {
       university: uni,
     });
-    console.log(resp.data);
     if (resp.data && resp.data.friendsList) {
       setFriendList(
         resp.data.friendsList.length > 0 ? resp.data.friendsList : []
@@ -566,7 +588,7 @@ function Home() {
         aria-labelledby="simple-dialog-title"
         open={open}
       >
-        <ShareCard userdata={userdata ? userdata : {}} />
+        <ShareCard userdata={userdata ? userdata : null} />
       </Dialog>
     );
   }
@@ -741,22 +763,7 @@ function Home() {
                 <div style={{ padding: "1rem" }}>
                   <HomeIcon
                     onClick={() => {
-                      setUserDetailsBool(false);
-                      setEnterEmailBool(false);
-                      setAskedForSendVerificationCode(false);
-                      setLandingPageBool(true);
-                      setSignUpformBool(false);
-                      setNewUniversityBool(false);
-                      setEnterPinOrCodeBool(false);
-                      setScribbleList([]);
-                      setFriendFocus(false);
-                      setUlistFocus(false);
-                      setFriendData({});
-                      setEnterFriendName("");
-                      setFriendLogo();
-                      setUniversityLogo();
-                      setUniversity("");
-                      setMessage("");
+                      window.location.reload();
                     }}
                   />
                   {userDetailsBool && userdata && (
@@ -792,9 +799,7 @@ function Home() {
                   <hr />
                   {landingPageBool && (
                     <>
-                      <div className="col-12">
-                        
-                      </div>
+                      <div className="col-12"></div>
                       <div className="formAvatarGroup col-12">
                         <div
                           id="un"
@@ -810,7 +815,7 @@ function Home() {
                               fontSize: "0.8em",
                               color: "#71E2F0",
                               cursor: "pointer",
-                              float: 'right'
+                              float: "right",
                             }}
                             onClick={() => {
                               setNewUniversityBool(true);
@@ -892,8 +897,6 @@ function Home() {
                       </div>
 
                       <div className="col-12">
-                        
-
                         <InviteFriend
                           open={openInviteDialog}
                           onClose={handleInviteClose}
@@ -914,16 +917,9 @@ function Home() {
                               fontSize: "0.8em",
                               color: "#71E2F0",
                               cursor: "pointer",
-                              float: 'right'
+                              float: "right",
                             }}
-                            onClick={() => {
-                              setOpenSnackbar(!userdata && true);
-                              setMsgSnackbar("Sign in to Invite");
-                              setTimeout(() => setOpenSnackbar(false), 3000);
-                              !userdata
-                                ? handleMyScribbleClick()
-                                : handleInviteOpen();
-                            }}
+                            onClick={handleInviteOpen}
                           >
                             Didn't find your Friend?
                           </Typography>
@@ -1210,7 +1206,10 @@ function Home() {
                           color="primary"
                         >
                           {loadingBool ? (
-                            <CircularProgress style={{ margin: "9px auto" }} />
+                            <CircularProgress
+                              size={30}
+                              style={{ color: "white" }}
+                            />
                           ) : (
                             "Submit"
                           )}
@@ -1235,145 +1234,152 @@ function Home() {
                       </div>
                     </>
                   )}
-                  {userDetailsBool && userdata && (
-                    <>
-                      <div className="detailWrapper">
-                        <label>{userdata.name}</label>
-                        <label>{userdata.email}</label>
-                        <label>{userdata.university}</label>
-                      </div>
-                      <div className="detailWrapper">
-                        <label>Scribbles Messages Received</label>
-                        <div
-                          style={{
-                            width: "100%",
-                            height: 1,
-                            margin: "12px 0 16px",
-                            backgroundColor: "#999",
-                          }}
-                        />
-                        <div
-                          style={{
-                            overflowY: "scroll",
-                            maxHeight: "200px",
-                          }}
-                        >
-                          {scribbleList.length > 0 ? (
-                            scribbleList.map((scribble) => (
-                              <div
-                                key={scribble._id}
-                                style={{
-                                  fontSize: "14px",
-                                }}
-                              >
-                                <CardHeader
-                                  avatar={
-                                    <Avatar
-                                      aria-label="recipe"
-                                      className={classes.avatar}
-                                      src={scribble.sendByAvatar}
-                                    ></Avatar>
-                                  }
-                                  title={scribble.sendByName}
-                                  subheader={scribble.message}
-                                />
-                                <div
-                                  style={{
-                                    width: "100%",
-                                    height: 1,
-                                    margin: "12px 0 16px",
-                                    backgroundColor: "#555",
-                                  }}
-                                />
-                              </div>
-                            ))
-                          ) : (
-                            <p style={{ color: "rgba(255,255,255,0.5)" }}>
-                              You didn't received any scribble yet!
-                              <br /> Invite your friends to write scribbles for
-                              you.
-                            </p>
-                          )}
+                  {userDetailsBool &&
+                    userdata &&
+                    (loadingBool ? (
+                      <CircularProgress />
+                    ) : (
+                      <>
+                        <div className="detailWrapper">
+                          <label>{userdata.name}</label>
+                          <label>{userdata.email}</label>
+                          <label>{userdata.university}</label>
                         </div>
-                      </div>
-                      <div className="part">
-                        <Button
-                          variant="contained"
-                          onClick={() => handleDownloadOpen()}
-                          style={{ backgroundColor: "#8A374A", color: "#fff" }}
-                        >
-                          <span className={"fa fa-instagram"}></span>
-                        </Button>
-                        <a
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          href="https://www.linkedin.com/shareArticle?mini=true&url=https://thirsty-goldwasser-7273c9.netlify.app/&title=%20Scribble%20Day%202021%20%20Write%20a%20Scribble%20for%20me%20&summary=Pandemic%20could%20ruin%20your%20studies%20But%20not%20your%20last%20day%20of%20college%20|%20#scribbleday2021&source=thirsty-goldwasser-7273c9.netlify.app/"
-                        >
+                        <div className="detailWrapper">
+                          <label>Scribbles Messages Received</label>
+                          <div
+                            style={{
+                              width: "100%",
+                              height: 1,
+                              margin: "12px 0 16px",
+                              backgroundColor: "#999",
+                            }}
+                          />
+                          <div
+                            style={{
+                              overflowY: "scroll",
+                              maxHeight: "200px",
+                            }}
+                          >
+                            {scribbleList.length > 0 ? (
+                              scribbleList.map((scribble) => (
+                                <div
+                                  key={scribble._id}
+                                  style={{
+                                    fontSize: "14px",
+                                  }}
+                                >
+                                  <CardHeader
+                                    avatar={
+                                      <Avatar
+                                        aria-label="recipe"
+                                        className={classes.avatar}
+                                        src={scribble.sendByAvatar}
+                                      ></Avatar>
+                                    }
+                                    title={scribble.sendByName}
+                                    subheader={scribble.message}
+                                  />
+                                  <div
+                                    style={{
+                                      width: "100%",
+                                      height: 1,
+                                      margin: "12px 0 16px",
+                                      backgroundColor: "#555",
+                                    }}
+                                  />
+                                </div>
+                              ))
+                            ) : (
+                              <p style={{ color: "rgba(255,255,255,0.5)" }}>
+                                You didn't received any scribble yet!
+                                <br /> Invite your friends to write scribbles
+                                for you.
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                        <div className="part">
                           <Button
                             variant="contained"
+                            onClick={() => handleDownloadOpen()}
                             style={{
-                              backgroundColor: "#2E73AD",
+                              backgroundColor: "#8A374A",
                               color: "#fff",
                             }}
                           >
-                            <span className={"fa fa-linkedin"}></span>
+                            <span className={"fa fa-instagram"}></span>
                           </Button>
-                        </a>
-                        <Button
-                          variant="contained"
-                          style={{
-                            backgroundColor: "#4095ED",
-                            color: "#fff",
-                          }}
-                          onClick={() => {
-                            window.open(
-                              "www.thirsty-goldwasser-7273c9.netlify.app/",
-                              "targetWindow",
-                              "toolbar=no,location=0,status=no,menubar=no,scrollbars=yes,resizable=yes,width=600,height=250"
-                            );
-                            return false;
-                          }}
-                        >
-                          <span className={"fa fa-facebook"}></span>
-                        </Button>
-                        <Button
-                          variant="contained"
-                          onClick={() => {
-                            window.location.href =
-                              "https://twitter.com/share?url=" +
-                              encodeURIComponent(
-                                "www.thirsty-goldwasser-7273c9.netlify.app/"
-                              ) +
-                              "&text=" +
-                              document.title;
-                          }}
-                          style={{
-                            backgroundColor: "#05ABFF",
-                            color: "#fff",
-                          }}
-                        >
-                          <span className={"fa fa-twitter"}></span>
-                        </Button>
-                        <a
-                          href="https://web.whatsapp.com/send?text=www.google.com"
-                          data-action="share/whatsapp/share"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
+                          <a
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            href="https://www.linkedin.com/shareArticle?mini=true&url=https://thirsty-goldwasser-7273c9.netlify.app/&title=%20Scribble%20Day%202021%20%20Write%20a%20Scribble%20for%20me%20&summary=Pandemic%20could%20ruin%20your%20studies%20But%20not%20your%20last%20day%20of%20college%20|%20#scribbleday2021&source=thirsty-goldwasser-7273c9.netlify.app/"
+                          >
+                            <Button
+                              variant="contained"
+                              style={{
+                                backgroundColor: "#2E73AD",
+                                color: "#fff",
+                              }}
+                            >
+                              <span className={"fa fa-linkedin"}></span>
+                            </Button>
+                          </a>
                           <Button
                             variant="contained"
-                            // onClick={() => handleDownloadOpen("share")}
                             style={{
-                              backgroundColor: "#0DC143",
+                              backgroundColor: "#4095ED",
+                              color: "#fff",
+                            }}
+                            onClick={() => {
+                              window.open(
+                                "www.thirsty-goldwasser-7273c9.netlify.app/",
+                                "targetWindow",
+                                "toolbar=no,location=0,status=no,menubar=no,scrollbars=yes,resizable=yes,width=600,height=250"
+                              );
+                              return false;
+                            }}
+                          >
+                            <span className={"fa fa-facebook"}></span>
+                          </Button>
+                          <Button
+                            variant="contained"
+                            onClick={() => {
+                              window.location.href =
+                                "https://twitter.com/share?url=" +
+                                encodeURIComponent(
+                                  "www.thirsty-goldwasser-7273c9.netlify.app/"
+                                ) +
+                                "&text=" +
+                                document.title;
+                            }}
+                            style={{
+                              backgroundColor: "#05ABFF",
                               color: "#fff",
                             }}
                           >
-                            <span className={"fa fa-whatsapp"}></span>
+                            <span className={"fa fa-twitter"}></span>
                           </Button>
-                        </a>
-                      </div>
-                    </>
-                  )}
+                          <a
+                            href="https://web.whatsapp.com/send?text=www.google.com"
+                            data-action="share/whatsapp/share"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <Button
+                              variant="contained"
+                              // onClick={() => handleDownloadOpen("share")}
+                              style={{
+                                backgroundColor: "#0DC143",
+                                color: "#fff",
+                              }}
+                            >
+                              <span className={"fa fa-whatsapp"}></span>
+                            </Button>
+                          </a>
+                        </div>
+                      </>
+                    ))}
                   {insertVerifyCode && (
                     <>
                       <FormControl
@@ -1406,7 +1412,8 @@ function Home() {
                             >
                               {loadingBool ? (
                                 <CircularProgress
-                                  style={{ margin: "9px auto" }}
+                                  size={30}
+                                  style={{ color: "white" }}
                                 />
                               ) : (
                                 <SendIcon style={{ cursor: "pointer" }} />
@@ -1455,7 +1462,8 @@ function Home() {
                           >
                             {loadingBool ? (
                               <CircularProgress
-                                style={{ margin: "9px auto" }}
+                                size={30}
+                                style={{ color: "white" }}
                               />
                             ) : (
                               <SendIcon style={{ cursor: "pointer" }} />
@@ -1471,7 +1479,7 @@ function Home() {
                         <FormControl
                           variant="filled"
                           className={classes.formControl}
-                          style={{width: '100%', margin: '12px 0'}}
+                          style={{ width: "100%", margin: "12px 0" }}
                         >
                           <InputLabel
                             id="demo-simple-select-filled-label"
@@ -1522,7 +1530,7 @@ function Home() {
                             name="gender"
                             value={signupFormInputs.gender}
                             onChange={handleInputChange}
-                            style={{ flexDirection: 'row'}}
+                            style={{ flexDirection: "row" }}
                           >
                             <FormControlLabel
                               value="female"
@@ -1554,17 +1562,22 @@ function Home() {
                           onChange={(e) => setAvatar(e.target.files[0])}
                           id="avatar"
                         />
-                        <label for="avatar" style={{width:'100%'}}>
-                          <div className="file-upload-control" style={{
-                          background: '#e52e71',
-                          padding: '0.5rem 2rem',
-                          borderRadius: 8,
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          cursor: 'pointer'
-                        }}>
+                        <label for="avatar" style={{ width: "100%" }}>
+                          <div
+                            className="file-upload-control"
+                            style={{
+                              background: "#e52e71",
+                              padding: "0.5rem 2rem",
+                              borderRadius: 8,
+                              display: "inline-flex",
+                              alignItems: "center",
+                              cursor: "pointer",
+                            }}
+                          >
                             <CloudUploadIcon />
-                            <span style={{marginLeft: 12}}>upload profile picture</span>
+                            <span style={{ marginLeft: 12 }}>
+                              upload profile picture
+                            </span>
                           </div>
                         </label>
                         <Button
@@ -1601,17 +1614,20 @@ function Home() {
                         }
                         id="newuniversitylogo"
                       />
-                      <label for="newuniversitylogo" style={{width: '100%'}}>
-                        <div className="file-upload-control" style={{
-                          background: '#e52e71',
-                          padding: '0.5rem 2rem',
-                          borderRadius: 8,
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          cursor: 'pointer'
-                        }}>
+                      <label for="newuniversitylogo" style={{ width: "100%" }}>
+                        <div
+                          className="file-upload-control"
+                          style={{
+                            background: "#e52e71",
+                            padding: "0.5rem 2rem",
+                            borderRadius: 8,
+                            display: "inline-flex",
+                            alignItems: "center",
+                            cursor: "pointer",
+                          }}
+                        >
                           <CloudUploadIcon />
-                          <span style={{marginLeft: 12}}>Upload Logo</span>
+                          <span style={{ marginLeft: 12 }}>Upload Logo</span>
                         </div>
                       </label>
 
@@ -1621,7 +1637,10 @@ function Home() {
                         onClick={handleNewUniversityForm}
                       >
                         {loadingBool ? (
-                          <CircularProgress style={{ margin: "9px auto" }} />
+                          <CircularProgress
+                            size={30}
+                            style={{ color: "white" }}
+                          />
                         ) : (
                           "Save"
                         )}
@@ -1705,12 +1724,7 @@ function Home() {
                 <div>
                   <Button
                     variant="contained"
-                    onClick={() => {
-                      setOpenSnackbar(!userdata && true);
-                      setMsgSnackbar("Sign in to Invite");
-                      setTimeout(() => setOpenSnackbar(false), 3000);
-                      !userdata ? handleMyScribbleClick() : handleInviteOpen();
-                    }}
+                    onClick={handleInviteOpen}
                     style={{ backgroundColor: "#05ABFF", color: "#fff" }}
                   >
                     <span className={"fa fa-share"}></span>

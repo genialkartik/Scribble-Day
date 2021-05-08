@@ -17,6 +17,7 @@
     "react-dom": "^16.14.0",
     "react-draggable": "^4.4.3",
     "react-gradient-progress": "^1.0.3",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
     "use-screenshot-hook": "^1.0.2"
   },
