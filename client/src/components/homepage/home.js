@@ -792,24 +792,10 @@ function Home() {
                   <hr />
                   {landingPageBool && (
                     <>
-                      <div>
-                        <Typography
-                          gutterBottom
-                          style={{
-                            fontSize: "0.8em",
-                            color: "#71E2F0",
-                            cursor: "pointer",
-                          }}
-                          onClick={() => {
-                            setNewUniversityBool(true);
-                            setLandingPageBool(false);
-                            setNewUniversityOnSuccess("landingPage");
-                          }}
-                        >
-                          Didn't find University?
-                        </Typography>
+                      <div className="col-12">
+                        
                       </div>
-                      <div className="formAvatarGroup col-12 col-sm-8 col-md-9">
+                      <div className="formAvatarGroup col-12">
                         <div
                           id="un"
                           style={{
@@ -818,6 +804,22 @@ function Home() {
                             zIndex: 3,
                           }}
                         >
+                          <Typography
+                            gutterBottom
+                            style={{
+                              fontSize: "0.8em",
+                              color: "#71E2F0",
+                              cursor: "pointer",
+                              float: 'right'
+                            }}
+                            onClick={() => {
+                              setNewUniversityBool(true);
+                              setLandingPageBool(false);
+                              setNewUniversityOnSuccess("landingPage");
+                            }}
+                          >
+                            Didn't find University?
+                          </Typography>
                           <Form.Control
                             className={" form"}
                             type="text"
@@ -889,32 +891,15 @@ function Home() {
                         />
                       </div>
 
-                      <div>
-                        <Typography
-                          gutterBottom
-                          style={{
-                            fontSize: "0.8em",
-                            color: "#71E2F0",
-                            cursor: "pointer",
-                          }}
-                          onClick={() => {
-                            setOpenSnackbar(!userdata && true);
-                            setMsgSnackbar("Sign in to Invite");
-                            setTimeout(() => setOpenSnackbar(false), 3000);
-                            !userdata
-                              ? handleMyScribbleClick()
-                              : handleInviteOpen();
-                          }}
-                        >
-                          Didn't find your Friend?
-                        </Typography>
+                      <div className="col-12">
+                        
 
                         <InviteFriend
                           open={openInviteDialog}
                           onClose={handleInviteClose}
                         />
                       </div>
-                      <div className="formAvatarGroup col-12 col-sm-8 col-md-9">
+                      <div className="formAvatarGroup col-12">
                         <div
                           id="fd"
                           style={{
@@ -923,6 +908,25 @@ function Home() {
                             zIndex: 2,
                           }}
                         >
+                          <Typography
+                            gutterBottom
+                            style={{
+                              fontSize: "0.8em",
+                              color: "#71E2F0",
+                              cursor: "pointer",
+                              float: 'right'
+                            }}
+                            onClick={() => {
+                              setOpenSnackbar(!userdata && true);
+                              setMsgSnackbar("Sign in to Invite");
+                              setTimeout(() => setOpenSnackbar(false), 3000);
+                              !userdata
+                                ? handleMyScribbleClick()
+                                : handleInviteOpen();
+                            }}
+                          >
+                            Didn't find your Friend?
+                          </Typography>
                           <Form.Control
                             className={" form"}
                             type="text"
@@ -1003,7 +1007,7 @@ function Home() {
                       /> */}
 
                       <Form.Control
-                        className={"col-12 col-sm-8 col-md-9 form"}
+                        className={"col-12 form"}
                         type="text"
                         placeholder="Scribble Message"
                         name="message"
@@ -1467,6 +1471,7 @@ function Home() {
                         <FormControl
                           variant="filled"
                           className={classes.formControl}
+                          style={{width: '100%', margin: '12px 0'}}
                         >
                           <InputLabel
                             id="demo-simple-select-filled-label"
@@ -1517,6 +1522,7 @@ function Home() {
                             name="gender"
                             value={signupFormInputs.gender}
                             onChange={handleInputChange}
+                            style={{ flexDirection: 'row'}}
                           >
                             <FormControlLabel
                               value="female"
@@ -1548,10 +1554,17 @@ function Home() {
                           onChange={(e) => setAvatar(e.target.files[0])}
                           id="avatar"
                         />
-                        <label for="avatar">
-                          <div className="file-upload-control">
+                        <label for="avatar" style={{width:'100%'}}>
+                          <div className="file-upload-control" style={{
+                          background: '#e52e71',
+                          padding: '0.5rem 2rem',
+                          borderRadius: 8,
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          cursor: 'pointer'
+                        }}>
                             <CloudUploadIcon />
-                            <span>upload profile picture</span>
+                            <span style={{marginLeft: 12}}>upload profile picture</span>
                           </div>
                         </label>
                         <Button
@@ -1588,10 +1601,17 @@ function Home() {
                         }
                         id="newuniversitylogo"
                       />
-                      <label for="newuniversitylogo">
-                        <div className="file-upload-control">
+                      <label for="newuniversitylogo" style={{width: '100%'}}>
+                        <div className="file-upload-control" style={{
+                          background: '#e52e71',
+                          padding: '0.5rem 2rem',
+                          borderRadius: 8,
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          cursor: 'pointer'
+                        }}>
                           <CloudUploadIcon />
-                          <span>Upload Logo</span>
+                          <span style={{marginLeft: 12}}>Upload Logo</span>
                         </div>
                       </label>
 
