@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import Draggable from "react-draggable";
 import axios from "axios";
 import PropTypes from "prop-types";
@@ -188,22 +189,23 @@ function Home() {
     setImageRefHeight(imageRef.current.getBoundingClientRect().height);
   }, [imageRef, imageRef.current, windowWidth]);
 
-  useEffect(() => {
-    let search = window.location.search;
-    let params = new URLSearchParams(search);
-    const param_userId = params.get("id");
+  const { userId } = useParams();
 
-    if (param_userId) {
+  useEffect(() => {
+    // let search = window.location.search;
+    // let params = new URLSearchParams(search);
+    // const userId = params.get("id");
+    if (userId) {
       (async () => {
         const resp = await axios.post("/friend/param", {
-          userId: param_userId,
+          userId: userId,
         });
         if (resp.data && resp.data.found) {
           const res = resp.data;
           setUniversity(res.university.name);
           setUniversityLogo(res.university.logo);
           setEnterFriendName(res.friendData.name);
-          setFriendLogo(res.friendData.logo);
+          setFriendLogo(res.friendData.avatar);
           setFriendData({
             friendUserId: res.friendData.userId,
             friendName: res.friendData.name,
@@ -874,7 +876,7 @@ function Home() {
 
                                         setFriendData({});
                                         setEnterFriendName("");
-                                        setFriendLogo("");
+                                        setFriendLogo();
                                         setFriendFocus(false);
                                       }}
                                     >
@@ -1313,7 +1315,7 @@ function Home() {
                           <a
                             target="_blank"
                             rel="noopener noreferrer"
-                            href="https://www.linkedin.com/shareArticle?mini=true&url=https://thirsty-goldwasser-7273c9.netlify.app/&title=%20Scribble%20Day%202021%20%20Write%20a%20Scribble%20for%20me%20&summary=Pandemic%20could%20ruin%20your%20studies%20But%20not%20your%20last%20day%20of%20college%20|%20#scribbleday2021&source=thirsty-goldwasser-7273c9.netlify.app/"
+                            href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A//thirsty-goldwasser-7273c9.netlify.app/u/cd841dba-fb1c-4c42-8e31-a900a4a23c6c&title=Hey%20dear%20friend,%20Lets%20Celebrate%20Scribble%20Day%202021%20virtullay%20together&summary=Pandemic%20could%20ruin%20oour%20studies%20But%20not%20our%20last%20day%20of%20college%20%7C%20%F0%9F%91%95%20Happy%20Scribble%20Day%202021%20%F0%9F%A5%B3%20%7C%20Write%20a%20Scribble%20for%20me%20%23scribbleday2021%20&source="
                           >
                             <Button
                               variant="contained"

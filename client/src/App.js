@@ -1,4 +1,5 @@
 import React from "react";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Home from "./components/homepage/home";
@@ -13,7 +14,10 @@ function App() {
   return (
     <MuiThemeProvider theme={Theme}>
       <div className="App">
-        <Home />
+        <Router>
+          <Route exact component={Home} path="/" />
+          <Route exact component={Home} path="/u/:userId" />
+        </Router>
       </div>
     </MuiThemeProvider>
   );
