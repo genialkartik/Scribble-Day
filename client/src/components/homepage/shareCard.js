@@ -163,7 +163,6 @@ export default function ShareCard(props) {
           >
             <Button
               variant="contained"
-              // onClick={() => handleDownloadOpen("share")}
               style={{
                 backgroundColor: "#0DC143",
                 color: "#fff",
