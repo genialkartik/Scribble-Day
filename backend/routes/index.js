@@ -32,11 +32,20 @@ rtr.get("/check/session", async (req, res) => {
 
 rtr.get("/get/scribbles", async (req, res) => {
   if (req.session.userdata) {
-    const resp = await Scribble.find({ userId: req.session.userdata.userId });
+    const resp = await Scribble.find({
+      sendToUserId: req.session.userdata.userId,
+    });
     res.json({
       scribbleList: resp ? resp : [],
     });
   }
+});
+
+rtr.post("/friends/scribbles", async (req, res) => {
+  const resp = await Scribble.find({ sendToUserId: req.body.userId });
+  res.json({
+    scribbleList: resp ? resp : [],
+  });
 });
 
 rtr.post("/login", async (req, res) => {
@@ -160,10 +169,12 @@ rtr.post("/save/scribble", async (req, res) => {
     }
     const newScribble = new Scribble({
       scribbleId: uuidv4(),
-      userId: req.session.userdata.userId,
-      senderUserId: req.body.friendUserId,
-      senderName: req.body.friendName,
-      senderAvatar: req.body.friendAvatar,
+      sendByUserId: req.session.userdata.userId,
+      sendByName: req.session.userdata.name,
+      sendByAvatar: req.session.userdata.avatar,
+      sendToUserId: req.body.friendUserId,
+      sendToName: req.body.friendName,
+      sendToAvatar: req.body.friendAvatar,
       dimensions: req.body.dimensions,
       message: req.body.message,
       angle: req.body.angle,
@@ -174,7 +185,7 @@ rtr.post("/save/scribble", async (req, res) => {
     });
     const scribbleResp = await newScribble.save();
     res.json({
-      scibbled: scribbleResp ? scribbleResp : null,
+      scribbled: scribbleResp ? scribbleResp : null,
       respMessage: "saved",
     });
   } catch (error) {
@@ -232,9 +243,32 @@ rtr.get("/institute/list", async (req, res) => {
 
 rtr.post("/friends/list", async (req, res) => {
   const resp = await User.find({ university: req.body.university });
+  let respFilter = resp;
+  if (req.session.userdata)
+    respFilter = resp.filter(
+      (scribble) => scribble.userId !== req.session.userdata.userId
+    );
   res.json({
-    friendsList: resp && resp.length > 0 ? resp : [],
+    friendsList: respFilter && respFilter.length > 0 ? respFilter : [],
   });
+});
+
+rtr.post("/university/detail", async (req, res) => {
+  const resp = await Institute.findOne({ name: req.body.university });
+  res.json({
+    university: resp ? resp : {},
+    respMessage: resp ? "" : "Error finding University",
+  });
+});
+
+rtr.get("/logout", async (req, res) => {
+  if (req.session.userdata) {
+    req.session.destroy(() => {
+      res.json({ loggedout: true });
+    });
+  } else {
+    res.json({ loggedout: false });
+  }
 });
 
 module.exports = rtr;

@@ -10,6 +10,7 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import FormControl from "@material-ui/core/FormControl";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
+import CardHeader from "@material-ui/core/CardHeader";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import Dialog from "@material-ui/core/Dialog";
 import Avatar from "@material-ui/core/Avatar";
@@ -34,6 +35,7 @@ import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
 import announcement from "../../assets/announcement.png";
 import "./home.css";
 import Preview from "../preview";
+import ShareCard from "./shareCard.js";
 import {
   getLeft,
   getTop,
@@ -129,22 +131,23 @@ function Home() {
       setData(data);
     }
   };
-  const [isFriendFocus, setFriendInput] = useState(false);
-  const [isUlistFocus, setUlistInput] = useState(false);
+  const [isFriendFocus, setFriendFocus] = useState(false);
+  const [isUlistFocus, setUlistFocus] = useState(false);
   const [scribbleList, setScribbleList] = useState([]);
   const [userdata, setUserData] = useState(null);
   const [friendData, setFriendData] = useState({});
-  const [message, setMessage] = useState("Scribble Message");
+  const [message, setMessage] = useState("");
   const [messageColor, setMessageColor] = useState("#000000");
   const [rotateValue, setRotateValue] = useState(0);
   const [dragBool, setDragBool] = useState(false);
   const [messageFont, setMessageFont] = useState(".8em");
   const [fontFam, setFontFam] = useState("Jazz LET, fantasy");
 
-  const [frontSide, setSide] = useState(true);
+  const [tshirtSide, setTshirtSide] = useState("front");
   const [isFixed, setIsFixed] = useState(false);
   const [dimensions, setDimensions] = useState({});
 
+  const [openInviteDialog, setInviteDialog] = useState(false);
   const [openDownloadDialog, setDownloadDialog] = useState(false);
   const [openPreviewDialog, setPreviewDialog] = useState(false);
   const [downloadInput, setDownloadInput] = useState();
@@ -175,6 +178,9 @@ function Home() {
   const [activateLoadingIn, setActivateLoadingIn] = useState("");
   const [newUnivesityName, setNewUniversityName] = useState("");
   const [newUnivesityLogo, setNewUniversityLogo] = useState();
+  const [newUniversityOnSuccess, setNewUniversityOnSuccess] = useState(
+    "signup"
+  );
   const [avatar, setAvatar] = useState();
 
   useEffect(() => {
@@ -274,6 +280,7 @@ function Home() {
     setLandingPageBool(false);
     setEnterFriendName("");
     if (userdata) {
+      setUniversityLogo(userdata.universityLogo);
       setLoadingBool(true);
       const scribbleResp = await axios.get("/get/scribbles");
       setLoadingBool(false);
@@ -281,6 +288,12 @@ function Home() {
         setScribbleList(scribbleResp.data.scribbleList);
       }
       setUserDetailsBool(true);
+      const universityResp = await axios.post("/university/detail", {
+        university: userdata.university,
+      });
+      if (universityResp.data) {
+        setUniversityLogo(universityResp.data.university.logo);
+      }
     } else {
       setEnterEmailBool(true);
     }
@@ -289,6 +302,7 @@ function Home() {
   const handleSendScribbleForm = async () => {
     if (userdata) {
       if (friendData && message && dimensions) {
+        setLoadingBool(true);
         // save scribble message to db
         const resp = await axios.post("/save/scribble", {
           friendUserId: friendData.friendUserId,
@@ -300,9 +314,17 @@ function Home() {
           colorCode: messageColor,
           fontStyle: fontFam,
           fontSize: messageFont,
-          side: frontSide ? "front" : "back",
+          side: tshirtSide,
         });
-        console.log(resp.data);
+        setLoadingBool(false);
+        setOpenSnackbar(true);
+        setTimeout(() => setOpenSnackbar(false), 1000);
+        if (resp.data && resp.data.scribbled) {
+          setMsgSnackbar("Send Scribble Successfully");
+        } else {
+          setMsgSnackbar("Something went wrong");
+          setTimeout(() => window.location.reload(), 3000);
+        }
       } else {
         setOpenSnackbar(true);
         setMsgSnackbar("Enter all inputs");
@@ -411,6 +433,15 @@ function Home() {
   const handleRotateChange = (event, newValue) => {
     setRotateValue(newValue);
   };
+
+  const handleInviteOpen = () => {
+    setInviteDialog(true);
+  };
+
+  const handleInviteClose = (value) => {
+    setInviteDialog(false);
+  };
+
   const handleDownloadOpen = () => {
     setDownloadDialog(true);
   };
@@ -418,9 +449,6 @@ function Home() {
   const handleDownloadClose = (value) => {
     setDownloadDialog(false);
     setDownloadInput(value);
-  };
-  const handlePreviewOpen = () => {
-    setPreviewDialog(true);
   };
 
   const handlePreviewClose = () => {
@@ -447,16 +475,22 @@ function Home() {
           ...instituteList,
           resp.data.institute,
         ]);
-        setSignUpformBool(true);
+        if (newUniversityOnSuccess === "signup") {
+          setSignUpformBool(true);
+        } else {
+          setLandingPageBool(true);
+        }
         setNewUniversityBool(false);
       }
     }
   };
 
   const handleSearchForStudents = async (uni) => {
+    setScribbleList([]);
     const resp = await axios.post("/friends/list", {
       university: uni,
     });
+    console.log(resp.data);
     if (resp.data && resp.data.friendsList) {
       setFriendList(
         resp.data.friendsList.length > 0 ? resp.data.friendsList : []
@@ -485,12 +519,34 @@ function Home() {
       >
         <Preview
           img={require("../../assets/malefront.png")}
-          face={frontSide ? "front" : "back"}
+          face={tshirtSide}
         />
       </Dialog>
     );
   }
 
+  function InviteFriend(props) {
+    const { onClose, open } = props;
+    const handleClose = () => {
+      onClose();
+    };
+
+    return (
+      <Dialog
+        onClose={handleClose}
+        aria-labelledby="simple-dialog-title"
+        open={open}
+      >
+        <ShareCard userdata={userdata ? userdata : {}} />
+      </Dialog>
+    );
+  }
+
+  InviteFriend.propTypes = {
+    onClose: PropTypes.func.isRequired,
+    open: PropTypes.bool.isRequired,
+    selectedValue: PropTypes.string.isRequired,
+  };
   function DownloadForm(props) {
     const { onClose, selectedValue, open, image } = props;
     const handleClose = () => {
@@ -574,7 +630,7 @@ function Home() {
                     <Button
                       color="primary"
                       onClick={() => {
-                        setSide(true);
+                        setTshirtSide("front");
                       }}
                     >
                       Front
@@ -582,7 +638,7 @@ function Home() {
                     <Button
                       color="secondary"
                       onClick={() => {
-                        setSide(false);
+                        setTshirtSide("back");
                       }}
                     >
                       Back
@@ -664,8 +720,41 @@ function Home() {
                       setNewUniversityBool(false);
                       setEnterPinOrCodeBool(false);
                       setScribbleList([]);
+                      setFriendFocus(false);
+                      setUlistFocus(false);
+                      setFriendData({});
+                      setEnterFriendName("");
+                      setFriendLogo();
+                      setUniversityLogo();
+                      setUniversity("");
+                      setMessage("");
                     }}
                   />
+                  {userDetailsBool && userdata && (
+                    <Button
+                      variant="contained"
+                      size="small"
+                      onClick={async () => {
+                        const resp = await axios.get("/logout");
+                        if (resp.data.loggedout) {
+                          setUserDetailsBool(false);
+                          setLandingPageBool(true);
+                          setUserData(null);
+                        } else {
+                          setOpenSnackbar(true);
+                          setMsgSnackbar("You're not logged in!");
+                          setTimeout(() => setOpenSnackbar(false), 3000);
+                        }
+                      }}
+                      style={{
+                        backgroundColor: "#1C3750",
+                        color: "rgba(255,255,255,.4)",
+                        marginInline: 20,
+                      }}
+                    >
+                      <span>Logout</span>
+                    </Button>
+                  )}
                 </div>
                 <div
                   className="formBox row align-items-center"
@@ -680,9 +769,12 @@ function Home() {
                           style={{
                             fontSize: "0.8em",
                             color: "#71E2F0",
+                            cursor: "pointer",
                           }}
                           onClick={() => {
                             setNewUniversityBool(true);
+                            setLandingPageBool(false);
+                            setNewUniversityOnSuccess("landingPage");
                           }}
                         >
                           Didn't find University?
@@ -691,7 +783,11 @@ function Home() {
                       <div className="formAvatarGroup col-12 col-sm-8 col-md-9">
                         <div
                           id="un"
-                          style={{ position: "relative", width: "100%" }}
+                          style={{
+                            position: "relative",
+                            width: "100%",
+                            zIndex: 3,
+                          }}
                         >
                           <Form.Control
                             className={" form"}
@@ -700,14 +796,17 @@ function Home() {
                             name="message"
                             maxLength={250}
                             value={university}
-                            onFocus={() => setUlistInput(true)}
+                            onFocus={() => {
+                              setUlistFocus(true);
+                              setFriendFocus(false);
+                            }}
                             // onBlur={()=>{
                             //   window.addEventListener('click',(e)=>{
                             //     console.log('running')
                             //     if(e.target.parentElement.offsetParent.id==='un'){
                             //       console.log(e.target);
                             //     }else{
-                            //       setUlistInput(false);
+                            //       setUlistFocus(false);
                             //     }
                             //   })
                             // }}
@@ -732,9 +831,16 @@ function Home() {
                                       className={classes.resultListItem}
                                       onClick={() => {
                                         setUniversity(uObj.name);
-                                        setUlistInput(false);
+                                        setUlistFocus(false);
                                         setUniversityLogo(uObj.logo);
                                         handleSearchForStudents(uObj.name);
+
+                                        // reset friend data
+
+                                        setFriendData({});
+                                        setEnterFriendName("");
+                                        setFriendLogo("");
+                                        setFriendFocus(false);
                                       }}
                                     >
                                       {uObj.name}
@@ -761,15 +867,33 @@ function Home() {
                           style={{
                             fontSize: "0.8em",
                             color: "#71E2F0",
+                            cursor: "pointer",
+                          }}
+                          onClick={() => {
+                            setOpenSnackbar(!userdata && true);
+                            setMsgSnackbar("Sign in to Invite");
+                            setTimeout(() => setOpenSnackbar(false), 3000);
+                            !userdata
+                              ? handleMyScribbleClick()
+                              : handleInviteOpen();
                           }}
                         >
-                          Didn't find your friend?
+                          Didn't find your Friend?
                         </Typography>
+
+                        <InviteFriend
+                          open={openInviteDialog}
+                          onClose={handleInviteClose}
+                        />
                       </div>
                       <div className="formAvatarGroup col-12 col-sm-8 col-md-9">
                         <div
                           id="fd"
-                          style={{ position: "relative", width: "100%" }}
+                          style={{
+                            position: "relative",
+                            width: "100%",
+                            zIndex: 2,
+                          }}
                         >
                           <Form.Control
                             className={" form"}
@@ -782,7 +906,8 @@ function Home() {
                             col-md-9
                             value={enterFriendName}
                             onFocus={() => {
-                              setFriendInput(true);
+                              setFriendFocus(true);
+                              setUlistFocus(false);
                             }}
                             onChange={(e) => {
                               searchFilterFunction(
@@ -793,14 +918,13 @@ function Home() {
                             }}
                             required
                           />
-                          download
                           <div className={classes.resultOfUlist}>
                             {isFriendFocus &&
                               friendList.length > 0 &&
                               friendList.map((uObj) => (
                                 <div
                                   className={classes.resultListItem}
-                                  onClick={() => {
+                                  onClick={async () => {
                                     setFriendData({
                                       friendUserId: uObj.userId,
                                       friendName: uObj.name,
@@ -808,7 +932,20 @@ function Home() {
                                     });
                                     setEnterFriendName(uObj.name);
                                     setFriendLogo(uObj.avatar);
-                                    setFriendInput(false);
+                                    setFriendFocus(false);
+                                    // find user's scribble
+                                    const scribbleResp = await axios.post(
+                                      "/friends/scribbles",
+                                      {
+                                        userId: uObj.userId,
+                                      }
+                                    );
+                                    console.log(scribbleResp.data);
+                                    if (scribbleResp.data) {
+                                      setScribbleList(
+                                        scribbleResp.data.scribbleList
+                                      );
+                                    }
                                   }}
                                 >
                                   {uObj.name}
@@ -826,6 +963,18 @@ function Home() {
                           }
                         />
                       </div>
+                      {/* <TextField
+                        className={"col-12 col-sm-8 col-md-9 form"}
+                        color="default"
+                        label="scribble message"
+                        multiline
+                        rows={4}
+                        variant="outlined"
+                        maxLength={250}
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                      /> */}
+
                       <Form.Control
                         className={"col-12 col-sm-8 col-md-9 form"}
                         type="text"
@@ -1078,31 +1227,42 @@ function Home() {
                             maxHeight: "200px",
                           }}
                         >
-                          {scribbleList.map((scribble) => (
-                            <div
-                              key={scribble._id}
-                              style={{
-                                fontSize: "14px",
-                              }}
-                            >
-                              <span>{scribble.message}</span>
-                              <span
+                          {scribbleList.length > 0 ? (
+                            scribbleList.map((scribble) => (
+                              <div
+                                key={scribble._id}
                                 style={{
-                                  color: "#aaa",
+                                  fontSize: "14px",
                                 }}
                               >
-                                <br />~ {scribble.senderName}
-                              </span>
-                              <div
-                                style={{
-                                  width: "100%",
-                                  height: 1,
-                                  margin: "12px 0 16px",
-                                  backgroundColor: "#555",
-                                }}
-                              />
-                            </div>
-                          ))}
+                                <CardHeader
+                                  avatar={
+                                    <Avatar
+                                      aria-label="recipe"
+                                      className={classes.avatar}
+                                      src={scribble.sendByAvatar}
+                                    ></Avatar>
+                                  }
+                                  title={scribble.sendByName}
+                                  subheader={scribble.message}
+                                />
+                                <div
+                                  style={{
+                                    width: "100%",
+                                    height: 1,
+                                    margin: "12px 0 16px",
+                                    backgroundColor: "#555",
+                                  }}
+                                />
+                              </div>
+                            ))
+                          ) : (
+                            <p style={{ color: "rgba(255,255,255,0.5)" }}>
+                              You didn't received any scribble yet!
+                              <br /> Invite your friends to write scribbles for
+                              you.
+                            </p>
+                          )}
                         </div>
                       </div>
                       <div className="part">
@@ -1305,6 +1465,7 @@ function Home() {
                               onClick={() => {
                                 setNewUniversityBool(true);
                                 setSignUpformBool(false);
+                                setNewUniversityOnSuccess("signup");
                               }}
                             >
                               Other
@@ -1497,7 +1658,12 @@ function Home() {
                 <div>
                   <Button
                     variant="contained"
-                    onClick={() => handleDownloadOpen("share")}
+                    onClick={() => {
+                      setOpenSnackbar(!userdata && true);
+                      setMsgSnackbar("Sign in to Invite");
+                      setTimeout(() => setOpenSnackbar(false), 3000);
+                      !userdata ? handleMyScribbleClick() : handleInviteOpen();
+                    }}
                     style={{ backgroundColor: "#05ABFF", color: "#fff" }}
                   >
                     <span className={"fa fa-share"}></span>
@@ -1509,11 +1675,15 @@ function Home() {
 
             <footer
               className={"center"}
-              style={{ textAlign: "center", padding: "0 2rem" }}
+              style={{
+                textAlign: "center",
+                width: "70%",
+                transform: "translate(20%, 0%)",
+              }}
             >
               <p>
-                Spread the happiness among your friends, juniors, and
-                connections to celebrate this year's <br />
+                Spread the happiness among your friends, juniors, seniors and
+                connections to celebrate this year's
                 <a
                   href="https://hacktoberfest.digitalocean.com/"
                   target="_blank"
@@ -1528,7 +1698,7 @@ function Home() {
             {/* RIGHT COLUMN */}
 
             <div className={"scribble-image1"} ref={imageWrap}>
-              {frontSide ? (
+              {tshirtSide === "front" ? (
                 <Image
                   alt="tshirt demo"
                   src={require("../../assets/malefront.png")}
@@ -1544,35 +1714,40 @@ function Home() {
                 />
               )}
               <div className={"university-logo"}>
-                <Image
-                  src={require("../../assets/lpu.png")}
+                <Avatar
+                  style={{ width: "60px", height: "60px" }}
                   alt="U"
-                  height="32px"
+                  src={
+                    universityLogo
+                      ? universityLogo
+                      : "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn0.iconfinder.com%2Fdata%2Ficons%2Fbuildings-1%2F128%2F29-512.png&f=1&nofb=1"
+                  }
                 />
               </div>
-              {scribbleList.map((scribble) => (
-                <p
-                  key={scribble._id}
-                  style={{
-                    textAlign: "center",
-                    rotate: scribble.angle + "deg",
-                    color: scribble.colorCode,
-                    fontSize: getFontSize(scribble.fontSize, imageRefWidth),
-                    fontFamily: scribble.fontStyle,
-                    position: "absolute",
-                    // transform: `scale(${(imageRefWidth/616)+0.204})`,
-                    top: `${scribble.dimensions.top}%`,
-                    left: `${scribble.dimensions.left}%`,
-                    maxWidth: "25%",
-                    minWidth: "20%",
-                  }}
-                >
-                  {scribble.message}
-                  <span>
-                    <br />~ {scribble.senderName}
-                  </span>
-                </p>
-              ))}
+              {scribbleList
+                .filter((item) => item.side === tshirtSide)
+                .map((scribble) => (
+                  <p
+                    key={scribble._id}
+                    style={{
+                      textAlign: "center",
+                      rotate: scribble.angle + "deg",
+                      color: scribble.colorCode,
+                      fontSize: getFontSize(scribble.fontSize, imageRefWidth),
+                      fontFamily: scribble.fontStyle,
+                      position: "absolute",
+                      // transform: `scale(${(imageRefWidth/616)+0.204})`,
+                      top: `${scribble.dimensions.top}%`,
+                      left: `${scribble.dimensions.left}%`,
+                      width: "25%",
+                    }}
+                  >
+                    {scribble.message}
+                    <span>
+                      <br />~ {scribble.sendByName}
+                    </span>
+                  </p>
+                ))}
               <Draggable
                 bounds="parent"
                 disabled={dragBool}
@@ -1603,7 +1778,7 @@ function Home() {
                         }}
                       >
                         <p ref={messageRef}>
-                          {message}
+                          {message ? message : "Scribble Message"}
                           <span>
                             <br />~ {userdata ? userdata.name : "Your name"}
                           </span>

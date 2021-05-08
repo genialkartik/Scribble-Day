@@ -6,18 +6,31 @@ const scribbleSchema = mongoose.Schema({
     required: true,
     unique: true,
   },
-  userId: {
+  sendByUserId: {
     type: String,
     required: true,
   },
-  senderUserId: String,
-  senderName: {
+  sendByName: {
     type: String,
     required: true,
   },
-  senderAvatar: String,
+  sendByAvatar: {
+    type: String,
+  },
+  sendToUserId: {
+    type: String,
+    required: true,
+  },
+  sendToName: {
+    type: String,
+    required: true,
+  },
+  sendToAvatar: String,
   dimensions: Object,
-  message: String,
+  message: {
+    type: String,
+    required: true,
+  },
   angle: Number,
   colorCode: String,
   fontStyle: String,
