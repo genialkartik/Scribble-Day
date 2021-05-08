@@ -212,7 +212,6 @@ rtr.post("/institute/add", async (req, res) => {
           logo: imageLocation,
         });
         const institute = await newInstitute.save();
-        console.log(institute);
         res.json({
           added: institute ? true : false,
           institute: institute ? institute : {},
@@ -268,6 +267,34 @@ rtr.get("/logout", async (req, res) => {
     });
   } else {
     res.json({ loggedout: false });
+  }
+});
+
+rtr.post("/friend/param", async (req, res) => {
+  try {
+    const friendResp = await User.findOne({ userId: req.body.userId });
+    if (!friendResp) throw "User not found";
+    const universityResp = await Institute.findOne({
+      name: friendResp.university,
+    });
+    if (!universityResp) throw "User details not found";
+    const scribbleResp = await Scribble.find({ sendToUserId: req.body.userId });
+
+    res.json({
+      university: universityResp ? universityResp : {},
+      scribbles: scribbleResp && scribbleResp.length > 0 ? scribbleResp : [],
+      friendData: friendResp ? friendResp : {},
+      found: true,
+    });
+  } catch (error) {
+    console.log(error);
+    res.json({
+      university: {},
+      scribbles: [],
+      friendData: {},
+      respMessage: error,
+      found: false,
+    });
   }
 });
 

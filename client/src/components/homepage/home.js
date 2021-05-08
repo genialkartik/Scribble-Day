@@ -189,6 +189,35 @@ function Home() {
   }, [imageRef, imageRef.current, windowWidth]);
 
   useEffect(() => {
+    let search = window.location.search;
+    let params = new URLSearchParams(search);
+    const param_userId = params.get("id");
+
+    if (param_userId) {
+      (async () => {
+        const resp = await axios.post("/friend/param", {
+          userId: param_userId,
+        });
+        if (resp.data && resp.data.found) {
+          const res = resp.data;
+          setUniversity(res.university.name);
+          setUniversityLogo(res.university.logo);
+          setEnterFriendName(res.friendData.name);
+          setFriendLogo(res.friendData.logo);
+          setFriendData({
+            friendUserId: res.friendData.userId,
+            friendName: res.friendData.name,
+            friendAvatar: res.friendData.avatar,
+          });
+          setScribbleList(res.scribbles);
+        } else {
+          setOpenSnackbar(true);
+          setMsgSnackbar(resp.data.respMessage);
+          setTimeout(() => setOpenSnackbar(false), 3000);
+        }
+      })();
+    }
+
     (async () => {
       const resp = await axios.get("/check/session");
       if (resp.data && resp.data.userdata) {
@@ -212,7 +241,7 @@ function Home() {
 
   const handleFixClick = () => {
     takeScreenshot();
-    if (!friendData || !message) {
+    if (!friendData) {
       setOpenSnackbar(true);
       setMsgSnackbar(
         "Please Select a Friend and must write a Scribble message"
@@ -813,7 +842,6 @@ function Home() {
                             onChange={(e) => {
                               setIsFixed(false);
                               setDragBool(false);
-                              setUniversity(e.target.value);
                               searchFilterFunction(
                                 e.target.value,
                                 duniversityList,
@@ -940,7 +968,6 @@ function Home() {
                                         userId: uObj.userId,
                                       }
                                     );
-                                    console.log(scribbleResp.data);
                                     if (scribbleResp.data) {
                                       setScribbleList(
                                         scribbleResp.data.scribbleList
