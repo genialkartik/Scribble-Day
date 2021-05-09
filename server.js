@@ -6,7 +6,7 @@ const fileUpload = require("express-fileupload");
 const mongoose = require("mongoose");
 const path = require("path");
 
-app.use(express.static(path.join(__dirname + "build")));
+app.use(express.static(path.join(__dirname + "client/build")));
 
 app.use(cors());
 var PORT = process.env.PORT || 4000;
