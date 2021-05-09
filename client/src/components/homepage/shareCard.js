@@ -98,13 +98,22 @@ export default function ShareCard(props) {
           <Button
             variant="contained"
             style={{ backgroundColor: "#8A374A", color: "#fff" }}
+            onClick={() => {
+              navigator.clipboard.writeText(shareText);
+              setOpenSnackbar(true);
+              setMsgSnackbar("Copied");
+              setTimeout(() => {
+                setOpenSnackbar(false);
+                window.open("https://www.instagram.com/");
+              }, 1000);
+            }}
           >
             <span className={"fa fa-instagram"}></span>
           </Button>
           <a
             target="_blank"
             rel="noopener noreferrer"
-            href="https://www.linkedin.com/shareArticle?mini=true&url=https://thirsty-goldwasser-7273c9.netlify.app/?id=cd841dba-fb1c-4c42-8e31-a900a4a23c6c&title=%20Scribble%20Day%202021%20%20Write%20a%20Scribble%20for%20me%20&summary=Pandemic%20could%20ruin%20your%20studies%20But%20not%20your%20last%20day%20of%20college%20|%20#scribbleday2021&source=thirsty-goldwasser-7273c9.netlify.app/"
+            href="https://www.linkedin.com/shareArticle?url=www.thirsty-goldwasser-7273c9.netlify.app/%20&title=Pandemic%20could%20ruin%20our%20studies%20But%20not%20our%20last%20day%20of%20college%20%7C%20%20%F0%9F%91%95%20Happy%20Scribble%20Day%202021%20%F0%9F%A5%B3%20%7C%20%20%20Write%20a%20Scribble%20for%20me%20"
           >
             <Button
               variant="contained"
@@ -124,42 +133,36 @@ export default function ShareCard(props) {
             }}
             onClick={() => {
               window.open(
-                "www.thirsty-goldwasser-7273c9.netlify.app/",
-                "targetWindow",
-                "toolbar=no,location=0,status=no,menubar=no,scrollbars=yes,resizable=yes,width=600,height=250"
+                "https://www.facebook.com/sharer/sharer.php?u=https%3A//thirsty-goldwasser-7273c9.netlify.app"
               );
               return false;
             }}
           >
             <span className={"fa fa-facebook"}></span>
           </Button>
-          <Button
-            variant="contained"
-            onClick={() => {
-              window.location.href =
-                "https://twitter.com/share?url=" +
-                encodeURIComponent(
-                  "www.thirsty-goldwasser-7273c9.netlify.app/"
-                ) +
-                "&text=" +
-                document.title;
-            }}
-            style={{
-              backgroundColor: "#05ABFF",
-              color: "#fff",
-            }}
-          >
-            <span className={"fa fa-twitter"}></span>
-          </Button>
           <a
-            href="https://web.whatsapp.com/send?text=www.google.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://twitter.com/intent/tweet?text=Pandemic%20could%20ruin%20our%20studies%20But%20not%20our%20last%20day%20of%20college%20%7C%0A%0A%F0%9F%91%95%20Happy%20Scribble%20Day%202021%20%F0%9F%A5%B3%20%7C%20%0A%0AWrite%20a%20Scribble%20for%20me%20%0A%0Awww.thirsty-goldwasser-7273c9.netlify.app/%20%0A%0A%23scribbleday2021%20"
+          >
+            <Button
+              variant="contained"
+              style={{
+                backgroundColor: "#05ABFF",
+                color: "#fff",
+              }}
+            >
+              <span className={"fa fa-twitter"}></span>
+            </Button>
+          </a>
+          <a
+            href="https://web.whatsapp.com/send?text=Pandemic%20could%20ruin%20our%20studies%20But%20not%20our%20last%20day%20of%20college%20%7C%20%20%F0%9F%91%95%20Happy%20Scribble%20Day%202021%20%F0%9F%A5%B3%20%7C%20%20%20Write%20a%20Scribble%20for%20me%20%20%20https%3A//thirsty-goldwasser-7273c9.netlify.app/%20%20%20#scribbleday2021%20%20"
             data-action="share/whatsapp/share"
             target="_blank"
             rel="noopener noreferrer"
           >
             <Button
               variant="contained"
-              // onClick={() => handleDownloadOpen("share")}
               style={{
                 backgroundColor: "#0DC143",
                 color: "#fff",
