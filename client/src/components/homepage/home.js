@@ -172,6 +172,7 @@ function Home() {
   const [enterEmailBool, setEnterEmailBool] = useState(false);
   const [loadingBool, setLoadingBool] = useState(false);
   const [loadingFor, setLoadingFor] = useState("");
+  const [downloadClicked, setDownloadClicked] = useState(false);
   const [
     askedForSendVerificationCode,
     setAskedForSendVerificationCode,
@@ -295,6 +296,7 @@ function Home() {
   }
 
   const download = (imageUrl) => {
+    console.log(imageUrl);
     if (imageUrl) {
       const url = imageUrl;
       const link = document.createElement("a");
@@ -317,7 +319,6 @@ function Home() {
   };
 
   const handleMyScribbleClick = async () => {
-    await takeScreenshot();
     setLandingPageBool(false);
     setEnterFriendName("");
     if (userdata) {
@@ -724,16 +725,24 @@ function Home() {
                     <Button
                       // onMouseEnter={()=>takeScreenshot()}
                       onClick={async () => {
-                        setLoadingFor("downloadTshirt");
-                        const clear = setInterval(async () => {
-                          if (true) {
-                            const imageBool = await download(image);
-                            if (imageBool) {
-                              setLoadingFor("");
-                              clearInterval(clear);
+                        setDownloadClicked(!downloadClicked);
+                        if (!downloadClicked) {
+                          setLoadingFor("downloadTshirt");
+                          await takeScreenshot();
+                          setTimeout(() => setLoadingFor(""), 1000);
+                        } else {
+                          setLoadingFor("downloadTshirt");
+                          await takeScreenshot();
+                          const clear = setInterval(async () => {
+                            if (true) {
+                              const imageBool = await download(image);
+                              if (imageBool) {
+                                setLoadingFor("");
+                                clearInterval(clear);
+                              }
                             }
-                          }
-                        }, 3000);
+                          }, 3000);
+                        }
                       }}
                       style={{
                         backgroundColor: "#0A0",
@@ -748,7 +757,8 @@ function Home() {
                         />
                       ) : (
                         <>
-                          <span className={"fa fa-download"}> </span> Download
+                          <span className={"fa fa-download"}> </span>
+                          {downloadClicked ? "Click to Download" : "Download"}
                         </>
                       )}
                     </Button>
