@@ -500,6 +500,7 @@ function Home() {
   };
 
   const handleDownloadOpen = () => {
+    takeScreenshot();
     setDownloadDialog(true);
   };
 
