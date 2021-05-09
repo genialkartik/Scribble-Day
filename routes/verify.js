@@ -15,6 +15,9 @@ rtr.post("/user/sendcode", async (req, res) => {
     if (profileResp) {
       var randomcode = Math.floor(100000 + Math.random() * 900000);
       var transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 465,
+        secure: true,
         service: "gmail",
         auth: {
           user: "krtyagikr", // eg: "kartik@gmail.com" is email, then write "kartik" only
