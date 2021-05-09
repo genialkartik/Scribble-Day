@@ -99,7 +99,6 @@ ValueLabelComponent.propTypes = {
 };
 
 function Home() {
-
   // refs for checking focused or blured inputs
   const searchUniversityRef = useRef(null);
   const searchFriendRef = useRef(null);
@@ -301,7 +300,7 @@ function Home() {
     link.setAttribute("download", "tshirtpreview.png"); //or any other extension
     document.body.appendChild(link);
     link.click();
-  }
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -719,16 +718,16 @@ function Home() {
                   <>
                     <a
                       // onMouseEnter={()=>takeScreenshot()}
-                      onClick={()=>{
+                      onClick={() => {
                         takeScreenshot();
                         let count = 0;
-                        const clear = setInterval(()=>{
+                        const clear = setInterval(() => {
                           count++;
-                          if(count>8){
-                            download(image)
+                          if (count > 8) {
+                            download(image);
                             clearInterval(clear);
                           }
-                        },1000)
+                        }, 1000);
                       }}
                       style={{
                         backgroundColor: "#0A0",
@@ -852,9 +851,8 @@ function Home() {
                               setUlistFocus(true);
                               setFriendFocus(false);
                             }}
-                            
-                            onBlur={()=>{
-                              if(!isSearchUniversityFocused){
+                            onBlur={() => {
+                              if (!isSearchUniversityFocused) {
                                 setUlistFocus(false);
                               }
                             }}
@@ -950,8 +948,8 @@ function Home() {
                               setFriendFocus(true);
                               setUlistFocus(false);
                             }}
-                            onBlur={()=>{
-                              if(!isSearchFriendFocused){
+                            onBlur={() => {
+                              if (!isSearchFriendFocused) {
                                 setFriendFocus(false);
                               }
                             }}
@@ -1805,12 +1803,15 @@ function Home() {
               )}
               <div className={"university-logo"}>
                 <Avatar
-                  style={{ width: getFontSize(60, imageRefWidth), height: getFontSize(60, imageRefWidth) }}
+                  style={{
+                    width: getFontSize(60, imageRefWidth),
+                    height: getFontSize(60, imageRefWidth),
+                  }}
                   alt="U"
                   src={
                     universityLogo
                       ? universityLogo
-                      : "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn0.iconfinder.com%2Fdata%2Ficons%2Fbuildings-1%2F128%2F29-512.png&f=1&nofb=1"
+                      : require("../../assets/hack.jpg")
                   }
                 />
               </div>

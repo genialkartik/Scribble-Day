@@ -16,6 +16,7 @@ function App() {
       <div className="App">
         <Router>
           <Route exact component={Home} path="/u/:userId" />
+          <Route exact component={Home} path="/" />
         </Router>
       </div>
     </MuiThemeProvider>
