@@ -264,20 +264,31 @@ footer a:hover {
 .detailWrapper label {
   display: flex;
   justify-content: left;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: bold;
   text-transform: uppercase;
-  color: #bbb;
+  color: #a1d2fa;
 }
+
 
 .part Button {
   margin-inline: 10px;
+}
+.part.socials {
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+.part.socials > a, .part.socials > button {
+  margin-bottom: 12px;
 }
 
 .formAvatarGroup {
   display: flex;
   width: 100%;
   padding: 0;
+  align-items: center;
 }
 
 @media screen and (max-width: 567.99px) {

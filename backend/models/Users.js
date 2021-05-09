@@ -28,15 +28,6 @@ const userSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  scribbleImageFront: String,
-  scribbleImageBack: String,
-  scribbledBy: [
-    {
-      userId: String,
-      name: String,
-      avatar: String,
-    },
-  ],
   downloaded: {
     type: Boolean,
     default: false,

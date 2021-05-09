@@ -4,6 +4,7 @@ const mv = require("mv");
 const AWS = require("aws-sdk");
 const User = require("../models/Users");
 const Institute = require("../models/Institutes");
+const Scribble = require("../models/Scribbles");
 
 //configuring the AWS environment
 AWS.config.update({
@@ -26,6 +27,24 @@ const uploadToS3B = async (file) => {
 rtr.get("/check/session", async (req, res) => {
   res.json({
     userdata: req.session.userdata ? req.session.userdata : null,
+  });
+});
+
+rtr.get("/get/scribbles", async (req, res) => {
+  if (req.session.userdata) {
+    const resp = await Scribble.find({
+      sendToUserId: req.session.userdata.userId,
+    });
+    res.json({
+      scribbleList: resp ? resp : [],
+    });
+  }
+});
+
+rtr.post("/friends/scribbles", async (req, res) => {
+  const resp = await Scribble.find({ sendToUserId: req.body.userId });
+  res.json({
+    scribbleList: resp ? resp : [],
   });
 });
 
@@ -108,14 +127,6 @@ rtr.post("/create", async (req, res) => {
             avatar: avatarLocation,
             university: formdata.university,
             gender: formdata.gender,
-            scribbleImageFront:
-              formdata.gender == "male"
-                ? "https://scribble2021.s3.ap-south-1.amazonaws.com/male1.png"
-                : ".https://scribble2021.s3.ap-south-1.amazonaws.com/female1.png",
-            scribbleImageBack:
-              formdata.gender == "male"
-                ? "https://scribble2021.s3.ap-south-1.amazonaws.com/male2.png"
-                : "https://scribble2021.s3.ap-south-1.amazonaws.com/female2.png",
             scribbledBy: [],
           });
           const newUserResp = await newUser.save();
@@ -127,8 +138,6 @@ rtr.post("/create", async (req, res) => {
               avatar: newUserResp.avatar,
               university: newUserResp.university,
               gender: newUserResp.gender,
-              scribbleImageFront: newUserResp.scribbleImageFront,
-              scribbleImageBack: newUserResp.scribbleImageBack,
             };
             res.json({
               signUp: true,
@@ -158,66 +167,31 @@ rtr.post("/save/scribble", async (req, res) => {
     if (!req.session.userdata) {
       throw "Login first! by clicking on My Scribble";
     }
-    const base64 = req.body.imageBase64;
-    const base64Data = await new Buffer.from(
-      base64.replace(/^data:image\/\w+;base64,/, ""),
-      "base64"
-    );
-    const type = await base64.split(";")[0].split("/")[1];
-    console.log(type);
-    let params = {};
-    if (req.body.userId && req.body.side) {
-      params = {
-        Bucket: "scribble2021",
-        Key: `scribbles/${req.body.userId}${req.body.side}.${type}`, // type is not required
-        Body: base64Data,
-        ACL: "public-read",
-        ContentEncoding: "base64", // required
-        ContentType: `image/${type}`, // required. Notice the back ticks
-      };
-    } else {
-      throw "Invalid Input";
-    }
-    const { Location } = await s3.upload(params).promise();
-    console.log(Location);
-    if (!Location) throw "Error in saving...";
-    const updateResp = await User.updateOne(
-      { userId: req.body.userId },
-      req.body.side == "front"
-        ? {
-            scribbleImageFront: Location,
-            $push: {
-              scribbleBy: {
-                userId: req.session.userdata.userId,
-                name: req.session.userdata.name,
-                avatar: req.session.userdata.avatar,
-              },
-            },
-          }
-        : {
-            scribbleImageBack: Location,
-            $push: {
-              scribbleBy: {
-                userId: req.session.userdata.userId,
-                name: req.session.userdata.name,
-                avatar: req.session.userdata.avatar,
-              },
-            },
-          }
-    );
-    console.log(updateResp);
-    if (updateResp.nModified == 1) {
-      res.json({
-        saved: true,
-        respMessage: "saved",
-      });
-    } else {
-      throw "Error updating";
-    }
+    const newScribble = new Scribble({
+      scribbleId: uuidv4(),
+      sendByUserId: req.session.userdata.userId,
+      sendByName: req.session.userdata.name,
+      sendByAvatar: req.session.userdata.avatar,
+      sendToUserId: req.body.friendUserId,
+      sendToName: req.body.friendName,
+      sendToAvatar: req.body.friendAvatar,
+      dimensions: req.body.dimensions,
+      message: req.body.message,
+      angle: req.body.angle,
+      colorCode: req.body.colorCode,
+      fontStyle: req.body.fontStyle,
+      fontSize: req.body.fontSize,
+      side: req.body.side,
+    });
+    const scribbleResp = await newScribble.save();
+    res.json({
+      scribbled: scribbleResp ? scribbleResp : null,
+      respMessage: "saved",
+    });
   } catch (error) {
     console.log(error);
     res.json({
-      saved: false,
+      scribbled: null,
       respMessage: error,
     });
   }
@@ -225,8 +199,6 @@ rtr.post("/save/scribble", async (req, res) => {
 
 rtr.post("/institute/add", async (req, res) => {
   try {
-    console.log(req.body);
-    console.log(req.files.logo);
     if (!req.files.logo) {
       res.json({
         added: false,
@@ -270,9 +242,60 @@ rtr.get("/institute/list", async (req, res) => {
 
 rtr.post("/friends/list", async (req, res) => {
   const resp = await User.find({ university: req.body.university });
+  let respFilter = resp;
+  if (req.session.userdata)
+    respFilter = resp.filter(
+      (scribble) => scribble.userId !== req.session.userdata.userId
+    );
   res.json({
-    friendsList: resp && resp.length > 0 ? resp : [],
+    friendsList: respFilter && respFilter.length > 0 ? respFilter : [],
   });
+});
+
+rtr.post("/university/detail", async (req, res) => {
+  const resp = await Institute.findOne({ name: req.body.university });
+  res.json({
+    university: resp ? resp : {},
+    respMessage: resp ? "" : "Error finding University",
+  });
+});
+
+rtr.get("/logout", async (req, res) => {
+  if (req.session.userdata) {
+    req.session.destroy(() => {
+      res.json({ loggedout: true });
+    });
+  } else {
+    res.json({ loggedout: false });
+  }
+});
+
+rtr.post("/friend/param", async (req, res) => {
+  try {
+    const friendResp = await User.findOne({ userId: req.body.userId });
+    if (!friendResp) throw "User not found";
+    const universityResp = await Institute.findOne({
+      name: friendResp.university,
+    });
+    if (!universityResp) throw "User details not found";
+    const scribbleResp = await Scribble.find({ sendToUserId: req.body.userId });
+
+    res.json({
+      university: universityResp ? universityResp : {},
+      scribbles: scribbleResp && scribbleResp.length > 0 ? scribbleResp : [],
+      friendData: friendResp ? friendResp : {},
+      found: true,
+    });
+  } catch (error) {
+    console.log(error);
+    res.json({
+      university: {},
+      scribbles: [],
+      friendData: {},
+      respMessage: error,
+      found: false,
+    });
+  }
 });
 
 module.exports = rtr;
