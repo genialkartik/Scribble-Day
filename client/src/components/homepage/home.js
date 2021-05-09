@@ -33,7 +33,6 @@ import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Button from "@material-ui/core/Button";
 import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
 import announcement from "../../assets/announcement.png";
-import "./home.css";
 import Preview from "../preview";
 import ShareCard from "./shareCard.js";
 import {
@@ -44,6 +43,8 @@ import {
 } from "../useGetPosition";
 import useWindowDimensions from "../dimension";
 import { useScreenshot } from "use-screenshot-hook";
+import useOutsideAlerter from "../useOutsideCatcher";
+import "./home.css";
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
@@ -60,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(2),
   },
   resultOfUlist: {
-    top: 38,
+    top: 61,
     position: "absolute",
     zIndex: 1,
     background: "#fff",
@@ -97,6 +98,13 @@ ValueLabelComponent.propTypes = {
 };
 
 function Home() {
+
+  // refs for checking focused or blured inputs
+  const searchUniversityRef = useRef(null);
+  const searchFriendRef = useRef(null);
+  const isSearchUniversityFocused = useOutsideAlerter(searchUniversityRef);
+  const isSearchFriendFocused = useOutsideAlerter(searchFriendRef);
+
   const classes = useStyles();
   const imageRef = React.createRef(null);
   const [imageRefWidth, setImageRefWidth] = useState(0);
@@ -240,7 +248,6 @@ function Home() {
   }, [landingPageBool]);
 
   const handleFixClick = () => {
-    takeScreenshot();
     if (!friendData) {
       setOpenSnackbar(true);
       setMsgSnackbar(
@@ -285,17 +292,14 @@ function Home() {
     };
   }
 
-  // useEffect(()=>{
-  //   console.log(useGetPosition(imageRef.current.getBoundingClientRect(), messageRef.current.getBoundingClientRect()))
-  // },[messageRef]);
-
-  // const [getMsgDimensions, setMsgDimensions] = useState(null);
-  // const [getImgWrapperDimensions, setImgWrapperDimensions] = useState(null);
-
-  // useEffect(()=>{
-  //   setMsgDimensions(messageRef.current.getBoundingClientRect());
-  //   setImgWrapperDimensions(imageRef.current.getBoundingClientRect());
-  // }, [windowWidth]);
+  const download = (imageUrl) => {
+    const url = imageUrl;
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "tshirtpreview.png"); //or any other extension
+    document.body.appendChild(link);
+    link.click();
+  }
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -712,9 +716,18 @@ function Home() {
                 {userdata && userDetailsBool && (
                   <>
                     <a
-                      href={image}
-                      download="tshirtpreview"
-                      // onClick={handleDownloadOpen}
+                      // onMouseEnter={()=>takeScreenshot()}
+                      onClick={()=>{
+                        takeScreenshot();
+                        let count = 0;
+                        const clear = setInterval(()=>{
+                          count++;
+                          if(count>8){
+                            download(image)
+                            clearInterval(clear);
+                          }
+                        },1000)
+                      }}
                       style={{
                         backgroundColor: "#0A0",
                         marginInline: 10,
@@ -808,6 +821,7 @@ function Home() {
                             width: "100%",
                             zIndex: 3,
                           }}
+                          ref={searchUniversityRef}
                         >
                           <Typography
                             gutterBottom
@@ -836,16 +850,12 @@ function Home() {
                               setUlistFocus(true);
                               setFriendFocus(false);
                             }}
-                            // onBlur={()=>{
-                            //   window.addEventListener('click',(e)=>{
-                            //     console.log('running')
-                            //     if(e.target.parentElement.offsetParent.id==='un'){
-                            //       console.log(e.target);
-                            //     }else{
-                            //       setUlistFocus(false);
-                            //     }
-                            //   })
-                            // }}
+                            
+                            onBlur={()=>{
+                              if(!isSearchUniversityFocused){
+                                setUlistFocus(false);
+                              }
+                            }}
                             onChange={(e) => {
                               setIsFixed(false);
                               setDragBool(false);
@@ -910,6 +920,7 @@ function Home() {
                             width: "100%",
                             zIndex: 2,
                           }}
+                          ref={searchFriendRef}
                         >
                           <Typography
                             gutterBottom
@@ -936,6 +947,11 @@ function Home() {
                             onFocus={() => {
                               setFriendFocus(true);
                               setUlistFocus(false);
+                            }}
+                            onBlur={()=>{
+                              if(!isSearchFriendFocused){
+                                setFriendFocus(false);
+                              }
                             }}
                             onChange={(e) => {
                               searchFilterFunction(
@@ -1008,6 +1024,8 @@ function Home() {
                         placeholder="Scribble Message"
                         name="message"
                         maxLength={250}
+                        multiple={true}
+                        as="textarea"
                         onChange={(e) => setMessage(e.target.value)}
                         required
                       />
@@ -1776,7 +1794,7 @@ function Home() {
               )}
               <div className={"university-logo"}>
                 <Avatar
-                  style={{ width: "60px", height: "60px" }}
+                  style={{ width: getFontSize(60, imageRefWidth), height: getFontSize(60, imageRefWidth) }}
                   alt="U"
                   src={
                     universityLogo
@@ -1833,7 +1851,7 @@ function Home() {
                         style={{
                           rotate: rotateValue + "deg",
                           color: messageColor,
-                          fontSize: messageFont,
+                          fontSize: getFontSize(messageFont, imageRefWidth),
                           fontFamily: fontFam,
                           cursor: dragBool ? "default" : "move",
                         }}

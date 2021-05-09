@@ -270,8 +270,18 @@ footer a:hover {
   color: #a1d2fa;
 }
 
+
 .part Button {
   margin-inline: 10px;
+}
+.part.socials {
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+.part.socials > a, .part.socials > button {
+  margin-bottom: 12px;
 }
 
 .formAvatarGroup {

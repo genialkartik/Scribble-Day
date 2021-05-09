@@ -80,7 +80,7 @@ export default function ShareCard(props) {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <div className="part">
+        <div className="part socials">
           {!props.userdata && (
             <Button
               variant="contained"
