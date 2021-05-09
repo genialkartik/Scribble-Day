@@ -6,8 +6,6 @@ const fileUpload = require("express-fileupload");
 const mongoose = require("mongoose");
 const path = require("path");
 
-app.use(express.static(path.join(__dirname + "client/build")));
-
 app.use(cors());
 var PORT = process.env.PORT || 4000;
 // prevent CORS
@@ -46,6 +44,16 @@ mongoose
 
 app.use(require("./routes/index"));
 app.use(require("./routes/verify"));
+
+// Serve static assets in production
+if (process.env.NODE_ENV === "production") {
+  // Set static folder
+  app.use(express.static("client/build"));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  });
+}
 
 const server = app.listen(PORT, () => {
   console.log(`Listening on PORT:  ${PORT}`);
