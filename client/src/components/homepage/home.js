@@ -171,6 +171,7 @@ function Home() {
   const [userDetailsBool, setUserDetailsBool] = useState(false);
   const [enterEmailBool, setEnterEmailBool] = useState(false);
   const [loadingBool, setLoadingBool] = useState(false);
+  const [loadingFor, setLoadingFor] = useState("");
   const [
     askedForSendVerificationCode,
     setAskedForSendVerificationCode,
@@ -294,12 +295,17 @@ function Home() {
   }
 
   const download = (imageUrl) => {
-    const url = imageUrl;
-    const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", "tshirtpreview.png"); //or any other extension
-    document.body.appendChild(link);
-    link.click();
+    if (imageUrl) {
+      const url = imageUrl;
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "scribble.png"); //or any other extension
+      document.body.appendChild(link);
+      link.click();
+      return true;
+    } else {
+      return false;
+    }
   };
 
   const handleInputChange = (e) => {
@@ -311,12 +317,12 @@ function Home() {
   };
 
   const handleMyScribbleClick = async () => {
+    await takeScreenshot();
     setLandingPageBool(false);
     setEnterFriendName("");
     if (userdata) {
       setLoadingBool(true);
       setUserDetailsBool(true);
-      setUniversityLogo(userdata.universityLogo);
       const scribbleResp = await axios.get("/get/scribbles");
       if (scribbleResp.data) {
         setScribbleList(scribbleResp.data.scribbleList);
@@ -449,15 +455,14 @@ function Home() {
   const checkUserAccountWithEmail = async () => {
     if (!inputEmail) alert("Insert Email");
     else {
-      setEnterEmailBool(false);
       const resp = await axios.post("/profile", {
         inputEmail,
       });
       const res = resp.data;
+      setEnterEmailBool(false);
       if (!res.profile) {
         setAskedForSendVerificationCode(true);
       } else {
-        setEnterEmailBool(false);
         setInsertVerifyCode(true);
         setEnterPinOrCodeBool("pin");
       }
@@ -716,28 +721,37 @@ function Home() {
               >
                 {userdata && userDetailsBool && (
                   <>
-                    <a
+                    <Button
                       // onMouseEnter={()=>takeScreenshot()}
-                      onClick={() => {
-                        takeScreenshot();
-                        let count = 0;
-                        const clear = setInterval(() => {
-                          count++;
-                          if (count > 8) {
-                            download(image);
-                            clearInterval(clear);
+                      onClick={async () => {
+                        setLoadingFor("downloadTshirt");
+                        const clear = setInterval(async () => {
+                          if (true) {
+                            const imageBool = await download(image);
+                            if (imageBool) {
+                              setLoadingFor("");
+                              clearInterval(clear);
+                            }
                           }
-                        }, 1000);
+                        }, 3000);
                       }}
                       style={{
                         backgroundColor: "#0A0",
                         marginInline: 10,
-                        padding: 11,
                         color: "#fff",
                       }}
                     >
-                      <span className={"fa fa-download"}></span>
-                    </a>
+                      {loadingFor === "downloadTshirt" ? (
+                        <CircularProgress
+                          size={20}
+                          style={{ color: "white" }}
+                        />
+                      ) : (
+                        <>
+                          <span className={"fa fa-download"}> </span> Download
+                        </>
+                      )}
+                    </Button>
                     <DownloadForm
                       insertVerifyCode={insertVerifyCode}
                       selectedValue={downloadInput}
@@ -747,7 +761,6 @@ function Home() {
                     />
                     <Button
                       variant="contained"
-                      // onClick={() => setPreviewDialog(true)}\
                       onClick={() => handleDownloadOpen()}
                       style={{
                         backgroundColor: "#05ABFF",
