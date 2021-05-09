@@ -18,6 +18,7 @@ rtr.post("/user/sendcode", async (req, res) => {
         host: "smtp.gmail.com",
         port: 465,
         secure: true,
+        ignoreTLS: false,
         service: "gmail",
         auth: {
           user: "krtyagikr", // eg: "kartik@gmail.com" is email, then write "kartik" only
