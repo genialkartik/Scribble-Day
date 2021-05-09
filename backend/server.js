@@ -4,6 +4,10 @@ const session = require("express-session");
 const cors = require("cors");
 const fileUpload = require("express-fileupload");
 const mongoose = require("mongoose");
+const path = require("path");
+
+app.use(express.static(path.join(__dirname + "build")));
+
 app.use(cors());
 var PORT = process.env.PORT || 4000;
 // prevent CORS
