@@ -1,0 +1,26 @@
+/* //// footer */
+
+.footer-cont {
+  background-color: #001120;
+}
+
+.fa-mobile {
+  font-size: 20px;
+}
+
+#contact {
+  font-size: 15px;
+}
+
+.grey-text {
+  color: lightgrey;
+}
+
+footer a {
+  color: #ed72c0;
+  font-weight: bold;
+}
+footer a:hover {
+  color: #05abff;
+  text-decoration: none;
+}
