@@ -47,9 +47,20 @@ input:-internal-autofill-selected {
   display: flex;
   align-items: center;
   justify-content: left;
-  padding-inline-start: 90px;
-  padding-top: 10px;
 }
+.scribble-imgbox .column {
+  width: 33.3%;
+  text-align: center;
+}
+@media only screen and (max-device-width: 768px) {
+  .scribble-imgbox .scribble-logo-left {
+    text-align: left;
+  }
+  .scribble-imgbox .column {
+    width: 100%;
+  }
+}
+
 .profile {
   display: flex;
   justify-content: center;
@@ -58,10 +69,18 @@ input:-internal-autofill-selected {
   text-align: center;
 }
 .form1 {
-  margin: 0 0 20px;
-  padding: 5px 0 90px;
   width: 100%;
+  margin: 2rem 0;
+  padding: 0.5rem;
+  position: relative;
+  top: -100px;
 }
+@media only screen and (max-device-width: 768px) {
+  .form1 {
+    top: -40px;
+  }
+}
+
 .avatarBox {
   width: 100px;
 }
@@ -155,15 +174,6 @@ input:-internal-autofill-selected {
 }
 .details-of-site .part .fa {
   margin-right: 8px;
-}
-
-footer a {
-  color: lightcoral;
-  font-weight: bold;
-}
-footer a:hover {
-  color: aqua;
-  text-decoration: none;
 }
 
 @media screen and (max-width: 575.99px) {
@@ -270,7 +280,6 @@ footer a:hover {
   color: #a1d2fa;
 }
 
-
 .part Button {
   margin-inline: 10px;
 }
@@ -280,7 +289,8 @@ footer a:hover {
   flex-wrap: wrap;
   justify-content: space-evenly;
 }
-.part.socials > a, .part.socials > button {
+.part.socials > a,
+.part.socials > button {
   margin-bottom: 12px;
 }
 
@@ -311,10 +321,6 @@ footer a:hover {
   }
   .details-of-site {
     margin: 0 !important;
-  }
-  .form1 {
-    margin: 2rem 0;
-    padding: 0.5rem;
   }
   .row.mb-view {
     flex-direction: column-reverse;

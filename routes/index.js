@@ -205,25 +205,42 @@ rtr.post("/institute/add", async (req, res) => {
         respMessage: "No file selected",
       });
     } else {
-      const imageLocation = await uploadToS3B(req.files.logo);
-      if (imageLocation) {
-        const newInstitute = new Institute({
-          name: req.body.name,
-          logo: imageLocation,
-        });
-        const institute = await newInstitute.save();
-        res.json({
-          added: institute ? true : false,
-          institute: institute ? institute : {},
-          respMessage: "Saved",
-        });
-      } else {
-        res.json({
-          added: false,
-          institute: {},
-          respMessage: "Unable to upload Logo",
-        });
-      }
+      // const imageLocation = await uploadToS3B(req.files.logo);
+      req.files.logo.mv(
+        __dirname + "/" + req.files.logo.name,
+        async function (err) {
+          if (err) throw err;
+          else {
+            mv(
+              __dirname + "/" + req.files.logo.name,
+              "client/build/images/" + req.files.logo.name.replace(/\s/g, ""),
+              function (err) {
+                if (err) throw err;
+              }
+            );
+          }
+
+          // if (imageLocation) {
+          const newInstitute = new Institute({
+            name: req.body.name,
+            // logo: imageLocation,
+            logo: "./images/" + req.files.logo.name.replace(/\s/g, ""),
+          });
+          const institute = await newInstitute.save();
+          res.json({
+            added: institute ? true : false,
+            institute: institute ? institute : {},
+            respMessage: "Saved",
+          });
+          // } else {
+          //   res.json({
+          //     added: false,
+          //     institute: {},
+          //     respMessage: "Unable to upload Logo",
+          //   });
+          // }
+        }
+      );
     }
   } catch (error) {
     console.log(error);

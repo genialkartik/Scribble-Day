@@ -34,7 +34,6 @@ import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Button from "@material-ui/core/Button";
 import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
 import announcement from "../../assets/announcement.png";
-import Preview from "../preview";
 import ShareCard from "./shareCard.js";
 import {
   getLeft,
@@ -46,6 +45,8 @@ import useWindowDimensions from "../dimension";
 import { useScreenshot } from "use-screenshot-hook";
 import useOutsideAlerter from "../useOutsideCatcher";
 import "./home.css";
+import SuperHeader from "../includes/superHeader";
+import Footer from "../includes/footer";
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
@@ -157,7 +158,6 @@ function Home() {
 
   const [openInviteDialog, setInviteDialog] = useState(false);
   const [openDownloadDialog, setDownloadDialog] = useState(false);
-  const [openPreviewDialog, setPreviewDialog] = useState(false);
   const [downloadInput, setDownloadInput] = useState();
   const [insertVerifyCode, setInsertVerifyCode] = useState(false);
   const [university, setUniversity] = useState("");
@@ -171,6 +171,8 @@ function Home() {
   const [userDetailsBool, setUserDetailsBool] = useState(false);
   const [enterEmailBool, setEnterEmailBool] = useState(false);
   const [loadingBool, setLoadingBool] = useState(false);
+  const [loadingFor, setLoadingFor] = useState("");
+  const [downloadClicked, setDownloadClicked] = useState(false);
   const [
     askedForSendVerificationCode,
     setAskedForSendVerificationCode,
@@ -294,12 +296,18 @@ function Home() {
   }
 
   const download = (imageUrl) => {
-    const url = imageUrl;
-    const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", "tshirtpreview.png"); //or any other extension
-    document.body.appendChild(link);
-    link.click();
+    console.log(imageUrl);
+    if (imageUrl) {
+      const url = imageUrl;
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", "scribble.png"); //or any other extension
+      document.body.appendChild(link);
+      link.click();
+      return true;
+    } else {
+      return false;
+    }
   };
 
   const handleInputChange = (e) => {
@@ -316,7 +324,6 @@ function Home() {
     if (userdata) {
       setLoadingBool(true);
       setUserDetailsBool(true);
-      setUniversityLogo(userdata.universityLogo);
       const scribbleResp = await axios.get("/get/scribbles");
       if (scribbleResp.data) {
         setScribbleList(scribbleResp.data.scribbleList);
@@ -449,15 +456,14 @@ function Home() {
   const checkUserAccountWithEmail = async () => {
     if (!inputEmail) alert("Insert Email");
     else {
-      setEnterEmailBool(false);
       const resp = await axios.post("/profile", {
         inputEmail,
       });
       const res = resp.data;
+      setEnterEmailBool(false);
       if (!res.profile) {
         setAskedForSendVerificationCode(true);
       } else {
-        setEnterEmailBool(false);
         setInsertVerifyCode(true);
         setEnterPinOrCodeBool("pin");
       }
@@ -508,10 +514,6 @@ function Home() {
     setDownloadInput(value);
   };
 
-  const handlePreviewClose = () => {
-    setPreviewDialog(false);
-  };
-
   const handleNewUniversityForm = async () => {
     if (!newUnivesityName || !newUnivesityLogo) {
       setOpenSnackbar(true);
@@ -560,26 +562,6 @@ function Home() {
   const handleOnDragStart = () => {
     // set
   };
-
-  function PreviewDialog(props) {
-    const { onClose, selectedValue, open } = props;
-    const handlePreviewClose = () => {
-      onClose(selectedValue);
-    };
-
-    return (
-      <Dialog
-        onClose={handlePreviewClose}
-        aria-labelledby="simple-dialog-title"
-        open={open}
-      >
-        <Preview
-          img={require("../../assets/malefront.png")}
-          face={tshirtSide}
-        />
-      </Dialog>
-    );
-  }
 
   function InviteFriend(props) {
     const { onClose, open } = props;
@@ -645,38 +627,28 @@ function Home() {
 
   return (
     <div className={"appbody"}>
-      <Container fluid className={"nav center"}>
-        <Row className={"container text-center"}>
-          <Col>
-            <img src={announcement} height="40px" alt="announcement" />{" "}
-            &nbsp;Make your virtual Scribble Day more exciting by
-            <a
-              href="https://ethicallearner.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {" "}
-              Placing ORDER of your SCRRIBLE TSHIRT
-            </a>
-          </Col>
-        </Row>
-      </Container>
+      <SuperHeader />
 
       <div className={"main"}>
         <div className={"center scribble-imgbox"}>
           <div className="row" style={{ width: "100%" }}>
+            <div className={"column"}></div>
             <div className={"column"}>
               <div>
                 <Image
-                  style={{ left: 100 }}
-                  src={require("../../assets/ScribbleDay.png")}
-                  height="190px"
+                  src={
+                    "https://scribble2021.s3.ap-south-1.amazonaws.com/ScribbleDayLogo2021.png"
+                  }
+                  height="200px"
                   alt="logo"
                 />
               </div>
             </div>
             <div className={"column"}>
-              <div className="details-of-site" style={{ marginTop: "50px" }}>
+              <div
+                className="details-of-site"
+                style={{ marginTop: "50px", float: "left" }}
+              >
                 <div className="part">
                   <ButtonGroup
                     disableElevation
@@ -716,28 +688,45 @@ function Home() {
               >
                 {userdata && userDetailsBool && (
                   <>
-                    <a
-                      // onMouseEnter={()=>takeScreenshot()}
-                      onClick={() => {
-                        takeScreenshot();
-                        let count = 0;
-                        const clear = setInterval(() => {
-                          count++;
-                          if (count > 8) {
-                            download(image);
-                            clearInterval(clear);
-                          }
-                        }, 1000);
+                    <Button
+                      onClick={async () => {
+                        setDownloadClicked(!downloadClicked);
+                        if (!downloadClicked) {
+                          setLoadingFor("downloadTshirt");
+                          await takeScreenshot();
+                          setTimeout(() => setLoadingFor(""), 1000);
+                        } else {
+                          setLoadingFor("downloadTshirt");
+                          await takeScreenshot();
+                          const clear = setInterval(async () => {
+                            if (true) {
+                              const imageBool = await download(image);
+                              if (imageBool) {
+                                setLoadingFor("");
+                                clearInterval(clear);
+                              }
+                            }
+                          }, 3000);
+                        }
                       }}
                       style={{
                         backgroundColor: "#0A0",
                         marginInline: 10,
-                        padding: 11,
                         color: "#fff",
                       }}
                     >
-                      <span className={"fa fa-download"}></span>
-                    </a>
+                      {loadingFor === "downloadTshirt" ? (
+                        <CircularProgress
+                          size={20}
+                          style={{ color: "white" }}
+                        />
+                      ) : (
+                        <>
+                          <span className={"fa fa-download"}> </span>
+                          {downloadClicked ? "Click to Download" : "Download"}
+                        </>
+                      )}
+                    </Button>
                     <DownloadForm
                       insertVerifyCode={insertVerifyCode}
                       selectedValue={downloadInput}
@@ -747,7 +736,6 @@ function Home() {
                     />
                     <Button
                       variant="contained"
-                      // onClick={() => setPreviewDialog(true)}\
                       onClick={() => handleDownloadOpen()}
                       style={{
                         backgroundColor: "#05ABFF",
@@ -758,10 +746,6 @@ function Home() {
                       <span className={"fa fa-user"}></span>
                       Preview
                     </Button>
-                    <PreviewDialog
-                      open={openPreviewDialog}
-                      onClose={handlePreviewClose}
-                    />
                   </>
                 )}
               </div>
@@ -1677,45 +1661,69 @@ function Home() {
                 </div>
               </div>
             </div>
-            {}
             <div
               style={{ textAlign: "center", marginBottom: "1rem" }}
               className="d-block d-sm-none"
             >
-              <Button
-                variant="contained"
-                // onClick={() => handleDownloadOpen()}
-                style={{
-                  backgroundColor: "#0A0",
-                  marginInline: 10,
-                  color: "#fff",
-                }}
-              >
-                <span className={"fa fa-download"}></span>
-                Download
-              </Button>
-              {/* <DownloadForm
-                insertVerifyCode={insertVerifyCode}
-                selectedValue={downloadInput}
-                open={openDownloadDialog}
-                onClose={handleDownloadClose}
-              /> */}
-              <Button
-                variant="contained"
-                onClick={() => handleDownloadOpen()}
-                style={{
-                  backgroundColor: "#05ABFF",
-                  marginInline: 10,
-                  color: "#fff",
-                }}
-              >
-                <span className={"fa fa-user"}></span>
-                Preview
-              </Button>
-              <PreviewDialog
-                open={openPreviewDialog}
-                onClose={handlePreviewClose}
-              />
+              {userdata && userDetailsBool && (
+                <>
+                  <Button
+                    onClick={async () => {
+                      setDownloadClicked(!downloadClicked);
+                      if (!downloadClicked) {
+                        setLoadingFor("downloadTshirt");
+                        await takeScreenshot();
+                        setTimeout(() => setLoadingFor(""), 1000);
+                      } else {
+                        setLoadingFor("downloadTshirt");
+                        await takeScreenshot();
+                        const clear = setInterval(async () => {
+                          if (true) {
+                            const imageBool = await download(image);
+                            if (imageBool) {
+                              setLoadingFor("");
+                              clearInterval(clear);
+                            }
+                          }
+                        }, 3000);
+                      }
+                    }}
+                    style={{
+                      backgroundColor: "#0A0",
+                      marginInline: 10,
+                      color: "#fff",
+                    }}
+                  >
+                    {loadingFor === "downloadTshirt" ? (
+                      <CircularProgress size={20} style={{ color: "white" }} />
+                    ) : (
+                      <>
+                        <span className={"fa fa-download"}> </span>
+                        {downloadClicked ? "Click to Download" : "Download"}
+                      </>
+                    )}
+                  </Button>
+                  <DownloadForm
+                    insertVerifyCode={insertVerifyCode}
+                    selectedValue={downloadInput}
+                    open={openDownloadDialog}
+                    onClose={handleDownloadClose}
+                    image={image}
+                  />
+                  <Button
+                    variant="contained"
+                    onClick={() => handleDownloadOpen()}
+                    style={{
+                      backgroundColor: "#05ABFF",
+                      marginInline: 10,
+                      color: "#fff",
+                    }}
+                  >
+                    <span className={"fa fa-user"}></span>
+                    Preview
+                  </Button>
+                </>
+              )}
             </div>
             <h3
               className={"center text-center"}
@@ -1811,7 +1819,7 @@ function Home() {
                   src={
                     universityLogo
                       ? universityLogo
-                      : require("../../assets/hack.jpg")
+                      : "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn0.iconfinder.com%2Fdata%2Ficons%2Fbuildings-1%2F128%2F29-512.png&f=1&nofb=1"
                   }
                 />
               </div>
@@ -1941,6 +1949,7 @@ function Home() {
         autoHideDuration={1000}
         message={msgSnackbar}
       />
+      <Footer />
     </div>
   );
 }
