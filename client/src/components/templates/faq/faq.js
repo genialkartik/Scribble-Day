@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Image } from "react-bootstrap";
 
 import announcement from "../../../assets/announcement.png";
 import Footer from "../../includes/footer";
@@ -30,6 +30,10 @@ export default function Faq() {
         <br />
         <br />
 
+        <div>
+          <Image src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.pngkey.com%2Fpng%2Fdetail%2F343-3437091_question-faq-vector.png&f=1&nofb=1" />
+        </div>
+
         <div class="alert alert-warning alert-dismissible" role="alert">
           <button type="button" class="close" data-dismiss="alert">
             <span aria-hidden="true">&times;</span>
@@ -53,16 +57,17 @@ export default function Faq() {
                   data-parent="#accordion"
                   href="#collapseOne"
                 >
-                  Is account registration required?
+                  Do I have to register myself before making a purchase?
                 </a>
               </h4>
             </div>
             <div id="collapseOne" class="panel-collapse collapse in">
               <div class="card-block">
-                Account registration at <strong>PrepBootstrap</strong> is only
-                required if you will be selling or buying themes. This ensures a
-                valid communication channel for all parties involved in any
-                transactions.
+                While you may enjoy writing the scribble at leisure, we advise
+                you to register at the time of check out for the first time to
+                enjoy a superior shopping experience every time you visit us. We
+                will also keep you updated on your orders and refunds through
+                SMS/email. We will require you to register at checkout.
               </div>
             </div>
           </div>
@@ -75,16 +80,13 @@ export default function Faq() {
                   data-parent="#accordion"
                   href="#collapseTen"
                 >
-                  Can I submit my own Bootstrap templates or themes?
+                  How often do you come up with a new design/collection?{" "}
                 </a>
               </h4>
             </div>
             <div id="collapseTen" class="panel-collapse collapse">
               <div class="card-block">
-                A lot of the content of the site has been submitted by the
-                community. Whether it is a commercial element/template/theme or
-                a free one, you are encouraged to contribute. All credits are
-                published along with the resources.
+                The core of the brand is to provide branded scribble t-shirts.
               </div>
             </div>
           </div>
@@ -97,19 +99,17 @@ export default function Faq() {
                   data-parent="#accordion"
                   href="#collapseEleven"
                 >
-                  What is the currency used for all transactions?
+                  Apart from an online presence do you also have a Retail
+                  presence?
                 </a>
               </h4>
             </div>
             <div id="collapseEleven" class="panel-collapse collapse">
-              <div class="card-block">
-                All prices for themes, templates and other items, including each
-                seller's or buyer's account balance are in <strong>USD</strong>
-              </div>
+              <div class="card-block">No!</div>
             </div>
           </div>
 
-          <div class="faqHeader">Sellers</div>
+          <div class="faqHeader">Shipping</div>
           <div class="card ">
             <div class="card-header">
               <h4 class="card-header">
@@ -119,14 +119,16 @@ export default function Faq() {
                   data-parent="#accordion"
                   href="#collapseTwo"
                 >
-                  Who cen sell items?
+                  How do you ship the purchased items? Are there any charges?
                 </a>
               </h4>
             </div>
             <div id="collapseTwo" class="panel-collapse collapse">
               <div class="card-block">
-                Any registed user, who presents a work, which is genuine and
-                appealing, can post it on <strong>PrepBootstrap</strong>.
+                At Fauxx, we ensure that our customers receive the purchased
+                items in the finest condition and on time. Depending on your
+                location, the product will be delivered to your doorstep upto 7-
+                10 days. We offer free shipping on scribble day T-shirts.
               </div>
             </div>
           </div>
@@ -139,7 +141,7 @@ export default function Faq() {
                   data-parent="#accordion"
                   href="#collapseThree"
                 >
-                  I want to sell my items - what are the steps?
+                  I want to place my t-shirt - what are the steps?
                 </a>
               </h4>
             </div>
@@ -149,14 +151,20 @@ export default function Faq() {
                 need to do is:
                 <ul>
                   <li>Register an account</li>
-                  <li>Activate your account</li>
+                  <li>Invite your friends to write Scribbles on your tshirt</li>
                   <li>
-                    Go to the <strong>Themes</strong> section and upload your
-                    theme
+                    Click on <strong>Place Order</strong> button and Place the
+                    order on the page your are directed to.
                   </li>
                   <li>
-                    The next step is the approval step, which usually takes
-                    about 72 hours.
+                    Now!! give us to verify your order. You'll receive an email
+                    regarding the order details.
+                  </li>
+                  <li>
+                    You'll might experience a delay in shipping or order due to
+                    Pandemic cause by Covid-19. But believe us, patience of few
+                    days is better than not celebrating Scribble Day (the best
+                    moment of everyone's life, we believe)
                   </li>
                 </ul>
               </div>
@@ -171,15 +179,15 @@ export default function Faq() {
                   data-parent="#accordion"
                   href="#collapseFive"
                 >
-                  How much do I get from each sale?
+                  Do you ship the items to an international address?
                 </a>
               </h4>
             </div>
             <div id="collapseFive" class="panel-collapse collapse">
               <div class="card-block">
-                Here, at <strong>PrepBootstrap</strong>, we offer a great, 70%
-                rate for each seller, regardless of any restrictions, such as
-                volume, date of entry, etc.
+                At present, we are only offering local shipping of orders. But
+                we would love to help you out, so call our Fauxx executive and
+                we can see if it can be worked out.
                 <br />
               </div>
             </div>
@@ -193,29 +201,17 @@ export default function Faq() {
                   data-parent="#accordion"
                   href="#collapseSix"
                 >
-                  Why sell my items here?
+                  How can I change the shipping address of my order?
                 </a>
               </h4>
             </div>
             <div id="collapseSix" class="panel-collapse collapse">
               <div class="card-block">
-                There are a number of reasons why you should join us:
-                <ul>
-                  <li>A great 70% flat rate for your items.</li>
-                  <li>
-                    Fast response/approval times. Many sites take weeks to
-                    process a theme or template. And if it gets rejected, there
-                    is another iteration. We have aliminated this, and made the
-                    process very fast. It only takes up to 72 hours for a
-                    template/theme to get reviewed.
-                  </li>
-                  <li>
-                    We are not an exclusive marketplace. This means that you can
-                    sell your items on <strong>PrepBootstrap</strong>, as well
-                    as on any other marketplate, and thus increase your earning
-                    potential.
-                  </li>
-                </ul>
+                You cannot change your shipping address at the time of placing
+                the order in your account. But you cannot change the address
+                after placing your order. You will be required to send us an
+                email with a Subject 'Change Shipping Address' and previous
+                order details, the new address will also be required.
               </div>
             </div>
           </div>
@@ -228,14 +224,13 @@ export default function Faq() {
                   data-parent="#accordion"
                   href="#collapseEight"
                 >
-                  What are the payment options?
+                  What do I need to do if I have forgotten my pin?
                 </a>
               </h4>
             </div>
             <div id="collapseEight" class="panel-collapse collapse">
               <div class="card-block">
-                The best way to transfer funds is via Paypal. This secure
-                platform ensures timely payments and a secure environment.
+                Just drop an email to info@ethicallearner.com
               </div>
             </div>
           </div>
@@ -248,21 +243,19 @@ export default function Faq() {
                   data-parent="#accordion"
                   href="#collapseNine"
                 >
-                  When do I get paid?
+                  How do you communicate the dispatch and delivery details?
                 </a>
               </h4>
             </div>
             <div id="collapseNine" class="panel-collapse collapse">
               <div class="card-block">
-                Our standard payment plan provides for monthly payments. At the
-                end of each month, all accumulated funds are transfered to your
-                account. The minimum amount of your balance should be at least
-                70 USD.
+                We will keep you informed through SMS & Email till your purchase
+                is delivered to you.
               </div>
             </div>
           </div>
 
-          <div class="faqHeader">Buyers</div>
+          <div class="faqHeader">Guidelines</div>
           <div class="card ">
             <div class="card-header">
               <h4 class="card-header">
@@ -272,19 +265,17 @@ export default function Faq() {
                   data-parent="#accordion"
                   href="#collapseFour"
                 >
-                  I want to buy a theme - what are the steps?
+                  What happens if your courier is unable to deliver the product?
                 </a>
               </h4>
             </div>
             <div id="collapseFour" class="panel-collapse collapse">
               <div class="card-block">
-                Buying a theme on <strong>PrepBootstrap</strong> is really
-                simple. Each theme has a live preview. Once you have selected a
-                theme or template, which is to your liking, you can quickly and
-                securely pay via Paypal.
-                <br />
-                Once the transaction is complete, you gain full access to the
-                purchased product.
+                Our Delivery partner will make three attempts to deliver before
+                returning the product to our warehouse. You may contact us at
+                info@ethicallearner.com or call Fauxx on 0000000000 to speak to
+                the executive to place a re-dispatch request. We are available
+                from 11 am to 8 pm all days
               </div>
             </div>
           </div>
@@ -297,14 +288,241 @@ export default function Faq() {
                   data-parent="#accordion"
                   href="#collapseSeven"
                 >
-                  Is this the latest version of an item
+                  What is your return and cancellation policy?
                 </a>
               </h4>
             </div>
             <div id="collapseSeven" class="panel-collapse collapse">
               <div class="card-block">
-                Each item in <strong>PrepBootstrap</strong> is maintained to its
-                latest version. This ensures its smooth operation.
+                Sorry! At this point of time we don’t have any return and
+                cancellation policy.
+              </div>
+            </div>
+          </div>
+
+          <div class="card ">
+            <div class="card-header">
+              <h4 class="card-header">
+                <a
+                  class="accordion-toggle collapsed"
+                  data-toggle="collapse"
+                  data-parent="#accordion"
+                  href="#collapseSeven"
+                >
+                  Do you offer Cash on Delivery - COD?
+                </a>
+              </h4>
+            </div>
+            <div id="collapseSeven" class="panel-collapse collapse">
+              <div class="card-block">
+                We regret that we are not offering cash on delivery at this
+                point in time
+              </div>
+            </div>
+          </div>
+
+          <div class="card ">
+            <div class="card-header">
+              <h4 class="card-header">
+                <a
+                  class="accordion-toggle collapsed"
+                  data-toggle="collapse"
+                  data-parent="#accordion"
+                  href="#collapseSeven"
+                >
+                  I have placed an order, how soon will I receive the same?
+                </a>
+              </h4>
+            </div>
+            <div id="collapseSeven" class="panel-collapse collapse">
+              <div class="card-block">
+                Thank you for shopping at Fauxx. Your purchase will be delivered
+                at your shipping address upto 7-10 days of placing an order.
+              </div>
+            </div>
+          </div>
+
+          <div class="card ">
+            <div class="card-header">
+              <h4 class="card-header">
+                <a
+                  class="accordion-toggle collapsed"
+                  data-toggle="collapse"
+                  data-parent="#accordion"
+                  href="#collapseSeven"
+                >
+                  Can I place an order and have it delivered as a gift to an
+                  alternate address?
+                </a>
+              </h4>
+            </div>
+            <div id="collapseSeven" class="panel-collapse collapse">
+              <div class="card-block">
+                Yes. We will be happy to have a product delivered as a gift to
+                an alternate address.
+              </div>
+            </div>
+          </div>
+
+          <div class="card ">
+            <div class="card-header">
+              <h4 class="card-header">
+                <a
+                  class="accordion-toggle collapsed"
+                  data-toggle="collapse"
+                  data-parent="#accordion"
+                  href="#collapseSeven"
+                >
+                  Do you offer gift wrapping?
+                </a>
+              </h4>
+            </div>
+            <div id="collapseSeven" class="panel-collapse collapse">
+              <div class="card-block">
+                At Fauxx, we would like to offer you the best shopping
+                experience. We will be happy to gift wrap your purchase as a
+                service gesture.
+              </div>
+            </div>
+          </div>
+
+          <div class="card ">
+            <div class="card-header">
+              <h4 class="card-header">
+                <a
+                  class="accordion-toggle collapsed"
+                  data-toggle="collapse"
+                  data-parent="#accordion"
+                  href="#collapseSeven"
+                >
+                  I seem to have received a damaged item. Who do I inform?
+                </a>
+              </h4>
+            </div>
+            <div id="collapseSeven" class="panel-collapse collapse">
+              <div class="card-block">
+                We regret the experience and apologies for the inconvenience. In
+                an unlikely event that your order arrives in a damaged
+                condition, please email us with an image of the damaged
+                merchandise at info@ethicallearner.com To be eligible for a
+                return, you must notify us of the damage within 48 hours of
+                receiving the order
+              </div>
+            </div>
+          </div>
+
+          <div class="card ">
+            <div class="card-header">
+              <h4 class="card-header">
+                <a
+                  class="accordion-toggle collapsed"
+                  data-toggle="collapse"
+                  data-parent="#accordion"
+                  href="#collapseSeven"
+                >
+                  I seem to have received an incorrect item. What should I do?
+                </a>
+              </h4>
+            </div>
+            <div id="collapseSeven" class="panel-collapse collapse">
+              <div class="card-block">
+                We apologise for the inconvenience. Please contact us at
+                info@ethicallearner.com or call us on 0000000000 to speak to the
+                Fauxx executive. We are available from 11 am to 10.00 pm on all
+                days of the week
+              </div>
+            </div>
+          </div>
+
+          <div class="card ">
+            <div class="card-header">
+              <h4 class="card-header">
+                <a
+                  class="accordion-toggle collapsed"
+                  data-toggle="collapse"
+                  data-parent="#accordion"
+                  href="#collapseSeven"
+                >
+                  How can I cancel an order that I placed online?
+                </a>
+              </h4>
+            </div>
+            <div id="collapseSeven" class="panel-collapse collapse">
+              <div class="card-block">
+                You may cancel your order by calling us on 1123456456785252 and
+                we will be happy to assist you. We are available from 11 am to
+                10.00 pm on all days of the week However, an order can be
+                cancelled only before the product(s) has been shipped out of the
+                warehouse, which is generally within 2-4 hours of placing the
+                order.
+              </div>
+            </div>
+          </div>
+
+          <div class="card ">
+            <div class="card-header">
+              <h4 class="card-header">
+                <a
+                  class="accordion-toggle collapsed"
+                  data-toggle="collapse"
+                  data-parent="#accordion"
+                  href="#collapseSeven"
+                >
+                  I am not interested in receiving any communication. What will
+                  I need to do?
+                </a>
+              </h4>
+            </div>
+            <div id="collapseSeven" class="panel-collapse collapse">
+              <div class="card-block">
+                We respect your need for privacy. Please click on the
+                unsubscribe link embedded in our online communication to
+                unsubscribe yourself. If the problem persists, just give us a
+                call at 1123456456785252 or email us at (((( email )))) and we
+                will take care of it.
+              </div>
+            </div>
+          </div>
+
+          <div class="card ">
+            <div class="card-header">
+              <h4 class="card-header">
+                <a
+                  class="accordion-toggle collapsed"
+                  data-toggle="collapse"
+                  data-parent="#accordion"
+                  href="#collapseSeven"
+                >
+                  What are the working hours of your customer service?
+                </a>
+              </h4>
+            </div>
+            <div id="collapseSeven" class="panel-collapse collapse">
+              <div class="card-block">
+                Our office hours are from 11 am to 10:00 pm on all days of the
+                week. You can also reach us at (((( email )))) and we assure you
+                of a response within 2 business days.
+              </div>
+            </div>
+          </div>
+
+          <div class="card ">
+            <div class="card-header">
+              <h4 class="card-header">
+                <a
+                  class="accordion-toggle collapsed"
+                  data-toggle="collapse"
+                  data-parent="#accordion"
+                  href="#collapseSeven"
+                >
+                  Do you have a loyalty programme?
+                </a>
+              </h4>
+            </div>
+            <div id="collapseSeven" class="panel-collapse collapse">
+              <div class="card-block">
+                Currently, we do not have a loyalty programme on our website but
+                we are working on it.
               </div>
             </div>
           </div>

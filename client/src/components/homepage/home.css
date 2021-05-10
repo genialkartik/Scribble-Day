@@ -282,6 +282,8 @@ input:-internal-autofill-selected {
   border-radius: 5px;
   margin-inline: 1%;
   font-size: 0.8em;
+  display: flex;
+  align-items: center;
   float: left;
   margin-top: 5px;
   cursor: pointer;

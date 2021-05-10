@@ -12,10 +12,8 @@ export default function About() {
         <div className="container py-5">
           <div className="row h-100 align-items-center py-5">
             <div className="col-lg-6">
-              <h1 className="display-4">About us page</h1>
-              <p className="lead text-muted mb-0">
-                Create a minimal about us page using Bootstrap 4.
-              </p>
+              <h1 className="display-4">Foxx</h1>
+              <p className="lead text-muted mb-0">Foxx is a</p>
               <p className="lead text-muted">
                 Snippet by{" "}
                 <a

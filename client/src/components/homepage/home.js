@@ -1041,30 +1041,35 @@ function Home() {
                           Font Size {" >"}
                         </div>
                         <div
+                          style={{ fontSize: ".4em" }}
                           className={"actions"}
                           onClick={() => setMessageFont(".4em")}
                         >
                           x-small
                         </div>
                         <div
+                          style={{ fontSize: ".5em" }}
                           className={"actions"}
                           onClick={() => setMessageFont(".5em")}
                         >
                           small
                         </div>
                         <div
+                          style={{ fontSize: ".6em" }}
                           className={"actions"}
                           onClick={() => setMessageFont(".6em")}
                         >
                           medium
                         </div>
                         <div
+                          style={{ fontSize: ".7em" }}
                           className={"actions"}
                           onClick={() => setMessageFont(".7em")}
                         >
                           large
                         </div>
                         <div
+                          style={{ fontSize: ".9em" }}
                           className={"actions"}
                           onClick={() => setMessageFont(".8em")}
                         >
