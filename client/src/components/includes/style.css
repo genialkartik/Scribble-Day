@@ -2,6 +2,7 @@
 
 .footer-cont {
   background-color: #001120;
+  padding: 16px 32px;
 }
 
 .fa-mobile {
@@ -15,7 +16,9 @@
 .grey-text {
   color: lightgrey;
 }
-
+.footer-links div > a {
+  border-right: 1px solid rgb(147, 194, 219);
+}
 footer a {
   color: #ed72c0;
   font-weight: bold;
@@ -23,4 +26,7 @@ footer a {
 footer a:hover {
   color: #05abff;
   text-decoration: none;
+}
+.footer-socials div.fa {
+  color: #fff;
 }
