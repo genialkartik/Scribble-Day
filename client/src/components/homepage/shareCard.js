@@ -125,16 +125,6 @@ export default function ShareCard(props) {
               <span className={"fa fa-linkedin"}></span>
             </Button>
           </a>
-          <iframe
-            src="https://www.facebook.com/plugins/share_button.php?href=https%3A%2F%2Fscribbleday.herokuapp.com%2F&layout=button&size=large&width=77&height=28&appId"
-            width="77"
-            height="28"
-            style={{ border: "none", overflow: "hidden" }}
-            scrolling="no"
-            frameborder="0"
-            allowfullscreen="true"
-            allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-          ></iframe>
           <Button
             variant="contained"
             style={{
