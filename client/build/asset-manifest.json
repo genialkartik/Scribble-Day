@@ -1,32 +1,28 @@
 {
   "files": {
-    "main.css": "/static/css/main.c70c540f.chunk.css",
-    "main.js": "/static/js/main.db554fe7.chunk.js",
-    "main.js.map": "/static/js/main.db554fe7.chunk.js.map",
+    "main.css": "/static/css/main.8166563f.chunk.css",
+    "main.js": "/static/js/main.81d66ad3.chunk.js",
+    "main.js.map": "/static/js/main.81d66ad3.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.f6673272.js",
     "runtime-main.js.map": "/static/js/runtime-main.f6673272.js.map",
     "static/css/2.9233ae65.chunk.css": "/static/css/2.9233ae65.chunk.css",
-    "static/js/2.cbe0a80e.chunk.js": "/static/js/2.cbe0a80e.chunk.js",
-    "static/js/2.cbe0a80e.chunk.js.map": "/static/js/2.cbe0a80e.chunk.js.map",
+    "static/js/2.88a50746.chunk.js": "/static/js/2.88a50746.chunk.js",
+    "static/js/2.88a50746.chunk.js.map": "/static/js/2.88a50746.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.1fc5dd0501efbc39c12b866be3b508c2.js": "/precache-manifest.1fc5dd0501efbc39c12b866be3b508c2.js",
+    "precache-manifest.a1ab4c5e754c56eef5e91ef077acc51f.js": "/precache-manifest.a1ab4c5e754c56eef5e91ef077acc51f.js",
     "service-worker.js": "/service-worker.js",
     "static/css/2.9233ae65.chunk.css.map": "/static/css/2.9233ae65.chunk.css.map",
-    "static/css/main.c70c540f.chunk.css.map": "/static/css/main.c70c540f.chunk.css.map",
-    "static/js/2.cbe0a80e.chunk.js.LICENSE.txt": "/static/js/2.cbe0a80e.chunk.js.LICENSE.txt",
-    "static/media/ScribbleDay.png": "/static/media/ScribbleDay.241eefb3.png",
+    "static/css/main.8166563f.chunk.css.map": "/static/css/main.8166563f.chunk.css.map",
+    "static/js/2.88a50746.chunk.js.LICENSE.txt": "/static/js/2.88a50746.chunk.js.LICENSE.txt",
     "static/media/announcement.png": "/static/media/announcement.ea18e75f.png",
-    "static/media/hack.jpg": "/static/media/hack.25f1372b.jpg",
     "static/media/maleback.png": "/static/media/maleback.5520076a.png",
-    "static/media/malefront.png": "/static/media/malefront.3b15893e.png",
-    "static/media/tshirt1.png": "/static/media/tshirt1.7ae50b19.png",
-    "static/media/tshirt2.png": "/static/media/tshirt2.7ae50b19.png"
+    "static/media/malefront.png": "/static/media/malefront.3b15893e.png"
   },
   "entrypoints": [
     "static/js/runtime-main.f6673272.js",
     "static/css/2.9233ae65.chunk.css",
-    "static/js/2.cbe0a80e.chunk.js",
-    "static/css/main.c70c540f.chunk.css",
-    "static/js/main.db554fe7.chunk.js"
+    "static/js/2.88a50746.chunk.js",
+    "static/css/main.8166563f.chunk.css",
+    "static/js/main.81d66ad3.chunk.js"
   ]
 }
