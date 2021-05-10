@@ -11,7 +11,7 @@ export default function SuperHeader() {
             <img src={announcement} height="40px" alt="announcement" />{" "}
             &nbsp;Make your virtual Scribble Day more exciting by
             <a
-              href="https://ethicallearner.com"
+              href={"https://rzp.io/l/Up18AjAWH"}
               target="_blank"
               rel="noopener noreferrer"
             >

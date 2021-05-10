@@ -5,12 +5,16 @@ import axios from "axios";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 
+import SaveIcon from "@material-ui/icons/Save";
 import Input from "@material-ui/core/Input";
+import SecurityIcon from "@material-ui/icons/Security";
+import PermIdentityIcon from "@material-ui/icons/PermIdentity";
 import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import FormControl from "@material-ui/core/FormControl";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
+import InfoIcon from "@material-ui/icons/Info";
 import CardHeader from "@material-ui/core/CardHeader";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import Dialog from "@material-ui/core/Dialog";
@@ -28,19 +32,13 @@ import Tooltip from "@material-ui/core/Tooltip";
 import SendIcon from "@material-ui/icons/Send";
 import VpnKeyIcon from "@material-ui/icons/VpnKey";
 import { blue } from "@material-ui/core/colors";
-import { Container, Row, Col, Form, Image } from "react-bootstrap";
+import { Form, Image } from "react-bootstrap";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Button from "@material-ui/core/Button";
 import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
-import announcement from "../../assets/announcement.png";
 import ShareCard from "./shareCard.js";
-import {
-  getLeft,
-  getTop,
-  getConstantLeft,
-  getFontSize,
-} from "../useGetPosition";
+import { getFontSize } from "../useGetPosition";
 import useWindowDimensions from "../dimension";
 import { useScreenshot } from "use-screenshot-hook";
 import useOutsideAlerter from "../useOutsideCatcher";
@@ -759,9 +757,41 @@ function Home() {
             <div className={"row justify-content-center form1"}>
               <div className={"col-12 col-sm-10 col-lg-8 d-flex flex-column"}>
                 <div style={{ padding: "1rem" }}>
-                  <HomeIcon
-                    onClick={() => {
-                      window.location.reload();
+                  <div className="navWrapper">
+                    <div className={"actions"}>
+                      <Button
+                        variant="contained"
+                        onClick={() => {
+                          window.location.reload();
+                        }}
+                      >
+                        <HomeIcon />
+                      </Button>
+                    </div>
+                    <a className={"actions"} href={"/resources"}>
+                      <Button variant="contained">
+                        <InfoIcon />
+                      </Button>
+                    </a>
+                    <div className={"actions"}>
+                      <Button
+                        variant="contained"
+                        onClick={handleMyScribbleClick}
+                        style={{ backgroundColor: "#0A0", color: "#fff" }}
+                        startIcon={
+                          userdata ? <PermIdentityIcon /> : <SecurityIcon />
+                        }
+                      >
+                        {userdata ? "My Scribble" : "Sign In"}
+                      </Button>
+                    </div>
+                  </div>
+                  <div
+                    style={{
+                      width: "100%",
+                      height: 1,
+                      margin: "12px 0 16px",
+                      backgroundColor: "rgba(255, 255, 255, 0.1)",
                     }}
                   />
                   {userDetailsBool && userdata && (
@@ -990,18 +1020,6 @@ function Home() {
                           }
                         />
                       </div>
-                      {/* <TextField
-                        className={"col-12 col-sm-8 col-md-9 form"}
-                        color="default"
-                        label="scribble message"
-                        multiline
-                        rows={4}
-                        variant="outlined"
-                        maxLength={250}
-                        value={message}
-                        onChange={(e) => setMessage(e.target.value)}
-                      /> */}
-
                       <Form.Control
                         className={"col-12 form"}
                         type="text"
@@ -1013,75 +1031,92 @@ function Home() {
                         onChange={(e) => setMessage(e.target.value)}
                         required
                       />
-                      {isFixed ? (
-                        <>
-                          <Button
-                            variant="contained"
-                            onClick={() => {
-                              setDragBool(false);
-                              setIsFixed(false);
-                            }}
-                            color="default"
-                          >
-                            Edit Again
-                          </Button>
-                        </>
-                      ) : (
-                        <>
-                          <div>
-                            <FiberManualRecordIcon
-                              onClick={() => setMessageColor("#f00000")}
-                              style={{ color: "#f00000" }}
-                            />
-                            <FiberManualRecordIcon
-                              onClick={() => setMessageColor("#07c603")}
-                              style={{ color: "#07c603" }}
-                            />
-                            <FiberManualRecordIcon
-                              onClick={() => setMessageColor("#05abff")}
-                              style={{ color: "#05abff" }}
-                            />
-                            <FiberManualRecordIcon
-                              onClick={() => setMessageColor("#ead300")}
-                              style={{ color: "#ead300" }}
-                            />
-                            <FiberManualRecordIcon
-                              onClick={() => setMessageColor("#ff8300")}
-                              style={{ color: "#ff8300" }}
-                            />
-                            <FiberManualRecordIcon
-                              onClick={() => setMessageColor("#9605ff")}
-                              style={{ color: "#9605ff" }}
-                            />
-                            <FiberManualRecordIcon
-                              onClick={() => setMessageColor("#ff05fa")}
-                              style={{ color: "#ff05fa" }}
-                            />
-                            <div
-                              className={"rotate-slider"}
-                              style={{
-                                margin: "1rem 0",
-                              }}
-                            >
-                              <Typography
-                                gutterBottom
-                                style={{ fontSize: "0.9em", color: "#FC88DF" }}
-                              >
-                                Rotate Scribble Message
-                              </Typography>
-                              <Slider
-                                ValueLabelComponent={ValueLabelComponent}
-                                aria-label="custom thumb label"
-                                value={rotateValue}
-                                min={-180}
-                                max={180}
-                                style={{ color: "white" }}
-                                onChange={handleRotateChange}
-                              />
-                            </div>
-                          </div>
-                        </>
-                      )}
+
+                      <div className="fontWrapper">
+                        <div
+                          className={"info"}
+                          onClick={() => handleFixClick()}
+                        >
+                          Font Size {" >"}
+                        </div>
+                        <div
+                          className={"actions"}
+                          onClick={() => setMessageFont(".4em")}
+                        >
+                          x-small
+                        </div>
+                        <div
+                          className={"actions"}
+                          onClick={() => setMessageFont(".5em")}
+                        >
+                          small
+                        </div>
+                        <div
+                          className={"actions"}
+                          onClick={() => setMessageFont(".6em")}
+                        >
+                          medium
+                        </div>
+                        <div
+                          className={"actions"}
+                          onClick={() => setMessageFont(".7em")}
+                        >
+                          large
+                        </div>
+                        <div
+                          className={"actions"}
+                          onClick={() => setMessageFont(".8em")}
+                        >
+                          x-large
+                        </div>
+                      </div>
+
+                      <div className="fontWrapper">
+                        <div className="info" onClick={() => handleFixClick()}>
+                          Rotate {" >"}
+                        </div>
+                        <Slider
+                          ValueLabelComponent={ValueLabelComponent}
+                          aria-label="custom thumb label"
+                          value={rotateValue}
+                          min={-180}
+                          max={180}
+                          style={{ color: "white" }}
+                          onChange={handleRotateChange}
+                        />
+                      </div>
+                      <div className={"fontWrapper"}>
+                        <div>
+                          <FiberManualRecordIcon
+                            onClick={() => setMessageColor("#f00000")}
+                            style={{ color: "#f00000" }}
+                          />
+                          <FiberManualRecordIcon
+                            onClick={() => setMessageColor("#07c603")}
+                            style={{ color: "#07c603" }}
+                          />
+                          <FiberManualRecordIcon
+                            onClick={() => setMessageColor("#05abff")}
+                            style={{ color: "#05abff" }}
+                          />
+                          <FiberManualRecordIcon
+                            onClick={() => setMessageColor("#ead300")}
+                            style={{ color: "#ead300" }}
+                          />
+                          <FiberManualRecordIcon
+                            onClick={() => setMessageColor("#ff8300")}
+                            style={{ color: "#ff8300" }}
+                          />
+                          <FiberManualRecordIcon
+                            onClick={() => setMessageColor("#9605ff")}
+                            style={{ color: "#9605ff" }}
+                          />
+                          <FiberManualRecordIcon
+                            onClick={() => setMessageColor("#ff05fa")}
+                            style={{ color: "#ff05fa" }}
+                          />
+                        </div>
+                      </div>
                       <div
                         style={{
                           display: "flex",
@@ -1089,97 +1124,96 @@ function Home() {
                           padding: "0 12px",
                         }}
                       >
-                        {!isFixed && (
-                          <FormControl
-                            variant="outlined"
-                            className={classes.formControl}
+                        <FormControl
+                          variant="outlined"
+                          className={classes.formControl}
+                        >
+                          <InputLabel
+                            color="primary"
+                            classes={{
+                              outlined: { color: "#fff" },
+                            }}
+                            id="demo-simple-select-outlined-label"
+                            style={{ color: "#b5d7f3" }}
                           >
-                            <InputLabel
-                              color="primary"
-                              classes={{
-                                outlined: { color: "#fff" },
-                              }}
-                              id="demo-simple-select-outlined-label"
-                              style={{ color: "#ddd" }}
-                            >
-                              Select Font
-                            </InputLabel>
-                            <Select
-                              labelId="demo-simple-select-outlined-label"
-                              id="demo-simple-select-outlined"
-                              value={fontFam}
-                              onChange={handleFontChange}
-                              label="Font"
+                            Select Font
+                          </InputLabel>
+                          <Select
+                            labelId="demo-simple-select-outlined-label"
+                            id="demo-simple-select-outlined"
+                            value={fontFam}
+                            onChange={handleFontChange}
+                            label="Font"
+                            style={{
+                              backgroundColor: "#183D5D",
+                              color: "#b5d7f3",
+                            }}
+                          >
+                            <MenuItem value="">
+                              <em>Select form</em>
+                            </MenuItem>
+                            <MenuItem
                               style={{
-                                backgroundColor: "#1A354E",
+                                fontFamily:
+                                  "Comic Sans MS, Comic Sans, cursive",
                               }}
+                              value={"Comic Sans MS, Comic Sans, cursive"}
                             >
-                              <MenuItem value="">
-                                <em>Select form</em>
-                              </MenuItem>
-                              <MenuItem
-                                style={{
-                                  fontFamily:
-                                    "Comic Sans MS, Comic Sans, cursive",
-                                }}
-                                value={"Comic Sans MS, Comic Sans, cursive"}
-                              >
-                                Happy Scribble Day
-                              </MenuItem>
-                              <MenuItem
-                                style={{
-                                  fontFamily:
-                                    "Brush Script MT, Brush Script Std, cursive",
-                                }}
-                                value={
-                                  "Brush Script MT, Brush Script Std, cursive"
-                                }
-                              >
-                                Happy Scribble Day
-                              </MenuItem>
-                              <MenuItem
-                                style={{
-                                  fontFamily: "Trattatello, fantasy",
-                                }}
-                                value={"Trattatello, fantasy"}
-                              >
-                                Happy Scribble Day
-                              </MenuItem>
-                              <MenuItem
-                                style={{
-                                  fontFamily: "Jazz LET, fantasy",
-                                }}
-                                value={"Jazz LET, fantasy"}
-                              >
-                                Happy Scribble Day
-                              </MenuItem>
-                              <MenuItem
-                                style={{
-                                  fontFamily: "Courier New, monospace",
-                                }}
-                                value={"Courier New, monospace"}
-                              >
-                                Happy Scribble Day
-                              </MenuItem>
-                              <MenuItem
-                                style={{
-                                  fontFamily: "OCR A Std, monospace",
-                                }}
-                                value={"OCR A Std, monospace"}
-                              >
-                                Happy Scribble Day
-                              </MenuItem>
-                              <MenuItem
-                                style={{
-                                  fontFamily: "cursive",
-                                }}
-                                value={"cursive"}
-                              >
-                                Happy Scribble Day
-                              </MenuItem>
-                            </Select>
-                          </FormControl>
-                        )}
+                              Happy Scribble Day
+                            </MenuItem>
+                            <MenuItem
+                              style={{
+                                fontFamily:
+                                  "Brush Script MT, Brush Script Std, cursive",
+                              }}
+                              value={
+                                "Brush Script MT, Brush Script Std, cursive"
+                              }
+                            >
+                              Happy Scribble Day
+                            </MenuItem>
+                            <MenuItem
+                              style={{
+                                fontFamily: "Trattatello, fantasy",
+                              }}
+                              value={"Trattatello, fantasy"}
+                            >
+                              Happy Scribble Day
+                            </MenuItem>
+                            <MenuItem
+                              style={{
+                                fontFamily: "Jazz LET, fantasy",
+                              }}
+                              value={"Jazz LET, fantasy"}
+                            >
+                              Happy Scribble Day
+                            </MenuItem>
+                            <MenuItem
+                              style={{
+                                fontFamily: "Courier New, monospace",
+                              }}
+                              value={"Courier New, monospace"}
+                            >
+                              Happy Scribble Day
+                            </MenuItem>
+                            <MenuItem
+                              style={{
+                                fontFamily: "OCR A Std, monospace",
+                              }}
+                              value={"OCR A Std, monospace"}
+                            >
+                              Happy Scribble Day
+                            </MenuItem>
+                            <MenuItem
+                              style={{
+                                fontFamily: "cursive",
+                              }}
+                              value={"cursive"}
+                            >
+                              Happy Scribble Day
+                            </MenuItem>
+                          </Select>
+                        </FormControl>
                         <Button
                           variant="contained"
                           onClick={() => {
@@ -1198,14 +1232,10 @@ function Home() {
                                 handleSendScribbleForm();
                               }
                             } else {
-                              setOpenSnackbar(true);
-                              setMsgSnackbar(
-                                "Click on 'fix' below the Message on tshirt to continue..."
-                              );
-                              setTimeout(() => setOpenSnackbar(false), 6000);
+                              handleFixClick();
                             }
                           }}
-                          color="primary"
+                          style={{ backgroundColor: "#ED72C0", color: "#fff" }}
                         >
                           {loadingBool ? (
                             <CircularProgress
@@ -1213,25 +1243,8 @@ function Home() {
                               style={{ color: "white" }}
                             />
                           ) : (
-                            "Submit"
+                            <>{isFixed ? "Click to Send Scribble" : "Save"}</>
                           )}
-                        </Button>
-                      </div>
-                      <div
-                        style={{
-                          width: "100%",
-                          height: 1,
-                          margin: "12px 0 16px",
-                          backgroundColor: "#ccc",
-                        }}
-                      />
-                      <div className="boxWrapper">
-                        <Button
-                          variant="contained"
-                          onClick={handleMyScribbleClick}
-                          style={{ backgroundColor: "#ED72C0", color: "#fff" }}
-                        >
-                          {userdata ? "My Scribble" : "Sign In"}
                         </Button>
                       </div>
                     </>
@@ -1883,40 +1896,6 @@ function Home() {
                           </span>
                         </p>
                       </div>
-                      {!dragBool && (
-                        <>
-                          <div
-                            className={"actions"}
-                            onClick={() => handleFixClick()}
-                          >
-                            fix
-                          </div>
-                          <div
-                            className={"actions"}
-                            onClick={() => setMessageFont(".4em")}
-                          >
-                            1
-                          </div>
-                          <div
-                            className={"actions"}
-                            onClick={() => setMessageFont(".5em")}
-                          >
-                            2
-                          </div>
-                          <div
-                            className={"actions"}
-                            onClick={() => setMessageFont(".6em")}
-                          >
-                            3
-                          </div>
-                          <div
-                            className={"actions"}
-                            onClick={() => setMessageFont(".7em")}
-                          >
-                            4
-                          </div>
-                        </>
-                      )}
                     </>
                   ) : userDetailsBool ? (
                     <></>

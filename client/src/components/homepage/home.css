@@ -223,19 +223,66 @@ input:-internal-autofill-selected {
   margin: 0%;
 }
 
-.scribble-message1 .actions {
+.navWrapper {
+  width: 100%;
+  text-align: left;
+  padding: 8px;
+  margin-bottom: 12px;
+  justify-content: space-evenly;
+  display: flex;
+  flex-wrap: wrap;
+}
+.navWrapper .actions {
   position: relative;
-  color: #38a5ff;
   right: 0;
-  background-color: #c8e6ff;
-  width: min-content;
-  padding-inline: 5%;
-  margin: 0%;
-  justify-content: end;
+  width: max-content;
   border-radius: 5px;
+  font-size: 0.8em;
   float: left;
+  cursor: pointer;
+}
+.navWrapper Button {
+  background-color: transparent;
+  color: #b5d7f3;
+}
+.navWrapper Button:hover {
+  background-color: transparent;
+  color: #fff;
+}
+.fontWrapper {
+  width: 100%;
+  text-align: center;
+  padding: 8px;
+  border: 1px solid #1a354e;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  justify-content: space-evenly;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.fontWrapper .info {
+  position: relative;
+  color: #b5d7f3;
+  border-radius: 5px;
+  margin-right: 5%;
+  font-size: 0.8em;
+  float: left;
+  margin-top: 5px;
+}
+
+.fontWrapper .actions {
+  position: relative;
+  color: #b5d7f3;
+  right: 0;
+  background-color: #1a354e;
+  width: max-content;
+  padding-inline: 1%;
+  margin: 0%;
+  border-radius: 5px;
   margin-inline: 1%;
   font-size: 0.8em;
+  float: left;
   margin-top: 5px;
   cursor: pointer;
 }

@@ -6,6 +6,7 @@ import "bootstrap/dist/js/bootstrap.js";
 import Home from "./components/homepage/home";
 import About from "./components/templates/about/about";
 import Faq from "./components/templates/faq/faq";
+import Resources from "./components/templates/resources/resources";
 
 const Theme = createMuiTheme({
   palette: {
@@ -22,6 +23,7 @@ function App() {
           <Route exact component={Home} path="/" />
           <Route exact component={About} path="/about" />
           <Route exact component={Faq} path="/faq" />
+          <Route exact component={Resources} path="/resources" />
         </Router>
       </div>
     </MuiThemeProvider>

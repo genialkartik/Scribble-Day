@@ -15,17 +15,20 @@ export default function Footer() {
             </div>
             <div class="p-2 row flex-fill bd-highlight justify-content-left">
               <div class="p-2 d-lg-flex">
-                <a href="https://ethicallearner.com/tnc">
-                  <div class="p-2 flex-fill d-flex bd-highlight">Terms</div>
-                </a>
-                <a href="https://ethicallearner.com/privacy">
-                  <div class="p-2 flex-fill d-flex bd-highlight">Privacy</div>
+                <a href="/resources">
+                  <div class="p-2 flex-fill d-flex bd-highlight">Resources</div>
                 </a>
                 <a href="/faq">
                   <div class="p-2 flex-fill d-flex bd-highlight">Faq</div>
                 </a>
                 <a href="/about">
                   <div class="p-2 flex-fill d-flex bd-highlight">About</div>
+                </a>
+                <a href="https://ethicallearner.com/tnc">
+                  <div class="p-2 flex-fill d-flex bd-highlight">Terms</div>
+                </a>
+                <a href="https://ethicallearner.com/privacy">
+                  <div class="p-2 flex-fill d-flex bd-highlight">Privacy</div>
                 </a>
               </div>
             </div>
