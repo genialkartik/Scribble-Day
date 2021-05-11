@@ -378,3 +378,9 @@ input:-internal-autofill-selected {
     justify-content: center;
   }
 }
+.loading {
+  background: transparent url('../../assets/spinner.gif') center no-repeat;
+  display: block;
+  min-width: 200px;
+  min-height: 100px;
+}

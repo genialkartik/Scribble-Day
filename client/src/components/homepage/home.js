@@ -1815,16 +1815,17 @@ function Home() {
             <div className={"scribble-image1"} ref={imageWrap}>
               {tshirtSide === "front" ? (
                 <Image
-                  alt="tshirt demo"
+                  alt=""
                   src={require("../../assets/malefront.png")}
-                  className={"male-front"}
+                  className={"male-front loading"}
                   ref={imageRef}
+
                 />
               ) : (
                 <Image
-                  alt="tshirt demo"
+                  alt=""
                   src={require("../../assets/maleback.png")}
-                  className={"male-front"}
+                  className={"male-front loading"}
                   ref={imageRef}
                 />
               )}
