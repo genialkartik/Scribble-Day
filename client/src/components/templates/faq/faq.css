@@ -27,7 +27,19 @@
   transform: rotate(90deg);
   color: #454444;
 }
-
+.card{
+  background-color: rgba(0,0,0,0.1);
+}
+.panel-collapse {
+  padding: 16px;
+}
 .card-block {
-  color: black;
+  padding: 16px 25px;
+  color: #fff;
+}
+.accordion-toggle {
+  color: #bdbdbd;
+}
+.accordion-toggle:hover {
+  color: #fff;
 }

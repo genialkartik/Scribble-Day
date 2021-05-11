@@ -2,6 +2,7 @@ import React from "react";
 import { Container, Row, Col, Image } from "react-bootstrap";
 
 import announcement from "../../../assets/announcement.png";
+import faq from '../../../assets/faq.png';
 import Footer from "../../includes/footer";
 import "./faq.css";
 
@@ -30,8 +31,13 @@ export default function Faq() {
         <br />
         <br />
 
-        <div>
-          <Image src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.pngkey.com%2Fpng%2Fdetail%2F343-3437091_question-faq-vector.png&f=1&nofb=1" />
+        <div className="text-center mb-5">
+          <Image src={faq} />
+          <div className="m-2">
+            <h1 className="m-5">Frequently Asked Questions</h1>
+            <h4>Learn more about Hacktoberfest and how to get involved.</h4>
+          </div>
+
         </div>
 
         <div class="alert alert-warning alert-dismissible" role="alert">
