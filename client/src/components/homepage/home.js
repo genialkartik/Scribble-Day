@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import Draggable from "react-draggable";
 import axios from "axios";
 import PropTypes from "prop-types";
@@ -769,11 +769,11 @@ function Home() {
                         <HomeIcon />
                       </Button>
                     </div>
-                    <a className={"actions"} href={"/resources"}>
+                    <Link className={"actions"} to={"/resources"}>
                       <Button variant="contained">
                         <InfoIcon />
                       </Button>
-                    </a>
+                    </Link>
                     <div className={"actions"}>
                       <Button
                         variant="contained"

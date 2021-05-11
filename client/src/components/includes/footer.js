@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from 'react-router-dom';
 import "./style.css";
 import footerLogo from '../../assets/footerlogo.svg';
 
@@ -9,13 +10,13 @@ export default function Footer() {
         <div className="row bottom-part justify-content-between">
           <div className="col-12 col-sm-2">
             <div>
-              <a href="https://www.digitalocean.com">
+              <Link to="https://www.digitalocean.com">
                 <div alt="DigitalOcean logo">
                   <div>
                     <image src={footerLogo} alt="Brand Logo at Footer" />
                   </div>
                 </div>
-              </a>
+              </Link>
             </div>
           </div>
           <div className="col-12 col-sm-10 d-flex flex-row-reverse">
@@ -40,25 +41,25 @@ export default function Footer() {
             <div className="col-12 col-sm-10 col-md-8 d-flex justify-content-end align-items-center">
               <div class="footer-links">
                 <div class="d-flex">
-                  <a href="/resources">
+                  <Link to="/resources">
                     <div class="p-2 flex-fill d-flex bd-highlight">Resources</div>
-                  </a>
-                  <a href="https://ethicallearner.com/tnc">
+                  </Link>
+                  <a target="_blank" href="https://ethicallearner.com/tnc">
                     <div class="p-2 flex-fill d-flex bd-highlight">Terms</div>
                   </a>
-                  <a href="https://ethicallearner.com/privacy">
+                  <a target="_blank" href="https://ethicallearner.com/privacy">
                     <div class="p-2 flex-fill d-flex bd-highlight">Privacy</div>
                   </a>
-                  <a href="/faq">
+                  <Link to="/faq">
                     <div class="p-2 flex-fill d-flex bd-highlight">Faq</div>
-                  </a>
-                  <a href="/about">
+                  </Link>
+                  <Link to="/about">
                     <div class="p-2 flex-fill d-flex bd-highlight">About</div>
-                  </a>
-                  <a href="https://ethicallearner.com/tnc">
+                  </Link>
+                  <a target="_blank" href="https://ethicallearner.com/tnc">
                     <div class="p-2 flex-fill d-flex bd-highlight">Terms</div>
                   </a>
-                  <a href="https://ethicallearner.com/privacy">
+                  <a target="_blank" href="https://ethicallearner.com/privacy">
                     <div class="p-2 flex-fill d-flex bd-highlight">Privacy</div>
                   </a>
                 </div>
