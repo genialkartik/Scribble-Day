@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
     color: blue[600],
   },
   formControl: {
-    margin: theme.spacing(1),
+    margin: `${theme.spacing(1)}px 0 ${theme.spacing(1)}px`,
     minWidth: 120,
     color: "#fff",
     borderColor: "#fff",
@@ -1078,7 +1078,7 @@ function Home() {
                       </div>
 
                       <div className="fontWrapper">
-                        <div className="info" onClick={() => handleFixClick()}>
+                        <div className="info" style={{flex: '1 0 auto'}} onClick={() => handleFixClick()}>
                           Rotate {" >"}
                         </div>
                         <Slider
@@ -1092,7 +1092,7 @@ function Home() {
                         />
                       </div>
                       <div className={"fontWrapper"}>
-                        <div>
+                        <div className="colorfontwrapper">
                           <FiberManualRecordIcon
                             onClick={() => setMessageColor("#f00000")}
                             style={{ color: "#f00000" }}
@@ -1127,7 +1127,7 @@ function Home() {
                         style={{
                           display: "flex",
                           flexDirection: "column",
-                          padding: "0 12px",
+                          width: '100%'
                         }}
                       >
                         <FormControl
