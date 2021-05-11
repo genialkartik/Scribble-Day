@@ -258,7 +258,8 @@ input:-internal-autofill-selected {
   margin-bottom: 12px;
   justify-content: space-evenly;
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  align-items: center;
 }
 
 .fontWrapper .info {
@@ -287,6 +288,11 @@ input:-internal-autofill-selected {
   float: left;
   margin-top: 5px;
   cursor: pointer;
+}
+.colorfontwrapper{
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
 }
 
 .university-logo {
@@ -377,4 +383,10 @@ input:-internal-autofill-selected {
   .formBox {
     justify-content: center;
   }
+}
+.loading {
+  background: transparent url('../../assets/spinner.gif') center no-repeat;
+  display: block;
+  min-width: 200px;
+  min-height: 100px;
 }

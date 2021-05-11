@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import Draggable from "react-draggable";
 import axios from "axios";
 import PropTypes from "prop-types";
@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
     color: blue[600],
   },
   formControl: {
-    margin: theme.spacing(1),
+    margin: `${theme.spacing(1)}px 0 ${theme.spacing(1)}px`,
     minWidth: 120,
     color: "#fff",
     borderColor: "#fff",
@@ -769,11 +769,11 @@ function Home() {
                         <HomeIcon />
                       </Button>
                     </div>
-                    <a className={"actions"} href={"/resources"}>
+                    <Link className={"actions"} to={"/resources"}>
                       <Button variant="contained">
                         <InfoIcon />
                       </Button>
-                    </a>
+                    </Link>
                     <div className={"actions"}>
                       <Button
                         variant="contained"
@@ -1078,7 +1078,7 @@ function Home() {
                       </div>
 
                       <div className="fontWrapper">
-                        <div className="info" onClick={() => handleFixClick()}>
+                        <div className="info" style={{flex: '1 0 auto'}} onClick={() => handleFixClick()}>
                           Rotate {" >"}
                         </div>
                         <Slider
@@ -1092,7 +1092,7 @@ function Home() {
                         />
                       </div>
                       <div className={"fontWrapper"}>
-                        <div>
+                        <div className="colorfontwrapper">
                           <FiberManualRecordIcon
                             onClick={() => setMessageColor("#f00000")}
                             style={{ color: "#f00000" }}
@@ -1127,7 +1127,7 @@ function Home() {
                         style={{
                           display: "flex",
                           flexDirection: "column",
-                          padding: "0 12px",
+                          width: '100%'
                         }}
                       >
                         <FormControl
@@ -1815,16 +1815,17 @@ function Home() {
             <div className={"scribble-image1"} ref={imageWrap}>
               {tshirtSide === "front" ? (
                 <Image
-                  alt="tshirt demo"
+                  alt=""
                   src={require("../../assets/malefront.png")}
-                  className={"male-front"}
+                  className={"male-front loading"}
                   ref={imageRef}
+
                 />
               ) : (
                 <Image
-                  alt="tshirt demo"
+                  alt=""
                   src={require("../../assets/maleback.png")}
-                  className={"male-front"}
+                  className={"male-front loading"}
                   ref={imageRef}
                 />
               )}

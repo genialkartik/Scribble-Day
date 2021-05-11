@@ -23,7 +23,7 @@ export default function About() {
                 justifyContent: "start",
               }}
             >
-              <a className={"action"} href={"/resources"}>
+              <a className={"action"} href={"/"}>
                 <Button
                   style={{
                     marginInline: 30,
