@@ -5,8 +5,8 @@ import axios from "axios";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 
-import SaveIcon from "@material-ui/icons/Save";
 import Input from "@material-ui/core/Input";
+import HelpIcon from "@material-ui/icons/Help";
 import SecurityIcon from "@material-ui/icons/Security";
 import PermIdentityIcon from "@material-ui/icons/PermIdentity";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -171,10 +171,8 @@ function Home() {
   const [loadingBool, setLoadingBool] = useState(false);
   const [loadingFor, setLoadingFor] = useState("");
   const [downloadClicked, setDownloadClicked] = useState(false);
-  const [
-    askedForSendVerificationCode,
-    setAskedForSendVerificationCode,
-  ] = useState(false);
+  const [askedForSendVerificationCode, setAskedForSendVerificationCode] =
+    useState(false);
   const [enterPinOrCodeBool, setEnterPinOrCodeBool] = useState("pin");
   const [signupFormBool, setSignUpformBool] = useState(false);
   const [newUniversityBool, setNewUniversityBool] = useState(false);
@@ -186,9 +184,8 @@ function Home() {
   const [activateLoadingIn, setActivateLoadingIn] = useState("");
   const [newUnivesityName, setNewUniversityName] = useState("");
   const [newUnivesityLogo, setNewUniversityLogo] = useState();
-  const [newUniversityOnSuccess, setNewUniversityOnSuccess] = useState(
-    "signup"
-  );
+  const [newUniversityOnSuccess, setNewUniversityOnSuccess] =
+    useState("signup");
   const [avatar, setAvatar] = useState();
 
   useEffect(() => {
@@ -765,15 +762,33 @@ function Home() {
                         onClick={() => {
                           window.location.reload();
                         }}
+                        startIcon={<HomeIcon />}
                       >
-                        <HomeIcon />
+                        Home
                       </Button>
                     </div>
-                    <Link className={"actions"} to={"/resources"}>
-                      <Button variant="contained">
-                        <InfoIcon />
+                    <a className={"actions"} href={"/resources"}>
+                      <Button
+                        variant="contained"
+                        style={{
+                          marginInline: 30,
+                        }}
+                        startIcon={<InfoIcon />}
+                      >
+                        Resources
                       </Button>
-                    </Link>
+                    </a>
+                    <a className={"actions"} href={"/faq"}>
+                      <Button
+                        variant="contained"
+                        style={{
+                          marginInline: 30,
+                        }}
+                        startIcon={<HelpIcon />}
+                      >
+                        FAQ
+                      </Button>
+                    </a>
                     <div className={"actions"}>
                       <Button
                         variant="contained"
@@ -1078,7 +1093,11 @@ function Home() {
                       </div>
 
                       <div className="fontWrapper">
-                        <div className="info" style={{flex: '1 0 auto'}} onClick={() => handleFixClick()}>
+                        <div
+                          className="info"
+                          style={{ flex: "1 0 auto" }}
+                          onClick={() => handleFixClick()}
+                        >
                           Rotate {" >"}
                         </div>
                         <Slider
@@ -1127,7 +1146,7 @@ function Home() {
                         style={{
                           display: "flex",
                           flexDirection: "column",
-                          width: '100%'
+                          width: "100%",
                         }}
                       >
                         <FormControl
@@ -1819,7 +1838,6 @@ function Home() {
                   src={require("../../assets/malefront.png")}
                   className={"male-front loading"}
                   ref={imageRef}
-
                 />
               ) : (
                 <Image

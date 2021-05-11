@@ -11,7 +11,7 @@ export default function Footer() {
         <div className="row bottom-part justify-content-between">
           <div className="col-12 col-sm-2">
             <div>
-              <Link to="https://www.digitalocean.com">
+              <Link to="/">
                 <div alt="DigitalOcean logo">
                   <div>
                     {/* <image src={footerLogo} alt="Brand Logo at Footer" /> */}
