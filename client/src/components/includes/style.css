@@ -15,7 +15,10 @@
 }
 
 .grey-text {
-  color: lightgrey;
+  color: #93c2db;
+}
+.grey-text:hover {
+  color: #fff;
 }
 .footer-links {
   border-right: 1px solid rgb(147, 194, 219);
@@ -34,5 +37,8 @@ footer a:hover {
   margin-top: 6px;
 }
 .footer-socials div.fa {
+  color: #4b7492;
+}
+.footer-socials div.fa:hover {
   color: #fff;
 }

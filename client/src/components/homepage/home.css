@@ -246,7 +246,7 @@ input:-internal-autofill-selected {
   color: #b5d7f3;
 }
 .navWrapper Button:hover {
-  background-color: transparent;
+  background-color: #183d5d;
   color: #fff;
 }
 .fontWrapper {

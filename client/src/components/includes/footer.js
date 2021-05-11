@@ -1,6 +1,7 @@
 import React from "react";
 import "./style.css";
-import footerLogo from '../../assets/footerlogo.svg';
+import footerLogo from "../../assets/footerlogo.png";
+import { Image } from "react-bootstrap";
 
 export default function Footer() {
   return (
@@ -12,7 +13,8 @@ export default function Footer() {
               <a href="https://www.digitalocean.com">
                 <div alt="DigitalOcean logo">
                   <div>
-                    <image src={footerLogo} alt="Brand Logo at Footer" />
+                    {/* <image src={footerLogo} alt="Brand Logo at Footer" /> */}
+                    <Image src={footerLogo} />
                   </div>
                 </div>
               </a>
@@ -21,7 +23,7 @@ export default function Footer() {
           <div className="col-12 col-sm-10 d-flex flex-row-reverse">
             <div className=" text-right">
               <div class="fa fa-mobile px-2 grey-text">
-                &nbsp;&nbsp;<span id="contact">888-777-666</span>
+                &nbsp;&nbsp;888-777-666
               </div>
               <div class="fa fa-envelope-o px-2 grey-text">
                 &nbsp;&nbsp;info@itcraft.in
@@ -35,13 +37,14 @@ export default function Footer() {
                 </div>
               </div>
             </div>
-            
 
             <div className="col-12 col-sm-10 col-md-8 d-flex justify-content-end align-items-center">
               <div class="footer-links">
                 <div class="d-flex">
                   <a href="/resources">
-                    <div class="p-2 flex-fill d-flex bd-highlight">Resources</div>
+                    <div class="p-2 flex-fill d-flex bd-highlight">
+                      Resources
+                    </div>
                   </a>
                   <a href="https://ethicallearner.com/tnc">
                     <div class="p-2 flex-fill d-flex bd-highlight">Terms</div>
@@ -65,7 +68,6 @@ export default function Footer() {
               </div>
             </div>
           </div>
-          
         </div>
       </footer>
     </div>
