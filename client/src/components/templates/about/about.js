@@ -69,7 +69,7 @@ export default function About() {
                 </h4>
                 <p className="lead">
                   Empowered under the hood of{" "}
-                  <a href="https://adorway.com">Adoway Pvt. Ltd.</a>
+                  <a href="https://adorway.com">Adorway Pvt. Ltd.</a>
                 </p>
               </div>
               <div className="col-lg-6 d-none d-lg-block">

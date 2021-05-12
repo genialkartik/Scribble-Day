@@ -14,7 +14,6 @@ export default function Footer() {
               <Link to="/">
                 <div alt="DigitalOcean logo">
                   <div>
-                    {/* <image src={footerLogo} alt="Brand Logo at Footer" /> */}
                     <Image src={footerLogo} />
                   </div>
                 </div>
@@ -24,10 +23,10 @@ export default function Footer() {
           <div className="col-12 col-sm-10 d-flex flex-row-reverse">
             <div className=" text-right">
               <div class="fa fa-mobile px-2 grey-text">
-                &nbsp;&nbsp;888-777-666
+                &nbsp;&nbsp;+91-9517716419
               </div>
               <div class="fa fa-envelope-o px-2 grey-text">
-                &nbsp;&nbsp;info@itcraft.in
+                &nbsp;&nbsp;info@ethicallearner.com
               </div>
               <div className="col-12">
                 <div class="footer-socials">
@@ -47,12 +46,6 @@ export default function Footer() {
                       Resources
                     </div>
                   </Link>
-                  <a target="_blank" href="https://ethicallearner.com/tnc">
-                    <div class="p-2 flex-fill d-flex bd-highlight">Terms</div>
-                  </a>
-                  <a target="_blank" href="https://ethicallearner.com/privacy">
-                    <div class="p-2 flex-fill d-flex bd-highlight">Privacy</div>
-                  </a>
                   <Link to="/faq">
                     <div class="p-2 flex-fill d-flex bd-highlight">Faq</div>
                   </Link>

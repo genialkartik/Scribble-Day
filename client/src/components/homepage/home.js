@@ -931,7 +931,7 @@ function Home() {
                           src={
                             universityLogo
                               ? universityLogo
-                              : "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn0.iconfinder.com%2Fdata%2Ficons%2Fbuildings-1%2F128%2F29-512.png&f=1&nofb=1"
+                              : require("../../assets/universitydemologo.png")
                           }
                         />
                       </div>
@@ -1032,7 +1032,7 @@ function Home() {
                           src={
                             friendLogo
                               ? friendLogo
-                              : "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.k6V8n31jhsNraAUlXqwNgQHaHa%26pid%3DApi&f=1"
+                              : require("../../assets/userdemoimage.jpg")
                           }
                         />
                       </div>
@@ -1817,7 +1817,7 @@ function Home() {
             >
               <p>
                 Spread the happiness among your friends, juniors, seniors and
-                connections to celebrate this year's
+                connections to celebrate this year's{" "}
                 <a
                   href="https://hacktoberfest.digitalocean.com/"
                   target="_blank"
@@ -1848,18 +1848,20 @@ function Home() {
                 />
               )}
               <div className={"university-logo"}>
-                <Avatar
-                  style={{
-                    width: getFontSize(60, imageRefWidth),
-                    height: getFontSize(60, imageRefWidth),
-                  }}
-                  alt="U"
-                  src={
-                    universityLogo
-                      ? universityLogo
-                      : "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn0.iconfinder.com%2Fdata%2Ficons%2Fbuildings-1%2F128%2F29-512.png&f=1&nofb=1"
-                  }
-                />
+                {tshirtSide === "front" && (
+                  <Avatar
+                    style={{
+                      width: getFontSize(60, imageRefWidth),
+                      height: getFontSize(60, imageRefWidth),
+                    }}
+                    alt="U"
+                    src={
+                      universityLogo
+                        ? universityLogo
+                        : require("../../assets/universitydemologo.png")
+                    }
+                  />
+                )}
               </div>
               {scribbleList
                 .filter((item) => item.side === tshirtSide)
