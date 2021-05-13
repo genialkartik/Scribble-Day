@@ -1,8 +1,11 @@
 import React from "react";
 import { Image } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import HomeIcon from "@material-ui/icons/Home";
+import HelpIcon from "@material-ui/icons/Help";
 import InfoIcon from "@material-ui/icons/Info";
+import LabelImportantIcon from "@material-ui/icons/LabelImportant";
 
 import faq from "../../../assets/faq.png";
 import Footer from "../../includes/footer";
@@ -25,21 +28,18 @@ export default function Faq() {
               justifyContent: "start",
             }}
           >
-            <div className={"action"}>
+            <Link className={"action"} to={"/"}>
               <Button
                 style={{
                   marginInline: 30,
                 }}
                 variant="contained"
-                onClick={() => {
-                  window.location.replace("/");
-                }}
                 startIcon={<HomeIcon />}
               >
                 Home
               </Button>
-            </div>
-            <a className={"actions"} href={"/resources"}>
+            </Link>
+            <Link className={"actions"} to={"/resources"}>
               <Button
                 variant="contained"
                 style={{
@@ -49,7 +49,29 @@ export default function Faq() {
               >
                 Resources
               </Button>
-            </a>
+            </Link>
+            <Link className={"actions"} to={"/faq"}>
+              <Button
+                variant="contained"
+                style={{
+                  marginInline: 30,
+                }}
+                startIcon={<HelpIcon />}
+              >
+                FAQ
+              </Button>
+            </Link>
+            <Link className={"actions"} to={"/about"}>
+              <Button
+                variant="contained"
+                style={{
+                  marginInline: 30,
+                }}
+                startIcon={<LabelImportantIcon />}
+              >
+                About
+              </Button>
+            </Link>
           </div>
           <div className="text-center mb-5">
             <div className="m-2">

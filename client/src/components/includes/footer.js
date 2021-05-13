@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "./style.css";
-import footerLogo from "../../assets/footerlogo.png";
+import footerLogo from "../../assets/foaxx.png";
 import { Image } from "react-bootstrap";
 
 export default function Footer() {
@@ -13,8 +13,8 @@ export default function Footer() {
             <div>
               <Link to="/">
                 <div alt="DigitalOcean logo">
-                  <div>
-                    <Image src={footerLogo} />
+                  <div className="logocont">
+                    <Image src={footerLogo} width={80} className="logo" />
                   </div>
                 </div>
               </Link>
@@ -22,41 +22,47 @@ export default function Footer() {
           </div>
           <div className="col-12 col-sm-10 d-flex flex-row-reverse">
             <div className=" text-right">
-              <div class="fa fa-mobile px-2 grey-text">
+              <div className="fa fa-mobile px-2 grey-text">
                 &nbsp;&nbsp;+91-9517716419
               </div>
-              <div class="fa fa-envelope-o px-2 grey-text">
+              <div className="fa fa-envelope-o px-2 grey-text">
                 &nbsp;&nbsp;info@ethicallearner.com
               </div>
               <div className="col-12">
-                <div class="footer-socials">
-                  <div class="fa fa-facebook px-2"></div>
-                  <div class="fa fa-linkedin px-2"></div>
-                  <div class="fa fa-twitter px-2"></div>
-                  <div class="fa fa-instagram px-2"></div>
+                <div className="footer-socials">
+                  <div className="fa fa-facebook px-2"></div>
+                  <div className="fa fa-linkedin px-2"></div>
+                  <div className="fa fa-twitter px-2"></div>
+                  <div className="fa fa-instagram px-2"></div>
                 </div>
               </div>
             </div>
 
             <div className="col-12 col-sm-10 col-md-8 d-flex justify-content-end align-items-center">
-              <div class="footer-links">
-                <div class="d-flex">
+              <div className="footer-links">
+                <div className="d-flex">
                   <Link to="/resources">
-                    <div class="p-2 flex-fill d-flex bd-highlight">
+                    <div className="p-2 flex-fill d-flex bd-highlight">
                       Resources
                     </div>
                   </Link>
                   <Link to="/faq">
-                    <div class="p-2 flex-fill d-flex bd-highlight">Faq</div>
+                    <div className="p-2 flex-fill d-flex bd-highlight">Faq</div>
                   </Link>
                   <Link to="/about">
-                    <div class="p-2 flex-fill d-flex bd-highlight">About</div>
+                    <div className="p-2 flex-fill d-flex bd-highlight">
+                      About
+                    </div>
                   </Link>
                   <a target="_blank" href="https://ethicallearner.com/tnc">
-                    <div class="p-2 flex-fill d-flex bd-highlight">Terms</div>
+                    <div className="p-2 flex-fill d-flex bd-highlight">
+                      Terms
+                    </div>
                   </a>
                   <a target="_blank" href="https://ethicallearner.com/privacy">
-                    <div class="p-2 flex-fill d-flex bd-highlight">Privacy</div>
+                    <div className="p-2 flex-fill d-flex bd-highlight">
+                      Privacy
+                    </div>
                   </a>
                 </div>
               </div>

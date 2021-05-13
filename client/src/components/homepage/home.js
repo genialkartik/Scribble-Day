@@ -44,7 +44,7 @@ import { useScreenshot } from "use-screenshot-hook";
 import useOutsideAlerter from "../useOutsideCatcher";
 import "./home.css";
 import SuperHeader from "../includes/superHeader";
-import Footer from "../includes/footer";
+import OrderCard from "./orderCard.js";
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
@@ -155,6 +155,7 @@ function Home() {
   const [dimensions, setDimensions] = useState({});
 
   const [openInviteDialog, setInviteDialog] = useState(false);
+  const [openPlaceOrderDialog, setPlaceOrderDialog] = useState(false);
   const [openDownloadDialog, setDownloadDialog] = useState(false);
   const [downloadInput, setDownloadInput] = useState();
   const [insertVerifyCode, setInsertVerifyCode] = useState(false);
@@ -499,7 +500,6 @@ function Home() {
   const handleInviteClose = (value) => {
     setInviteDialog(false);
   };
-
   const handleDownloadOpen = () => {
     takeScreenshot();
     setDownloadDialog(true);
@@ -577,6 +577,29 @@ function Home() {
   }
 
   InviteFriend.propTypes = {
+    onClose: PropTypes.func.isRequired,
+    open: PropTypes.bool.isRequired,
+    selectedValue: PropTypes.string.isRequired,
+  };
+
+  function PlaceOrder(props) {
+    const { onClose, open } = props;
+    const handleClose = () => {
+      onClose();
+    };
+
+    return (
+      <Dialog
+        onClose={handleClose}
+        aria-labelledby="simple-dialog-title"
+        open={open}
+      >
+        <OrderCard userdata={userdata ? userdata : null} />
+      </Dialog>
+    );
+  }
+
+  PlaceOrder.propTypes = {
     onClose: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired,
     selectedValue: PropTypes.string.isRequired,
@@ -760,14 +783,14 @@ function Home() {
                       <Button
                         variant="contained"
                         onClick={() => {
-                          window.location.reload();
+                          window.location.replace("/");
                         }}
                         startIcon={<HomeIcon />}
                       >
                         Home
                       </Button>
                     </div>
-                    <a className={"actions"} href={"/resources"}>
+                    <Link className={"actions"} to={"/resources"}>
                       <Button
                         variant="contained"
                         style={{
@@ -777,8 +800,8 @@ function Home() {
                       >
                         Resources
                       </Button>
-                    </a>
-                    <a className={"actions"} href={"/faq"}>
+                    </Link>
+                    <Link className={"actions"} to={"/faq"}>
                       <Button
                         variant="contained"
                         style={{
@@ -788,7 +811,7 @@ function Home() {
                       >
                         FAQ
                       </Button>
-                    </a>
+                    </Link>
                     <div className={"actions"}>
                       <Button
                         variant="contained"
@@ -1783,13 +1806,23 @@ function Home() {
                   >
                     <Button
                       variant="contained"
-                      onClick={() => handleDownloadOpen("download")}
+                      onClick={() => {
+                        setPlaceOrderDialog(true);
+                      }}
                       style={{ backgroundColor: "#0A0", color: "#fff" }}
                     >
                       <span className={"fa fa-shopping-cart"}></span>
                       Place Order
                     </Button>
                   </a>
+                </div>
+                <div className="col-12">
+                  <PlaceOrder
+                    open={openPlaceOrderDialog}
+                    onClose={() => {
+                      setPlaceOrderDialog(false);
+                    }}
+                  />
                 </div>
               </div>
 
@@ -1955,7 +1988,6 @@ function Home() {
         autoHideDuration={1000}
         message={msgSnackbar}
       />
-      <Footer />
     </div>
   );
 }

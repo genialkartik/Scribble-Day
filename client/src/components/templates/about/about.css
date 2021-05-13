@@ -49,3 +49,10 @@
   text-decoration: none;
   font-style: normal;
 }
+
+.logo img {
+  position: relative;
+  width: 60%;
+  left: 50%;
+  transform: translate(-20%);
+}

@@ -1,8 +1,10 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 import InfoIcon from "@material-ui/icons/Info";
 import HelpIcon from "@material-ui/icons/Help";
 import Button from "@material-ui/core/Button";
+import LabelImportantIcon from "@material-ui/icons/LabelImportant";
 import HomeIcon from "@material-ui/icons/Home";
 import Footer from "../../includes/footer";
 import SuperHeader from "../../includes/superHeader";
@@ -23,21 +25,18 @@ export default function About() {
                 justifyContent: "start",
               }}
             >
-              <a className={"action"} href={"/"}>
+              <Link className={"action"} to={"/"}>
                 <Button
                   style={{
                     marginInline: 30,
                   }}
                   variant="contained"
-                  onClick={() => {
-                    window.location.replace("/");
-                  }}
                   startIcon={<HomeIcon />}
                 >
                   Home
                 </Button>
-              </a>
-              <a className={"actions"} href={"/resources"}>
+              </Link>
+              <Link className={"actions"} to={"/resources"}>
                 <Button
                   variant="contained"
                   style={{
@@ -47,8 +46,8 @@ export default function About() {
                 >
                   Resources
                 </Button>
-              </a>
-              <a className={"actions"} href={"/faq"}>
+              </Link>
+              <Link className={"actions"} to={"/faq"}>
                 <Button
                   variant="contained"
                   style={{
@@ -58,7 +57,18 @@ export default function About() {
                 >
                   FAQ
                 </Button>
-              </a>
+              </Link>
+              <Link className={"actions"} to={"/about"}>
+                <Button
+                  variant="contained"
+                  style={{
+                    marginInline: 30,
+                  }}
+                  startIcon={<LabelImportantIcon />}
+                >
+                  About
+                </Button>
+              </Link>
             </div>
             <div className="row h-100 align-items-center py-5">
               <div className="fox-intro col-lg-6">
@@ -72,9 +82,9 @@ export default function About() {
                   <a href="https://adorway.com">Adorway Pvt. Ltd.</a>
                 </p>
               </div>
-              <div className="col-lg-6 d-none d-lg-block">
+              <div className="col-lg-6 d-none d-lg-block logo">
                 <img
-                  src="https://scribble2021.s3.ap-south-1.amazonaws.com/ScribbleDayLogo2021.png"
+                  src={require("../../../assets/foaxx.png")}
                   alt=""
                   className="img-fluid"
                 />

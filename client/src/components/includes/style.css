@@ -10,6 +10,12 @@
   font-size: 20px;
 }
 
+.footer-cont .logocont {
+  position: relative;
+  margin-inline: 20px;
+  filter: brightness(10);
+}
+
 #contact {
   font-size: 15px;
 }
