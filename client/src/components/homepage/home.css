@@ -165,12 +165,14 @@ input:-internal-autofill-selected {
 
 .details-of-site {
   display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-top: 20px;
+  justify-content: space-between;
+  margin: 20px 0 10px;
 }
 .details-of-site .part {
-  margin: 10px;
+  width: 48%;
+}
+.details-of-site .part a {
+  display: block;
 }
 .details-of-site .part .fa {
   margin-right: 8px;
@@ -232,6 +234,14 @@ input:-internal-autofill-selected {
   display: flex;
   flex-wrap: wrap;
 }
+@media screen and (min-width: 568px) {
+  .navWrapper{
+    flex-wrap: nowrap;
+    justify-content: start;
+    margin: 0;
+    padding: 0;
+  }
+}
 .navWrapper .actions {
   position: relative;
   right: 0;
@@ -258,7 +268,8 @@ input:-internal-autofill-selected {
   margin-bottom: 12px;
   justify-content: space-evenly;
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  align-items: center;
 }
 
 .fontWrapper .info {
@@ -269,6 +280,13 @@ input:-internal-autofill-selected {
   font-size: 0.8em;
   float: left;
   margin-top: 5px;
+  cursor: pointer;
+}
+
+.colorfontwrapper{
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
 }
 
 .fontWrapper .actions {
@@ -330,7 +348,7 @@ input:-internal-autofill-selected {
 }
 
 .part Button {
-  margin-inline: 10px;
+  width: 100%;
 }
 .part.socials {
   margin: 0 auto;
@@ -377,4 +395,11 @@ input:-internal-autofill-selected {
   .formBox {
     justify-content: center;
   }
+}
+
+.loading {
+  background: transparent url('../../assets/spinner.gif') center no-repeat;
+  display: block;
+  min-width: 200px;
+  min-height: 100px;
 }

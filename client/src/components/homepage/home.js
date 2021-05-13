@@ -32,7 +32,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import SendIcon from "@material-ui/icons/Send";
 import VpnKeyIcon from "@material-ui/icons/VpnKey";
 import { blue } from "@material-ui/core/colors";
-import { Form, Image } from "react-bootstrap";
+import { Form, Image, Row, Col } from "react-bootstrap";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Button from "@material-ui/core/Button";
@@ -666,7 +666,7 @@ function Home() {
             <div className={"column"}>
               <div
                 className="details-of-site"
-                style={{ marginTop: "50px", float: "left" }}
+                style={{ marginTop: "50px", float: "left", width: '100%' }}
               >
                 <div className="part">
                   <ButtonGroup
@@ -702,7 +702,7 @@ function Home() {
               </div>
 
               <div
-                style={{ textAlign: "center" }}
+                style={{ textAlign: "left" }}
                 className="d-none d-sm-block"
               >
                 {userdata && userDetailsBool && (
@@ -787,32 +787,23 @@ function Home() {
                         }}
                         startIcon={<HomeIcon />}
                       >
-                        Home
                       </Button>
                     </div>
                     <Link className={"actions"} to={"/resources"}>
                       <Button
                         variant="contained"
-                        style={{
-                          marginInline: 30,
-                        }}
                         startIcon={<InfoIcon />}
                       >
-                        Resources
                       </Button>
                     </Link>
                     <Link className={"actions"} to={"/faq"}>
                       <Button
                         variant="contained"
-                        style={{
-                          marginInline: 30,
-                        }}
                         startIcon={<HelpIcon />}
                       >
-                        FAQ
                       </Button>
                     </Link>
-                    <div className={"actions"}>
+                    <div className={"actions"} style={{flex: '1 0 auto'}}>
                       <Button
                         variant="contained"
                         onClick={handleMyScribbleClick}
@@ -1455,7 +1446,7 @@ function Home() {
                   {insertVerifyCode && (
                     <>
                       <FormControl
-                        className={"col-12 col-sm-8 col-md-9 form"}
+                        className={"col-12 form"}
                         style={{ padding: 20 }}
                       >
                         <Input
@@ -1513,7 +1504,7 @@ function Home() {
                   )}
                   {enterEmailBool && (
                     <FormControl
-                      className={"col-12 col-sm-8 col-md-9 form"}
+                      className={"col-12 form"}
                       style={{ padding: 20 }}
                     >
                       <Input
@@ -1547,7 +1538,7 @@ function Home() {
                   )}
                   {signupFormBool && !userdata && (
                     <>
-                      <div className="col-12 col-sm-11 col-lg-9 row">
+                      <div className="col-12 row">
                         <FormControl
                           variant="filled"
                           className={classes.formControl}
@@ -1786,6 +1777,8 @@ function Home() {
                 </>
               )}
             </div>
+            <Row className="justify-content-center" style={{padding: 16}}>
+              <Col xs={12} sm={10} lg={8} className="d-flex flex-column">
             <h3
               className={"center text-center"}
               style={{
@@ -1843,9 +1836,7 @@ function Home() {
             <footer
               className={"center"}
               style={{
-                textAlign: "center",
-                width: "70%",
-                transform: "translate(20%, 0%)",
+                textAlign: "center"
               }}
             >
               <p>
@@ -1860,6 +1851,8 @@ function Home() {
                 </a>
               </p>
             </footer>
+              </Col>
+            </Row>
           </div>
           <div className={"column"}>
             {/* RIGHT COLUMN */}
