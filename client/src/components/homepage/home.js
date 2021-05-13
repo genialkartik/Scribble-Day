@@ -797,7 +797,7 @@ function Home() {
                       <Button
                         variant="contained"
                         onClick={handleMyScribbleClick}
-                        style={{ backgroundColor: "#0A0", color: "#fff" }}
+                        style={{ backgroundColor: "#183D5D", color: "#fff" }}
                         startIcon={
                           userdata ? <PermIdentityIcon /> : <SecurityIcon />
                         }
@@ -1852,11 +1852,7 @@ function Home() {
                     <p>
                       Spread the happiness among your friends, juniors, seniors
                       and connections to celebrate this year's{" "}
-                      <a
-                        href="https://hacktoberfest.digitalocean.com/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
+                      <a href="/" target="_blank" rel="noopener noreferrer">
                         Scribble Day
                       </a>
                     </p>
