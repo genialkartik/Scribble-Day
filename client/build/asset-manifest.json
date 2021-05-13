@@ -1,28 +1,32 @@
 {
   "files": {
-    "main.css": "/static/css/main.a27758d5.chunk.css",
-    "main.js": "/static/js/main.ea75ab48.chunk.js",
-    "main.js.map": "/static/js/main.ea75ab48.chunk.js.map",
+    "main.css": "/static/css/main.9d974afc.chunk.css",
+    "main.js": "/static/js/main.ef3c91db.chunk.js",
+    "main.js.map": "/static/js/main.ef3c91db.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.f6673272.js",
     "runtime-main.js.map": "/static/js/runtime-main.f6673272.js.map",
     "static/css/2.9233ae65.chunk.css": "/static/css/2.9233ae65.chunk.css",
-    "static/js/2.e429638c.chunk.js": "/static/js/2.e429638c.chunk.js",
-    "static/js/2.e429638c.chunk.js.map": "/static/js/2.e429638c.chunk.js.map",
+    "static/js/2.044b8431.chunk.js": "/static/js/2.044b8431.chunk.js",
+    "static/js/2.044b8431.chunk.js.map": "/static/js/2.044b8431.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.daa4ac143954ad6644e04a007969d77a.js": "/precache-manifest.daa4ac143954ad6644e04a007969d77a.js",
+    "precache-manifest.472e03ac80419a727115749f197264e6.js": "/precache-manifest.472e03ac80419a727115749f197264e6.js",
     "service-worker.js": "/service-worker.js",
     "static/css/2.9233ae65.chunk.css.map": "/static/css/2.9233ae65.chunk.css.map",
-    "static/css/main.a27758d5.chunk.css.map": "/static/css/main.a27758d5.chunk.css.map",
-    "static/js/2.e429638c.chunk.js.LICENSE.txt": "/static/js/2.e429638c.chunk.js.LICENSE.txt",
+    "static/css/main.9d974afc.chunk.css.map": "/static/css/main.9d974afc.chunk.css.map",
+    "static/js/2.044b8431.chunk.js.LICENSE.txt": "/static/js/2.044b8431.chunk.js.LICENSE.txt",
     "static/media/announcement.png": "/static/media/announcement.ea18e75f.png",
+    "static/media/faq.png": "/static/media/faq.461c7113.png",
+    "static/media/foaxx.png": "/static/media/foaxx.fb20c590.png",
     "static/media/maleback.png": "/static/media/maleback.5520076a.png",
-    "static/media/malefront.png": "/static/media/malefront.3b15893e.png"
+    "static/media/malefront.png": "/static/media/malefront.3b15893e.png",
+    "static/media/universitydemologo.png": "/static/media/universitydemologo.6778e78a.png",
+    "static/media/userdemoimage.jpg": "/static/media/userdemoimage.6e9141a4.jpg"
   },
   "entrypoints": [
     "static/js/runtime-main.f6673272.js",
     "static/css/2.9233ae65.chunk.css",
-    "static/js/2.e429638c.chunk.js",
-    "static/css/main.a27758d5.chunk.css",
-    "static/js/main.ea75ab48.chunk.js"
+    "static/js/2.044b8431.chunk.js",
+    "static/css/main.9d974afc.chunk.css",
+    "static/js/main.ef3c91db.chunk.js"
   ]
 }

@@ -142,7 +142,7 @@ function Home() {
   const [isUlistFocus, setUlistFocus] = useState(false);
   const [scribbleList, setScribbleList] = useState([]);
   const [userdata, setUserData] = useState(null);
-  const [friendData, setFriendData] = useState({});
+  const [friendData, setFriendData] = useState(null);
   const [message, setMessage] = useState("");
   const [messageColor, setMessageColor] = useState("#000000");
   const [rotateValue, setRotateValue] = useState(0);
@@ -218,6 +218,7 @@ function Home() {
           });
           setScribbleList(res.scribbles);
         } else {
+          setFriendData(null);
           setOpenSnackbar(true);
           setMsgSnackbar(resp.data.respMessage);
           setTimeout(() => setOpenSnackbar(false), 3000);
@@ -249,21 +250,15 @@ function Home() {
   const handleFixClick = () => {
     if (!friendData) {
       setOpenSnackbar(true);
-      setMsgSnackbar(
-        "Please Select a Friend and must write a Scribble message"
-      );
+      setMsgSnackbar("Please Select a Friend and write a Scribble message");
       setTimeout(() => setOpenSnackbar(false), 3000);
     } else {
-      // setDimensions(getPositions);
       setDimensions(
         GetPosition(
           imageRef.current.getBoundingClientRect(),
           messageRef.current.getBoundingClientRect()
         )
       );
-      // console.log(getPositions);
-      // setDimensions(messageRef.current.getBoundingClientRect());
-      // console.log(useGetPosition(getImgWrapperDimensions, getMsgDimensions));
       setDragBool(true);
       setIsFixed(true);
     }
@@ -353,7 +348,7 @@ function Home() {
           setInsertVerifyCode(false);
           setFriendFocus(false);
           setUlistFocus(false);
-          setFriendData({});
+          setFriendData(null);
           setEnterFriendName("");
           setFriendLogo();
           setUniversityLogo();
@@ -584,13 +579,13 @@ function Home() {
 
   function PlaceOrder(props) {
     const { onClose, open } = props;
-    const handleClose = () => {
+    const handlePlaceOrderClose = () => {
       onClose();
     };
 
     return (
       <Dialog
-        onClose={handleClose}
+        onClose={handlePlaceOrderClose}
         aria-labelledby="simple-dialog-title"
         open={open}
       >
@@ -935,7 +930,7 @@ function Home() {
 
                                         // reset friend data
 
-                                        setFriendData({});
+                                        setFriendData(null);
                                         setEnterFriendName("");
                                         setFriendLogo();
                                         setFriendFocus(false);
@@ -1799,22 +1794,22 @@ function Home() {
             <div className="details-of-site">
               <div className="part">
                 <div>
-                  <a
+                  {/* <a
                     href={"https://rzp.io/l/Up18AjAWH"}
                     target="_blank"
                     rel="noopener noreferrer"
+                  > */}
+                  <Button
+                    variant="contained"
+                    onClick={() => {
+                      setPlaceOrderDialog(true);
+                    }}
+                    style={{ backgroundColor: "#0A0", color: "#fff" }}
                   >
-                    <Button
-                      variant="contained"
-                      onClick={() => {
-                        setPlaceOrderDialog(true);
-                      }}
-                      style={{ backgroundColor: "#0A0", color: "#fff" }}
-                    >
-                      <span className={"fa fa-shopping-cart"}></span>
-                      Place Order
-                    </Button>
-                  </a>
+                    <span className={"fa fa-shopping-cart"}></span>
+                    Place Order
+                  </Button>
+                  {/* </a> */}
                 </div>
                 <div className="col-12">
                   <PlaceOrder
