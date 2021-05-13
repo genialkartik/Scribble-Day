@@ -815,29 +815,42 @@ function Home() {
                     }}
                   />
                   {userDetailsBool && userdata && (
-                    <Button
-                      variant="contained"
-                      size="small"
-                      onClick={async () => {
-                        const resp = await axios.get("/logout");
-                        if (resp.data.loggedout) {
-                          setUserDetailsBool(false);
-                          setLandingPageBool(true);
-                          setUserData(null);
-                        } else {
-                          setOpenSnackbar(true);
-                          setMsgSnackbar("You're not logged in!");
-                          setTimeout(() => setOpenSnackbar(false), 3000);
+                    <>
+                      <Button
+                        variant="contained"
+                        size="small"
+                        onClick={async () => {
+                          const resp = await axios.get("/logout");
+                          if (resp.data.loggedout) {
+                            setUserDetailsBool(false);
+                            setLandingPageBool(true);
+                            setUserData(null);
+                          } else {
+                            setOpenSnackbar(true);
+                            setMsgSnackbar("You're not logged in!");
+                            setTimeout(() => setOpenSnackbar(false), 3000);
+                          }
+                        }}
+                        style={{
+                          backgroundColor: "#1C3750",
+                          color: "rgba(255,255,255,.4)",
+                          marginInline: 20,
+                        }}
+                      >
+                        <span>Logout</span>
+                      </Button>
+
+                      <Button
+                        variant="contained"
+                        onClick={() => setPlaceOrderDialog(true)}
+                        style={{ backgroundColor: "#0A0", color: "#fff" }}
+                        startIcon={
+                          <span className={"fa fa-shopping-cart"}></span>
                         }
-                      }}
-                      style={{
-                        backgroundColor: "#1C3750",
-                        color: "rgba(255,255,255,.4)",
-                        marginInline: 20,
-                      }}
-                    >
-                      <span>Logout</span>
-                    </Button>
+                      >
+                        Place Order
+                      </Button>
+                    </>
                   )}
                 </div>
                 <div
@@ -1767,86 +1780,90 @@ function Home() {
                 </>
               )}
             </div>
-            <Row className="justify-content-center" style={{ padding: 16 }}>
-              <Col xs={12} sm={10} lg={8} className="d-flex flex-column">
-                <h3
-                  className={"center text-center"}
-                  style={{
-                    color: "#FF8AE2",
-                    fontFamily: "sans",
-                    textAlign: "left",
-                  }}
-                >
-                  A Day worth Remembering
-                </h3>
-                <div className="details-of-site">
-                  <div className="part">
-                    <div>
-                      <Button
-                        variant="contained"
-                        onClick={() => {
-                          if (userdata) {
-                            {
-                              setPlaceOrderDialog(true);
+            {!userDetailsBool && (
+              <Row className="justify-content-center" style={{ padding: 16 }}>
+                <Col xs={12} sm={10} lg={8} className="d-flex flex-column">
+                  <h3
+                    className={"center text-center"}
+                    style={{
+                      color: "#FF8AE2",
+                      fontFamily: "sans",
+                      textAlign: "left",
+                    }}
+                  >
+                    A Day worth Remembering
+                  </h3>
+                  <div className="details-of-site">
+                    <div className="part">
+                      <div>
+                        <Button
+                          variant="contained"
+                          onClick={() => {
+                            if (userdata) {
+                              {
+                                setPlaceOrderDialog(true);
+                              }
+                            } else {
+                              setMsgSnackbar("Login First");
+                              setOpenSnackbar(true);
+                              setTimeout(() => setOpenSnackbar(false), 1000);
+                              setLandingPageBool(false);
+                              setEnterEmailBool(true);
                             }
-                          } else {
-                            setMsgSnackbar("Login First");
-                            setOpenSnackbar(true);
-                            setTimeout(() => setOpenSnackbar(false), 1000);
-                            setLandingPageBool(false);
-                            setEnterEmailBool(true);
+                          }}
+                          style={{ backgroundColor: "#0A0", color: "#fff" }}
+                          startIcon={
+                            <span className={"fa fa-shopping-cart"}></span>
                           }
-                        }}
-                        style={{ backgroundColor: "#0A0", color: "#fff" }}
-                      >
-                        <span className={"fa fa-shopping-cart"}></span>
-                        Place Order
-                      </Button>
+                        >
+                          Place Order
+                        </Button>
+                      </div>
+                      <div className="col-12">
+                        <PlaceOrder
+                          open={openPlaceOrderDialog}
+                          onClose={() => {
+                            setPlaceOrderDialog(false);
+                          }}
+                        />
+                      </div>
                     </div>
-                    <div className="col-12">
-                      <PlaceOrder
-                        open={openPlaceOrderDialog}
-                        onClose={() => {
-                          setPlaceOrderDialog(false);
-                        }}
-                      />
+
+                    <div className="part">
+                      <div>
+                        <Button
+                          variant="contained"
+                          onClick={handleInviteOpen}
+                          style={{ backgroundColor: "#05ABFF", color: "#fff" }}
+                          startIcon={<span className={"fa fa-share"}></span>}
+                        >
+                          Invite Friend
+                        </Button>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="part">
-                    <div>
-                      <Button
-                        variant="contained"
-                        onClick={handleInviteOpen}
-                        style={{ backgroundColor: "#05ABFF", color: "#fff" }}
+                  <footer
+                    className={"center"}
+                    style={{
+                      textAlign: "center",
+                    }}
+                  >
+                    <p>
+                      Spread the happiness among your friends, juniors, seniors
+                      and connections to celebrate this year's{" "}
+                      <a
+                        href="https://hacktoberfest.digitalocean.com/"
+                        target="_blank"
+                        rel="noopener noreferrer"
                       >
-                        <span className={"fa fa-share"}></span>
-                        Invite Friend
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-
-                <footer
-                  className={"center"}
-                  style={{
-                    textAlign: "center",
-                  }}
-                >
-                  <p>
-                    Spread the happiness among your friends, juniors, seniors
-                    and connections to celebrate this year's{" "}
-                    <a
-                      href="https://hacktoberfest.digitalocean.com/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Scribble Day
-                    </a>
-                  </p>
-                </footer>
-              </Col>
-            </Row>
+                        Scribble Day
+                      </a>
+                    </p>
+                  </footer>
+                </Col>
+              </Row>
+            )}
           </div>
           <div className={"column"}>
             {/* RIGHT COLUMN */}
