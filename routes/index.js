@@ -120,7 +120,8 @@ rtr.post("/create", async (req, res) => {
         } else {
           const formdata = JSON.parse(req.body.formInput);
           const newUser = new User({
-            userId: uuidv4(),
+            // userId: uuidv4(),
+            userId: Math.floor(100000 + Math.random() * 900000),
             name: formdata.name,
             email: req.body.email,
             pin: formdata.pin,
@@ -156,7 +157,7 @@ rtr.post("/create", async (req, res) => {
     console.log(error);
     res.json({
       signUp: false,
-      respMessage: "Something went Wrong",
+      respMessage: "Something went Wrong, try again",
     });
   }
 });

@@ -155,7 +155,7 @@ function Home() {
   const [dimensions, setDimensions] = useState({});
 
   const [openInviteDialog, setInviteDialog] = useState(false);
-  const [openPlaceOrderDialog, setPlaceOrderDialog] = useState(false);
+  const [openPlaceOrderDialog, setPlaceOrderDialog] = useState(true);
   const [openDownloadDialog, setDownloadDialog] = useState(false);
   const [downloadInput, setDownloadInput] = useState();
   const [insertVerifyCode, setInsertVerifyCode] = useState(false);
@@ -197,9 +197,6 @@ function Home() {
   const { userId } = useParams();
 
   useEffect(() => {
-    // let search = window.location.search;
-    // let params = new URLSearchParams(search);
-    // const userId = params.get("id");
     if (userId) {
       (async () => {
         const resp = await axios.post("/friend/param", {
@@ -221,7 +218,10 @@ function Home() {
           setFriendData(null);
           setOpenSnackbar(true);
           setMsgSnackbar(resp.data.respMessage);
-          setTimeout(() => setOpenSnackbar(false), 3000);
+          setTimeout(() => {
+            setOpenSnackbar(false);
+            window.location.replace("/");
+          }, 2000);
         }
       })();
     }
@@ -582,6 +582,7 @@ function Home() {
     const handlePlaceOrderClose = () => {
       onClose();
     };
+    console.log(userdata);
 
     return (
       <Dialog
@@ -1794,22 +1795,26 @@ function Home() {
             <div className="details-of-site">
               <div className="part">
                 <div>
-                  {/* <a
-                    href={"https://rzp.io/l/Up18AjAWH"}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  > */}
                   <Button
                     variant="contained"
                     onClick={() => {
-                      setPlaceOrderDialog(true);
+                      if (userdata) {
+                        {
+                          setPlaceOrderDialog(true);
+                        }
+                      } else {
+                        setMsgSnackbar("Login First");
+                        setOpenSnackbar(true);
+                        setTimeout(() => setOpenSnackbar(false), 1000);
+                        setLandingPageBool(false);
+                        setEnterEmailBool(true);
+                      }
                     }}
                     style={{ backgroundColor: "#0A0", color: "#fff" }}
                   >
                     <span className={"fa fa-shopping-cart"}></span>
                     Place Order
                   </Button>
-                  {/* </a> */}
                 </div>
                 <div className="col-12">
                   <PlaceOrder
