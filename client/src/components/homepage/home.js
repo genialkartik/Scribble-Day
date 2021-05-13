@@ -155,7 +155,7 @@ function Home() {
   const [dimensions, setDimensions] = useState({});
 
   const [openInviteDialog, setInviteDialog] = useState(false);
-  const [openPlaceOrderDialog, setPlaceOrderDialog] = useState(true);
+  const [openPlaceOrderDialog, setPlaceOrderDialog] = useState(false);
   const [openDownloadDialog, setDownloadDialog] = useState(false);
   const [downloadInput, setDownloadInput] = useState();
   const [insertVerifyCode, setInsertVerifyCode] = useState(false);
@@ -662,7 +662,7 @@ function Home() {
             <div className={"column"}>
               <div
                 className="details-of-site"
-                style={{ marginTop: "50px", float: "left", width: '100%' }}
+                style={{ marginTop: "50px", float: "left", width: "100%" }}
               >
                 <div className="part">
                   <ButtonGroup
@@ -697,10 +697,7 @@ function Home() {
                 </div>
               </div>
 
-              <div
-                style={{ textAlign: "left" }}
-                className="d-none d-sm-block"
-              >
+              <div style={{ textAlign: "left" }} className="d-none d-sm-block">
                 {userdata && userDetailsBool && (
                   <>
                     <Button
@@ -782,24 +779,21 @@ function Home() {
                           window.location.replace("/");
                         }}
                         startIcon={<HomeIcon />}
-                      >
-                      </Button>
+                      ></Button>
                     </div>
                     <Link className={"actions"} to={"/resources"}>
                       <Button
                         variant="contained"
                         startIcon={<InfoIcon />}
-                      >
-                      </Button>
+                      ></Button>
                     </Link>
                     <Link className={"actions"} to={"/faq"}>
                       <Button
                         variant="contained"
                         startIcon={<HelpIcon />}
-                      >
-                      </Button>
+                      ></Button>
                     </Link>
-                    <div className={"actions"} style={{flex: '1 0 auto'}}>
+                    <div className={"actions"} style={{ flex: "1 0 auto" }}>
                       <Button
                         variant="contained"
                         onClick={handleMyScribbleClick}
@@ -1773,84 +1767,84 @@ function Home() {
                 </>
               )}
             </div>
-            <Row className="justify-content-center" style={{padding: 16}}>
+            <Row className="justify-content-center" style={{ padding: 16 }}>
               <Col xs={12} sm={10} lg={8} className="d-flex flex-column">
-            <h3
-              className={"center text-center"}
-              style={{
-                color: "#FF8AE2",
-                fontFamily: "sans",
-                textAlign: "left",
-              }}
-            >
-              A Day worth Remembering
-            </h3>
-            <div className="details-of-site">
-              <div className="part">
-                <div>
-                  <Button
-                    variant="contained"
-                    onClick={() => {
-                      if (userdata) {
-                        {
-                          setPlaceOrderDialog(true);
-                        }
-                      } else {
-                        setMsgSnackbar("Login First");
-                        setOpenSnackbar(true);
-                        setTimeout(() => setOpenSnackbar(false), 1000);
-                        setLandingPageBool(false);
-                        setEnterEmailBool(true);
-                      }
-                    }}
-                    style={{ backgroundColor: "#0A0", color: "#fff" }}
-                  >
-                    <span className={"fa fa-shopping-cart"}></span>
-                    Place Order
-                  </Button>
-                </div>
-                <div className="col-12">
-                  <PlaceOrder
-                    open={openPlaceOrderDialog}
-                    onClose={() => {
-                      setPlaceOrderDialog(false);
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div className="part">
-                <div>
-                  <Button
-                    variant="contained"
-                    onClick={handleInviteOpen}
-                    style={{ backgroundColor: "#05ABFF", color: "#fff" }}
-                  >
-                    <span className={"fa fa-share"}></span>
-                    Invite Friend
-                  </Button>
-                </div>
-              </div>
-            </div>
-
-            <footer
-              className={"center"}
-              style={{
-                textAlign: "center"
-              }}
-            >
-              <p>
-                Spread the happiness among your friends, juniors, seniors and
-                connections to celebrate this year's{" "}
-                <a
-                  href="https://hacktoberfest.digitalocean.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <h3
+                  className={"center text-center"}
+                  style={{
+                    color: "#FF8AE2",
+                    fontFamily: "sans",
+                    textAlign: "left",
+                  }}
                 >
-                  Scribble Day
-                </a>
-              </p>
-            </footer>
+                  A Day worth Remembering
+                </h3>
+                <div className="details-of-site">
+                  <div className="part">
+                    <div>
+                      <Button
+                        variant="contained"
+                        onClick={() => {
+                          if (userdata) {
+                            {
+                              setPlaceOrderDialog(true);
+                            }
+                          } else {
+                            setMsgSnackbar("Login First");
+                            setOpenSnackbar(true);
+                            setTimeout(() => setOpenSnackbar(false), 1000);
+                            setLandingPageBool(false);
+                            setEnterEmailBool(true);
+                          }
+                        }}
+                        style={{ backgroundColor: "#0A0", color: "#fff" }}
+                      >
+                        <span className={"fa fa-shopping-cart"}></span>
+                        Place Order
+                      </Button>
+                    </div>
+                    <div className="col-12">
+                      <PlaceOrder
+                        open={openPlaceOrderDialog}
+                        onClose={() => {
+                          setPlaceOrderDialog(false);
+                        }}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="part">
+                    <div>
+                      <Button
+                        variant="contained"
+                        onClick={handleInviteOpen}
+                        style={{ backgroundColor: "#05ABFF", color: "#fff" }}
+                      >
+                        <span className={"fa fa-share"}></span>
+                        Invite Friend
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+
+                <footer
+                  className={"center"}
+                  style={{
+                    textAlign: "center",
+                  }}
+                >
+                  <p>
+                    Spread the happiness among your friends, juniors, seniors
+                    and connections to celebrate this year's{" "}
+                    <a
+                      href="https://hacktoberfest.digitalocean.com/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Scribble Day
+                    </a>
+                  </p>
+                </footer>
               </Col>
             </Row>
           </div>
