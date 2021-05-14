@@ -199,7 +199,7 @@ function Home() {
   useEffect(() => {
     if (userId) {
       (async () => {
-        const resp = await axios.post("/friend/param", {
+        const resp = await axios.post("/api/friend/param", {
           userId: userId,
         });
         if (resp.data && resp.data.found) {
@@ -227,7 +227,7 @@ function Home() {
     }
 
     (async () => {
-      const resp = await axios.get("/check/session");
+      const resp = await axios.get("/api/check/session");
       if (resp.data && resp.data.userdata) {
         setUserData(resp.data.userdata);
       }
@@ -235,7 +235,7 @@ function Home() {
 
     // fecth university list
     (async () => {
-      const resp = await axios.get("/institute/list");
+      const resp = await axios.get("/api/institute/list");
       if (resp.data && resp.data.instituteList) {
         setUniversityList(
           resp.data.instituteList.length > 0 ? resp.data.instituteList : []
@@ -315,12 +315,12 @@ function Home() {
     if (userdata) {
       setLoadingBool(true);
       setUserDetailsBool(true);
-      const scribbleResp = await axios.get("/get/scribbles");
+      const scribbleResp = await axios.get("/api/get/scribbles");
       if (scribbleResp.data) {
         setScribbleList(scribbleResp.data.scribbleList);
       }
       setLoadingBool(false);
-      const universityResp = await axios.post("/university/detail", {
+      const universityResp = await axios.post("/api/university/detail", {
         university: userdata.university,
       });
       if (universityResp.data) {
@@ -358,7 +358,7 @@ function Home() {
           setMsgSnackbar("You cannot send scribble message to yourself");
           setTimeout(() => setOpenSnackbar(false), 3000);
         } else {
-          const resp = await axios.post("/save/scribble", {
+          const resp = await axios.post("/api/save/scribble", {
             friendUserId: friendData.friendUserId,
             friendName: friendData.friendName,
             friendAvatar: friendData.friendAvatar,
@@ -395,7 +395,7 @@ function Home() {
     if (!inputEmail) alert("Insert Email");
     else {
       setActivateLoadingIn("send-verification-code");
-      const resp = await axios.post("/email/verify", {
+      const resp = await axios.post("/api/email/verify", {
         email: inputEmail,
       });
       setActivateLoadingIn("");
@@ -414,7 +414,7 @@ function Home() {
     if (!pinCodeToVerify) alert("Insert PIN to verify");
     else if (!inputEmail) alert("Insert Email first");
     else {
-      const resp = await axios.post("/login", {
+      const resp = await axios.post("/api/login", {
         email: inputEmail,
         pin: pinCodeToVerify,
       });
@@ -447,7 +447,7 @@ function Home() {
   const checkUserAccountWithEmail = async () => {
     if (!inputEmail) alert("Insert Email");
     else {
-      const resp = await axios.post("/profile", {
+      const resp = await axios.post("/api/profile", {
         inputEmail,
       });
       const res = resp.data;
@@ -472,7 +472,7 @@ function Home() {
       formData.set("formInput", JSON.stringify(signupFormInputs));
       formData.set("avatar", avatar);
       formData.set("email", inputEmail);
-      const resp = await axios.post("/create", formData);
+      const resp = await axios.post("/api/create", formData);
       setLoadingBool(false);
       setOpenSnackbar(true);
       setMsgSnackbar(resp.data.respMessage);
@@ -515,7 +515,7 @@ function Home() {
       const formData = new FormData();
       formData.set("name", newUnivesityName);
       formData.set("logo", newUnivesityLogo);
-      const resp = await axios.post("/institute/add", formData);
+      const resp = await axios.post("/api/institute/add", formData);
       setLoadingBool(false);
       setOpenSnackbar(true);
       setTimeout(() => setOpenSnackbar(false), 3000);
@@ -537,7 +537,7 @@ function Home() {
 
   const handleSearchForStudents = async (uni) => {
     setScribbleList([]);
-    const resp = await axios.post("/friends/list", {
+    const resp = await axios.post("/api/friends/list", {
       university: uni,
     });
     if (resp.data && resp.data.friendsList) {
@@ -820,7 +820,7 @@ function Home() {
                         variant="contained"
                         size="small"
                         onClick={async () => {
-                          const resp = await axios.get("/logout");
+                          const resp = await axios.get("/api/logout");
                           if (resp.data.loggedout) {
                             setUserDetailsBool(false);
                             setLandingPageBool(true);

@@ -2,6 +2,9 @@ const rtr = require("express").Router();
 const { v4: uuidv4 } = require("uuid");
 const mv = require("mv");
 const AWS = require("aws-sdk");
+const bcrypt = require("bcryptjs");
+const nodemailer = require("nodemailer");
+
 const User = require("../models/Users");
 const Institute = require("../models/Institutes");
 const Scribble = require("../models/Scribbles");
@@ -316,15 +319,6 @@ rtr.post("/friend/param", async (req, res) => {
   }
 });
 
-const bcrypt = require("bcryptjs");
-const nodemailer = require("nodemailer");
-
-
-// NOTE:
-// Make your email less secure, to use nodemailer.
-// Link to make less secure: https://myaccount.google.com/u/0/lesssecureapps?pli=1&rapt=AEjHL4MiXjAmnxssNISAZTf3xDYb0jRwrSvvy8ltHNw2Zk0czfB3u7zk9KIcMBk9Za0-Itwes0x0Z-liKD7fZvwthz1j-15fDA
-
-// to reset pin
 rtr.post("/user/sendcode", async (req, res) => {
   try {
     const profileResp = await User.findOne({ email: req.body.email });
@@ -465,4 +459,5 @@ rtr.post("/email/verify", async (req, res) => {
     });
   }
 });
+
 module.exports = rtr;
