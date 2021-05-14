@@ -42,8 +42,7 @@ mongoose
   .then(() => console.log("mongodb connected"))
   .catch((err) => console.log(err));
 
-app.use(require("./routes/index"));
-app.use(require("./routes/verify"));
+app.use('/api', require("./routes/index"));
 
 // Serve static assets in production
 if (process.env.NODE_ENV === "production") {
