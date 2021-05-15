@@ -90,6 +90,7 @@ export default function ShareCard(props) {
                 setOpenSnackbar(true);
                 setMsgSnackbar("Copied");
                 setTimeout(() => setOpenSnackbar(false), 1000);
+                return false;
               }}
             >
               <span className={"fa fa-copy"}></span>
@@ -106,6 +107,7 @@ export default function ShareCard(props) {
                 setOpenSnackbar(false);
                 window.open("https://www.instagram.com/");
               }, 1000);
+              return false;
             }}
           >
             <span className={"fa fa-instagram"}></span>
@@ -143,7 +145,7 @@ export default function ShareCard(props) {
           <a
             target="_blank"
             rel="noopener noreferrer"
-            href="https://twitter.com/intent/tweet?url=www.foaxx.com&text=Let's%20celebrate%20%F0%9F%91%95Scribble%20Day%202021%20%F0%9F%A5%B3%20Write%20a%20Scribble%20for%20me%20%F0%9F%98%8E&via=genialkartik"
+            href="https://twitter.com/intent/tweet?url=www.foaxx.com&text=Let's%20celebrate%20%F0%9F%91%95Scribble%20Day%202021%20%F0%9F%A5%B3%20Write%20a%20Scribble%20for%20me%20%F0%9F%98%8E"
           >
             <Button
               variant="contained"
@@ -156,7 +158,7 @@ export default function ShareCard(props) {
             </Button>
           </a>
           <a
-            href="whatsapp://send?text=Pandemic%20could%20ruin%20our%20studies%20But%20not%20our%20last%20day%20of%20college%20%7C%20%20%F0%9F%91%95%20Happy%20Scribble%20Day%202021%20%F0%9F%A5%B3%20%7C%20%20%20Write%20a%20Scribble%20for%20me%20%20%20https%3A//foaxx.com/%20%20%20#scribbleday2021%20%20"
+            href="whatsapp://send?text=Let's%20celebrate%20%F0%9F%91%95Scribble%20Day%202021%20%F0%9F%A5%B3%20Write%20a%20Scribble%20for%20me%20%F0%9F%98%8Ehttps%3A//foaxx.com/%20%20%20#scribbleday2021%20%20"
             data-action="share/whatsapp/share"
             target="_blank"
             rel="noopener noreferrer"
