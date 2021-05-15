@@ -81,37 +81,36 @@ export default function ShareCard(props) {
       </CardContent>
       <CardActions disableSpacing>
         <div className="part socials">
-          {!props.userdata && (
-            <Button
-              variant="contained"
-              color="default"
-              onClick={() => {
-                navigator.clipboard.writeText(shareText);
-                setOpenSnackbar(true);
-                setMsgSnackbar("Copied");
-                setTimeout(() => setOpenSnackbar(false), 1000);
-                return false;
-              }}
-            >
-              <span className={"fa fa-copy"}></span>
-            </Button>
-          )}
           <Button
             variant="contained"
-            style={{ backgroundColor: "#8A374A", color: "#fff" }}
+            color="default"
             onClick={() => {
               navigator.clipboard.writeText(shareText);
               setOpenSnackbar(true);
-              setMsgSnackbar("Copied! share on Instagram now");
-              setTimeout(() => {
-                setOpenSnackbar(false);
-                window.open("https://www.instagram.com/");
-              }, 1000);
+              setMsgSnackbar("Copied");
+              setTimeout(() => setOpenSnackbar(false), 1000);
               return false;
             }}
           >
-            <span className={"fa fa-instagram"}></span>
+            <span className={"fa fa-copy"}></span>
           </Button>
+          <a href="https://www.instagram.com/">
+            <Button
+              variant="contained"
+              style={{ backgroundColor: "#8A374A", color: "#fff" }}
+              onClick={() => {
+                navigator.clipboard.writeText(shareText);
+                setOpenSnackbar(true);
+                setMsgSnackbar("Copied! share on Instagram now");
+                setTimeout(() => {
+                  setOpenSnackbar(false);
+                }, 1000);
+                return false;
+              }}
+            >
+              <span className={"fa fa-instagram"}></span>
+            </Button>
+          </a>
           <a
             target="_blank"
             rel="noopener noreferrer"
@@ -173,6 +172,16 @@ export default function ShareCard(props) {
               <span className={"fa fa-whatsapp"}></span>
             </Button>
           </a>
+
+          <Snackbar
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "center",
+            }}
+            open={openSnackbar}
+            autoHideDuration={1000}
+            message={msgSnackbar}
+          />
         </div>
       </CardActions>
 
@@ -181,6 +190,7 @@ export default function ShareCard(props) {
           vertical: "top",
           horizontal: "center",
         }}
+        style={{ zIndex: 10 }}
         open={openSnackbar}
         autoHideDuration={1000}
         message={msgSnackbar}
