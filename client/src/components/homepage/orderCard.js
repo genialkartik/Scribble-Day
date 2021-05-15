@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
 
 function getSteps() {
   return [
-    "Click on Checkout",
+    "First, Click on Checkout",
     "Order Confirmation Details",
     "Shipping Details",
   ];
@@ -52,15 +52,15 @@ function getStepContent(step) {
       return `Clicking on 'Checkout', you will be directed to Razorpay Payment Gateway. 
       On Payment Successful, You will receive an Email and SMS with Order confirmation`;
     case 1:
-      return `With in 12 hours of Order Confirmation, you will receive another email from 
+      return `Within 12 hours of Order Confirmation, you will receive another email from 
       'info@ethicallearner.com' with subject 'Scribble Order Received Successfully' and 
-      a Call (in office hours). This email confirms your Order has been Received Successfully'. 
+      a Call (in-office hours). This email confirms your Order has been Received Successfully'. 
       Any Query? Reach us 24/7 on info@ethicallearner.com`;
     case 2:
       return `Now let us fabricate your T-shirt with your memories you gathered in 
       your graduation with friends and friends of friend`;
     default:
-      return `With in a week, you will receive your Shipping Details on your registered
+      return `Within a week, you will receive your Shipping Details on your registered
       Email with Order ID, Tracking Id and Shipping Details`;
   }
 }

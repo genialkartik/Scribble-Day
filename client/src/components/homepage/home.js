@@ -1362,7 +1362,7 @@ function Home() {
                               variant="contained"
                               onClick={() => {
                                 navigator.clipboard.writeText(
-                                  "Hey dear friend, Lets Celebrate Scribble Day 2021 virtullay together | Write a Scribble Message for me || www.thirsty-goldwasser-7273c9.netlify.app/"
+                                  "Hey dear friend, Lets Celebrate Scribble Day 2021 virtullay together | Write a Scribble Message for me || www.foaxx.com/"
                                 );
                                 setOpenSnackbar(true);
                                 setMsgSnackbar(
@@ -1381,7 +1381,7 @@ function Home() {
                           <a
                             target="_blank"
                             rel="noopener noreferrer"
-                            href="https://www.linkedin.com/shareArticle?url=www.thirsty-goldwasser-7273c9.netlify.app/%20&title=Pandemic%20could%20ruin%20our%20studies%20But%20not%20our%20last%20day%20of%20college%20%7C%20%20%F0%9F%91%95%20Happy%20Scribble%20Day%202021%20%F0%9F%A5%B3%20%7C%20%20%20Write%20a%20Scribble%20for%20me%20"
+                            href="https://www.linkedin.com/shareArticle?url=www.foaxx.com/%20&title=Pandemic%20could%20ruin%20our%20studies%20But%20not%20our%20last%20day%20of%20college%20%7C%20%20%F0%9F%91%95%20Happy%20Scribble%20Day%202021%20%F0%9F%A5%B3%20%7C%20%20%20Write%20a%20Scribble%20for%20me%20"
                           >
                             <Button
                               variant="contained"
@@ -1401,7 +1401,7 @@ function Home() {
                             }}
                             onClick={() => {
                               window.open(
-                                "https://www.facebook.com/sharer/sharer.php?u=https%3A//thirsty-goldwasser-7273c9.netlify.app"
+                                "https://www.facebook.com/sharer/sharer.php?u=https%3A//foaxx.com"
                               );
                               return false;
                             }}
@@ -1412,7 +1412,7 @@ function Home() {
                             target="_blank"
                             rel="noopener noreferrer"
                             href={
-                              "https://twitter.com/intent/tweet?text=Pandemic%20could%20ruin%20our%20studies%20But%20not%20our%20last%20day%20of%20college%20%7C%0A%0A%F0%9F%91%95%20Happy%20Scribble%20Day%202021%20%F0%9F%A5%B3%20%7C%20%0A%0AWrite%20a%20Scribble%20for%20me%20%0A%0Ahttps%3A//thirsty-goldwasser-7273c9.netlify.app/u/" +
+                              "https://twitter.com/intent/tweet?text=Pandemic%20could%20ruin%20our%20studies%20But%20not%20our%20last%20day%20of%20college%20%7C%0A%0A%F0%9F%91%95%20Happy%20Scribble%20Day%202021%20%F0%9F%A5%B3%20%7C%20%0A%0AWrite%20a%20Scribble%20for%20me%20%0A%0Ahttps%3A//foaxx.com/u/" +
                               userdata.userId +
                               "%20%0A%0A%23scribbleday2021%20"
                             }
@@ -1428,7 +1428,7 @@ function Home() {
                             </Button>
                           </a>
                           <a
-                            href="https://web.whatsapp.com/send?text=Pandemic%20could%20ruin%20our%20studies%20But%20not%20our%20last%20day%20of%20college%20%7C%20%20%F0%9F%91%95%20Happy%20Scribble%20Day%202021%20%F0%9F%A5%B3%20%7C%20%20%20Write%20a%20Scribble%20for%20me%20%20%20https%3A//thirsty-goldwasser-7273c9.netlify.app/%20%20%20#scribbleday2021%20%20"
+                            href="https://web.whatsapp.com/send?text=Pandemic%20could%20ruin%20our%20studies%20But%20not%20our%20last%20day%20of%20college%20%7C%20%20%F0%9F%91%95%20Happy%20Scribble%20Day%202021%20%F0%9F%A5%B3%20%7C%20%20%20Write%20a%20Scribble%20for%20me%20%20%20https%3A//foaxx.com/%20%20%20#scribbleday2021%20%20"
                             data-action="share/whatsapp/share"
                             target="_blank"
                             rel="noopener noreferrer"
