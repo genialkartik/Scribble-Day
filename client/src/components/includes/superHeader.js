@@ -1,6 +1,7 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import announcement from "../../assets/announcement.png";
+import GitHubIcon from "@material-ui/icons/GitHub";
 
 export default function SuperHeader() {
   return (
@@ -19,6 +20,9 @@ export default function SuperHeader() {
               Placing ORDER of your SCRRIBLE TSHIRT
             </a>
           </Col>
+          <div>
+            <GitHubIcon />
+          </div>
         </Row>
       </Container>
     </div>
