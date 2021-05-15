@@ -199,9 +199,12 @@ function Home() {
   useEffect(() => {
     if (userId) {
       (async () => {
-        const resp = await axios.get("/friend/param", {
-          userId: userId,
-        });
+        const resp = await axios.post(
+          process.env.REACT_APP_FETCH_URL + "/friend/param",
+          {
+            userId: userId,
+          }
+        );
         if (resp.data && resp.data.found) {
           const res = resp.data;
           setUniversity(res.university.name);
@@ -227,7 +230,9 @@ function Home() {
     }
 
     (async () => {
-      const resp = await axios.post("/check/session");
+      const resp = await axios.get(
+        process.env.REACT_APP_FETCH_URL + "/check/session"
+      );
       if (resp.data && resp.data.userdata) {
         setUserData(resp.data.userdata);
       }
@@ -235,7 +240,9 @@ function Home() {
 
     // fecth university list
     (async () => {
-      const resp = await axios.post("/institute/list");
+      const resp = await axios.get(
+        process.env.REACT_APP_FETCH_URL + "/institute/list"
+      );
       if (resp.data && resp.data.instituteList) {
         setUniversityList(
           resp.data.instituteList.length > 0 ? resp.data.instituteList : []
@@ -315,14 +322,19 @@ function Home() {
     if (userdata) {
       setLoadingBool(true);
       setUserDetailsBool(true);
-      const scribbleResp = await axios.post("/get/scribbles");
+      const scribbleResp = await axios.get(
+        process.env.REACT_APP_FETCH_URL + "/get/scribbles"
+      );
       if (scribbleResp.data) {
         setScribbleList(scribbleResp.data.scribbleList);
       }
       setLoadingBool(false);
-      const universityResp = await axios.get("/university/detail", {
-        university: userdata.university,
-      });
+      const universityResp = await axios.post(
+        process.env.REACT_APP_FETCH_URL + "/university/detail",
+        {
+          university: userdata.university,
+        }
+      );
       if (universityResp.data) {
         setUniversityLogo(universityResp.data.university.logo);
       }
@@ -358,18 +370,21 @@ function Home() {
           setMsgSnackbar("You cannot send scribble message to yourself");
           setTimeout(() => setOpenSnackbar(false), 3000);
         } else {
-          const resp = await axios.get("/save/scribble", {
-            friendUserId: friendData.friendUserId,
-            friendName: friendData.friendName,
-            friendAvatar: friendData.friendAvatar,
-            dimensions,
-            message,
-            angle: rotateValue,
-            colorCode: messageColor,
-            fontStyle: fontFam,
-            fontSize: messageFont,
-            side: tshirtSide,
-          });
+          const resp = await axios.post(
+            process.env.REACT_APP_FETCH_URL + "/save/scribble",
+            {
+              friendUserId: friendData.friendUserId,
+              friendName: friendData.friendName,
+              friendAvatar: friendData.friendAvatar,
+              dimensions,
+              message,
+              angle: rotateValue,
+              colorCode: messageColor,
+              fontStyle: fontFam,
+              fontSize: messageFont,
+              side: tshirtSide,
+            }
+          );
           setLoadingBool(false);
           setOpenSnackbar(true);
           setTimeout(() => setOpenSnackbar(false), 1000);
@@ -395,9 +410,12 @@ function Home() {
     if (!inputEmail) alert("Insert Email");
     else {
       setActivateLoadingIn("send-verification-code");
-      const resp = await axios.get("/email/verify", {
-        email: inputEmail,
-      });
+      const resp = await axios.post(
+        process.env.REACT_APP_FETCH_URL + "/email/verify",
+        {
+          email: inputEmail,
+        }
+      );
       setActivateLoadingIn("");
       if (resp.data.sent) {
         setAskedForSendVerificationCode(false);
@@ -414,10 +432,13 @@ function Home() {
     if (!pinCodeToVerify) alert("Insert PIN to verify");
     else if (!inputEmail) alert("Insert Email first");
     else {
-      const resp = await axios.get("/login", {
-        email: inputEmail,
-        pin: pinCodeToVerify,
-      });
+      const resp = await axios.post(
+        process.env.REACT_APP_FETCH_URL + "/login",
+        {
+          email: inputEmail,
+          pin: pinCodeToVerify,
+        }
+      );
       if (resp.data.loggedIn) {
         setLandingPageBool(true);
         setInsertVerifyCode(false);
@@ -447,9 +468,12 @@ function Home() {
   const checkUserAccountWithEmail = async () => {
     if (!inputEmail) alert("Insert Email");
     else {
-      const resp = await axios.get("/profile", {
-        inputEmail,
-      });
+      const resp = await axios.post(
+        process.env.REACT_APP_FETCH_URL + "/profile",
+        {
+          inputEmail,
+        }
+      );
       const res = resp.data;
       setEnterEmailBool(false);
       if (!res.profile) {
@@ -472,7 +496,10 @@ function Home() {
       formData.set("formInput", JSON.stringify(signupFormInputs));
       formData.set("avatar", avatar);
       formData.set("email", inputEmail);
-      const resp = await axios.get("/create", formData);
+      const resp = await axios.post(
+        process.env.REACT_APP_FETCH_URL + "/create",
+        formData
+      );
       setLoadingBool(false);
       setOpenSnackbar(true);
       setMsgSnackbar(resp.data.respMessage);
@@ -515,7 +542,10 @@ function Home() {
       const formData = new FormData();
       formData.set("name", newUnivesityName);
       formData.set("logo", newUnivesityLogo);
-      const resp = await axios.get("/institute/add", formData);
+      const resp = await axios.post(
+        process.env.REACT_APP_FETCH_URL + "/institute/add",
+        formData
+      );
       setLoadingBool(false);
       setOpenSnackbar(true);
       setTimeout(() => setOpenSnackbar(false), 3000);
@@ -537,9 +567,12 @@ function Home() {
 
   const handleSearchForStudents = async (uni) => {
     setScribbleList([]);
-    const resp = await axios.get("/friends/list", {
-      university: uni,
-    });
+    const resp = await axios.post(
+      process.env.REACT_APP_FETCH_URL + "/friends/list",
+      {
+        university: uni,
+      }
+    );
     if (resp.data && resp.data.friendsList) {
       setFriendList(
         resp.data.friendsList.length > 0 ? resp.data.friendsList : []
@@ -820,7 +853,9 @@ function Home() {
                         variant="contained"
                         size="small"
                         onClick={async () => {
-                          const resp = await axios.post("/logout");
+                          const resp = await axios.get(
+                            process.env.REACT_APP_FETCH_URL + "/logout"
+                          );
                           if (resp.data.loggedout) {
                             setUserDetailsBool(false);
                             setLandingPageBool(true);
