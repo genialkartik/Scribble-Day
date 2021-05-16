@@ -106,6 +106,5 @@ dist
 # custom
 *.pem
 .DS_Store
-
-### custom
 *.txt
+config.*

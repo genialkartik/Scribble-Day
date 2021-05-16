@@ -92,9 +92,9 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: "#bbb",
     },
   },
-  tabLabel:{
-    minHeight: 48
-  }
+  tabLabel: {
+    minHeight: 48,
+  },
 }));
 
 function ValueLabelComponent(props) {
@@ -1008,7 +1008,7 @@ function Home() {
                               }
                             }}
                             onChange={(e) => {
-                              setUniversity(e.target.value)
+                              setUniversity(e.target.value);
                               setIsFixed(false);
                               setDragBool(false);
                               searchFilterFunction(
@@ -1466,7 +1466,7 @@ function Home() {
                                 label="Scribbles Received"
                                 value="Received"
                                 classes={{
-                                  labelIcon: classes.tabLabel
+                                  labelIcon: classes.tabLabel,
                                 }}
                               />
 
@@ -1480,7 +1480,7 @@ function Home() {
                                 label="Scribbles Sent"
                                 value="Sent"
                                 classes={{
-                                  labelIcon: classes.tabLabel
+                                  labelIcon: classes.tabLabel,
                                 }}
                               />
                             </Tabs>
@@ -1504,22 +1504,24 @@ function Home() {
                                     }}
                                   >
                                     <div className="scr-msg-wrapper">
-                                      <div style={{
-                                        display: 'flex',
-                                        justifyContent: 'space-between'
-                                      }}>
-                                      <div>
-                                        <Avatar
-                                          aria-label="recipe"
-                                          className={classes.avatar}
-                                          src={
-                                            scribbleBool === "Sent"
-                                              ? scribble.sendToAvatar
-                                              : scribble.sendByAvatar
-                                          }
-                                        ></Avatar>
-                                      </div>
-                                      <div>
+                                      <div
+                                        style={{
+                                          display: "flex",
+                                          justifyContent: "space-between",
+                                        }}
+                                      >
+                                        <div>
+                                          <Avatar
+                                            aria-label="recipe"
+                                            className={classes.avatar}
+                                            src={
+                                              scribbleBool === "Sent"
+                                                ? scribble.sendToAvatar
+                                                : scribble.sendByAvatar
+                                            }
+                                          ></Avatar>
+                                        </div>
+                                        <div>
                                           {scribbleBool === "Received" && (
                                             <Link
                                               to={`/u/${scribble.sendByUserId}`}
@@ -1552,15 +1554,21 @@ function Home() {
                                             }
                                           />
                                         </div>
-                                        </div>
-                                        <div>
-                                        <span style={{fontWeight: 'bold', color:'#fff'}}>{
-                                        scribbleBool === "Sent"
-                                          ? scribble.sendToName
-                                          : scribble.sendByName
-                                        }</span><br/>
+                                      </div>
+                                      <div>
+                                        <span
+                                          style={{
+                                            fontWeight: "bold",
+                                            color: "#fff",
+                                          }}
+                                        >
+                                          {scribbleBool === "Sent"
+                                            ? scribble.sendToName
+                                            : scribble.sendByName}
+                                        </span>
+                                        <br />
                                         {scribble.message}
-                                        </div>
+                                      </div>
                                     </div>
                                     {/* <CardHeader
                                       avatar={
@@ -1709,8 +1717,11 @@ function Home() {
                             </Button>
                           </a>
                           <a
-                            href={windowWidth>568?`https://web.whatsapp.com/send?text=Let's%20celebrate%20%F0%9F%91%95Scribble%20Day%202021%20%F0%9F%A5%B3%20Write%20a%20Scribble%20for%20me%20%F0%9F%98%8Ehttps%3A//foaxx.com/u/${userdata.userId}%20%20%20#scribbleday2021%20%20`:
-                            `whatsapp://send?text=Let's%20celebrate%20%F0%9F%91%95Scribble%20Day%202021%20%F0%9F%A5%B3%20Write%20a%20Scribble%20for%20me%20%F0%9F%98%8Ehttps%3A//foaxx.com/u/${userdata.userId}%20%20%20#scribbleday2021%20%20`}
+                            href={
+                              windowWidth > 568
+                                ? `https://web.whatsapp.com/send?text=Let's%20celebrate%20%F0%9F%91%95Scribble%20Day%202021%20%F0%9F%A5%B3%20Write%20a%20Scribble%20for%20me%20%F0%9F%98%8Ehttps%3A//foaxx.com/u/${userdata.userId}%20%20%20#scribbleday2021%20%20`
+                                : `whatsapp://send?text=Let's%20celebrate%20%F0%9F%91%95Scribble%20Day%202021%20%F0%9F%A5%B3%20Write%20a%20Scribble%20for%20me%20%F0%9F%98%8Ehttps%3A//foaxx.com/u/${userdata.userId}%20%20%20#scribbleday2021%20%20`
+                            }
                             data-action="share/whatsapp/share"
                             target="_blank"
                             rel="noopener noreferrer"
@@ -1946,7 +1957,7 @@ function Home() {
                   )}
                   {newUniversityBool && (
                     <>
-                      <Form.Control 
+                      <Form.Control
                         className={"col-12 form"}
                         type="text"
                         placeholder="Univesity Name"
@@ -2076,14 +2087,19 @@ function Home() {
                       borderRadius: "25px",
                       paddingInline: "30px",
                       paddingBlock: "10px",
-                      marginLeft: 'auto',
-                      marginRight: 'auto'
+                      marginLeft: "auto",
+                      marginRight: "auto",
                     }}
                   >
-                    <RateReviewIcon size="small" /> <span style={{
-                      fontWeight: 'bold',
-                      color: '#fff'
-                    }}>{786 + scribblesCount}</span> {" "}
+                    <RateReviewIcon size="small" />{" "}
+                    <span
+                      style={{
+                        fontWeight: "bold",
+                        color: "#fff",
+                      }}
+                    >
+                      {786 + scribblesCount}
+                    </span>{" "}
                     scribbles
                   </p>
                   <div className="details-of-site">
@@ -2176,6 +2192,11 @@ function Home() {
               ) : tshirtSide === "front" ? (
                 <Image
                   alt=""
+                  style={{
+                    position: "relative",
+                    top: "40px",
+                    transform: "scale(1.2)",
+                  }}
                   src={require("../../assets/femalefront.png")}
                   className={"male-front loading"}
                   ref={imageRef}
@@ -2183,6 +2204,11 @@ function Home() {
               ) : (
                 <Image
                   alt=""
+                  style={{
+                    position: "relative",
+                    top: "40px",
+                    transform: "scale(1.2)",
+                  }}
                   src={require("../../assets/femaleback.png")}
                   className={"male-front loading"}
                   ref={imageRef}
@@ -2204,30 +2230,31 @@ function Home() {
                   />
                 )}
               </div>
-              {scribbleList
-                .filter((item) => item.side === tshirtSide)
-                .map((scribble) => (
-                  <p
-                    key={scribble._id}
-                    style={{
-                      textAlign: "center",
-                      rotate: scribble.angle + "deg",
-                      color: scribble.colorCode,
-                      fontSize: getFontSize(scribble.fontSize, imageRefWidth),
-                      fontFamily: scribble.fontStyle,
-                      position: "absolute",
-                      // transform: `scale(${(imageRefWidth/616)+0.204})`,
-                      top: `${scribble.dimensions.top}%`,
-                      left: `${scribble.dimensions.left}%`,
-                      width: "25%",
-                    }}
-                  >
-                    {scribble.message}
-                    <span>
-                      <br />~ {scribble.sendByName}
-                    </span>
-                  </p>
-                ))}
+              {scribbleBool === "Received" &&
+                scribbleList
+                  .filter((item) => item.side === tshirtSide)
+                  .map((scribble) => (
+                    <p
+                      key={scribble._id}
+                      style={{
+                        textAlign: "center",
+                        rotate: scribble.angle + "deg",
+                        color: scribble.colorCode,
+                        fontSize: getFontSize(scribble.fontSize, imageRefWidth),
+                        fontFamily: scribble.fontStyle,
+                        position: "absolute",
+                        // transform: `scale(${(imageRefWidth/616)+0.204})`,
+                        top: `${scribble.dimensions.top}%`,
+                        left: `${scribble.dimensions.left}%`,
+                        width: "25%",
+                      }}
+                    >
+                      {scribble.message}
+                      <span>
+                        <br />~ {scribble.sendByName}
+                      </span>
+                    </p>
+                  ))}
               <Draggable bounds="parent" disabled={dragBool}>
                 <div
                   className={"scribble-message1"}
