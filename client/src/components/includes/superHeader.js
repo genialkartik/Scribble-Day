@@ -20,7 +20,7 @@ export default function SuperHeader() {
               Placing ORDER of your SCRRIBLE TSHIRT
             </a>
           </Col>
-          <div>
+          <div className="nav-github-icon">
             <GitHubIcon />
           </div>
         </Row>

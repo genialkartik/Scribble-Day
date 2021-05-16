@@ -7,6 +7,7 @@
   /* height: 40px !important; */
   padding: 0 !important;
   font-size: 85%;
+  position: relative;
 }
 .appbody .main {
   min-height: calc(100vh - 40px);
@@ -402,4 +403,11 @@ input:-internal-autofill-selected {
   display: block;
   min-width: 200px;
   min-height: 100px;
+}
+
+.nav-github-icon{
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
 }
