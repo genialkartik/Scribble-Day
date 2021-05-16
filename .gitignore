@@ -107,4 +107,4 @@ dist
 *.pem
 .DS_Store
 *.txt
-config.*
+config.js
