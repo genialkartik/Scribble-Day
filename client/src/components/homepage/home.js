@@ -2191,6 +2191,8 @@ function Home() {
                   ) : (
                     <div
                       style={{
+                        msTransform: `rotate(${rotateValue}deg)`,
+                        transform: `rotate(${rotateValue}deg)`,
                         rotate: rotateValue + "deg",
                         color: messageColor,
                         fontSize: messageFont,
@@ -2199,7 +2201,7 @@ function Home() {
                     >
                       <p>
                         Select a Friend to write a Scribble message and Move
-                        this block
+                        this block {rotateValue}
                       </p>
                     </div>
                   )}

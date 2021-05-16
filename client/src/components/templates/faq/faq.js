@@ -108,12 +108,10 @@ export default function Faq() {
               </div>
               <div id="collapseOne" className="panel-collapse collapse in">
                 <div className="card-block">
-                  While you may enjoy writing the scribble at leisure, we advise
-                  you to register at the time of check out for the first time to
-                  enjoy a superior shopping experience every time you visit us.
-                  We will also keep you updated on your orders and refunds
-                  through SMS/email. We will require you to register at
-                  checkout.
+                  Yes, Before writing a scribble message to your friends you
+                  have to register yourself by using your email, and after the
+                  successful verification of email, you are ready to write a
+                  scribble for your friends.
                 </div>
               </div>
             </div>
@@ -126,13 +124,44 @@ export default function Faq() {
                     data-parent="#accordion"
                     href="#collapseTen"
                   >
-                    How often do you come up with a new design/collection?{" "}
+                    How can I get scribbles from my friends?
                   </a>
                 </h4>
               </div>
               <div id="collapseTen" className="panel-collapse collapse">
                 <div className="card-block">
-                  The core of the brand is to provide branded scribble t-shirts.
+                  In order to get scribbles from your friends, you have to share
+                  your scribble link through WhatsApp, Instagram or by using any
+                  other social media platform. Use methods to share your
+                  scribble with friends:
+                  <ul>
+                    <li>
+                      Register an account, Goto 'My Scribbles' and click on any
+                      social media icon to share your profile link
+                    </li>
+                    <li>
+                      Ask your friend to join{" "}
+                      <strong>
+                        <a href="/" target="_blank" rel="norefferrer">
+                          www.foaxx.com
+                        </a>
+                      </strong>{" "}
+                      and find your profile by your university and your Name.
+                    </li>
+                    <li>
+                      Download your Scribble T-shirt and share your profile link
+                      or{" "}
+                      <strong>
+                        <a href="/" target="_blank" rel="norefferrer">
+                          www.foaxx.com
+                        </a>
+                      </strong>{" "}
+                    </li>
+                    <li>
+                      Click on 'Invite Friend and share text or click on any
+                      social media Icon to let your friend about us.
+                    </li>
+                  </ul>
                 </div>
               </div>
             </div>
@@ -145,13 +174,18 @@ export default function Faq() {
                     data-parent="#accordion"
                     href="#collapseEleven"
                   >
-                    Apart from an online presence do you also have a Retail
-                    presence?
+                    Is there any limit to writing scribble messages on T-shirts?
                   </a>
                 </h4>
               </div>
               <div id="collapseEleven" className="panel-collapse collapse">
-                <div className="card-block">No!</div>
+                <div className="card-block">
+                  Gosh!! No. There is no limit to getting scribble messages from
+                  your friends as such if you are having enough space on your
+                  virtual Tshirt. We want to create memories with you, how could
+                  we think as such! <br />
+                  Though to friends can only write one scribble to each other.
+                </div>
               </div>
             </div>
 
@@ -165,16 +199,17 @@ export default function Faq() {
                     data-parent="#accordion"
                     href="#collapseTwo"
                   >
-                    How do you ship the purchased items? Are there any charges?
+                    Can I order my scribble t-shirt?
                   </a>
                 </h4>
               </div>
               <div id="collapseTwo" className="panel-collapse collapse">
                 <div className="card-block">
-                  At Foaxx, we ensure that our customers receive the purchased
-                  items in the finest condition and on time. Depending on your
-                  location, the product will be delivered to your doorstep upto
-                  7- 10 days. We offer free shipping on scribble day T-shirts.
+                  Yes of course! We're here to no just create memories but also
+                  to share and safely deliver to you.
+                  <br /> You can order your scribble t-shirt, by clicking on the
+                  “Place Order” button. A detailed instructions will be shown
+                  accordingly.
                 </div>
               </div>
             </div>
@@ -187,38 +222,16 @@ export default function Faq() {
                     data-parent="#accordion"
                     href="#collapseThree"
                   >
-                    I want to place my t-shirt - what are the steps?
+                    How could I pay for my Scribble T-shirt?
                   </a>
                 </h4>
               </div>
               <div id="collapseThree" className="panel-collapse collapse">
                 <div className="card-block">
-                  The steps involved in this process are really simple. All you
-                  need to do is:
-                  <ul>
-                    <li>Register an account</li>
-                    <li>
-                      Invite your friends to write Scribbles on your tshirt
-                    </li>
-                    <li>
-                      Click on{" "}
-                      <strong>
-                        <a href="/">Place Order</a>
-                      </strong>{" "}
-                      button and Place the order on the page your are directed
-                      to.
-                    </li>
-                    <li>
-                      Now!! give us to verify your order. You'll receive an
-                      email regarding the order details.
-                    </li>
-                    <li>
-                      You'll might experience a delay in shipping or order due
-                      to Pandemic cause by Covid-19. But believe us, patience of
-                      few days is better than not celebrating Scribble Day (the
-                      best moment of everyone's life, we believe)
-                    </li>
-                  </ul>
+                  You could pay for your Scribble T-shirt by using any payment
+                  method. By clicking on 'Place Order' followed by 'Checkout',
+                  you'll be directed to Razorpay portal. There you could make
+                  your payment by using any payment method you like.
                 </div>
               </div>
             </div>
@@ -237,9 +250,9 @@ export default function Faq() {
               </div>
               <div id="collapseFive" className="panel-collapse collapse">
                 <div className="card-block">
-                  At present, we are only offering local shipping of orders. But
-                  we would love to help you out, so call our Foaxx executive and
-                  we can see if it can be worked out.
+                  At present, we are only offering local shipping orders in
+                  India Only. But we would love to help you out, so call our
+                  Foaxx executive and we can see if it can be worked out.
                   <br />
                 </div>
               </div>
@@ -259,11 +272,12 @@ export default function Faq() {
               </div>
               <div id="collapseSix" className="panel-collapse collapse">
                 <div className="card-block">
-                  You cannot change your shipping address at the time of placing
-                  the order in your account. But you cannot change the address
-                  after placing your order. You will be required to send us an
-                  email with a Subject 'Change Shipping Address' and previous
-                  order details, the new address will also be required.
+                  You cannot change your shipping address after placing the
+                  order from your account. <br />
+                  But you could send us an email with a Subject 'Change My
+                  Shipping Address RegId:123456', previous order details (a PDF,
+                  email, or Receipt), and the new Address where you want your
+                  package to be delivered.
                 </div>
               </div>
             </div>
@@ -276,13 +290,16 @@ export default function Faq() {
                     data-parent="#accordion"
                     href="#collapseEight"
                   >
-                    What do I need to do if I have forgotten my pin?
+                    How long will it take the package delivered to my doorsteps,
+                    safe and secure?
                   </a>
                 </h4>
               </div>
               <div id="collapseEight" className="panel-collapse collapse">
                 <div className="card-block">
-                  Just drop an email to info@ethicallearner.com
+                  Firstly, Thank you for trusting us and placing your order at
+                  Foaxx.com. Your purchase will be delivered at your shipping
+                  address upto 10-14 days of placing an order.
                 </div>
               </div>
             </div>
@@ -306,8 +323,6 @@ export default function Faq() {
                 </div>
               </div>
             </div>
-
-            <div className="faqHeader">Guidelines</div>
             <div className="card ">
               <div className="card-header">
                 <h4 className="card-header">
@@ -315,23 +330,49 @@ export default function Faq() {
                     className="accordion-toggle collapsed"
                     data-toggle="collapse"
                     data-parent="#accordion"
-                    href="#collapseFour"
+                    href="#collapseNine"
                   >
-                    What happens if your courier is unable to deliver the
-                    product?
+                    What happens if my package does not reach my shipping
+                    address?
                   </a>
                 </h4>
               </div>
-              <div id="collapseFour" className="panel-collapse collapse">
+              <div id="collapseNine" className="panel-collapse collapse">
                 <div className="card-block">
                   Our Delivery partner will make three attempts to deliver
                   before returning the product to our warehouse. You may contact
-                  us at info@ethicallearner.com or call Foaxx on 0000000000 to
-                  speak to the executive to place a re-dispatch request. We are
-                  available from 11 am to 8 pm all days
+                  us at info@ethicallearner.com or call Foaxx on +91 9517716419
+                  to speak to the executive to place a re-dispatch request. We
+                  are available from 11 am to 8 pm all day.
                 </div>
               </div>
             </div>
+            <div className="card ">
+              <div className="card-header">
+                <h4 className="card-header">
+                  <a
+                    className="accordion-toggle collapsed"
+                    data-toggle="collapse"
+                    data-parent="#accordion"
+                    href="#collapseNine"
+                  >
+                    Is there any refund policy?
+                  </a>
+                </h4>
+              </div>
+              <div id="collapseNine" className="panel-collapse collapse">
+                <div className="card-block">
+                  At present, we are commited to deliver you the best quality
+                  and nicely decorated products as much as possible. Due lots of
+                  supply {"&"} demands, and less resources, we are not being
+                  able to entertain you with any return or refund policy. Though
+                  your are our prestigious customer, you can us an email on
+                  info@ethicallearner.com in case of any query.
+                </div>
+              </div>
+            </div>
+
+            <div className="faqHeader">Guidelines</div>
             <div className="card ">
               <div className="card-header">
                 <h4 className="card-header">
@@ -373,29 +414,6 @@ export default function Faq() {
                 </div>
               </div>
             </div>
-
-            <div className="card ">
-              <div className="card-header">
-                <h4 className="card-header">
-                  <a
-                    className="accordion-toggle collapsed"
-                    data-toggle="collapse"
-                    data-parent="#accordion"
-                    href="#collapseTwelve"
-                  >
-                    I have placed an order, how soon will I receive the same?
-                  </a>
-                </h4>
-              </div>
-              <div id="collapseTwelve" className="panel-collapse collapse">
-                <div className="card-block">
-                  Thank you for shopping at Foaxx. Your purchase will be
-                  delivered at your shipping address upto 7-10 days of placing
-                  an order.
-                </div>
-              </div>
-            </div>
-
             <div className="card ">
               <div className="card-header">
                 <h4 className="card-header">
@@ -413,149 +431,8 @@ export default function Faq() {
               <div id="collapseThirteen" className="panel-collapse collapse">
                 <div className="card-block">
                   Yes. We will be happy to have a product delivered as a gift to
-                  an alternate address.
-                </div>
-              </div>
-            </div>
-
-            <div className="card ">
-              <div className="card-header">
-                <h4 className="card-header">
-                  <a
-                    className="accordion-toggle collapsed"
-                    data-toggle="collapse"
-                    data-parent="#accordion"
-                    href="#collapseFouteen"
-                  >
-                    Do you offer gift wrapping?
-                  </a>
-                </h4>
-              </div>
-              <div id="collapseFourteen" className="panel-collapse collapse">
-                <div className="card-block">
-                  At Foaxx, we would like to offer you the best shopping
-                  experience. We will be happy to gift wrap your purchase as a
-                  service gesture.
-                </div>
-              </div>
-            </div>
-
-            <div className="card ">
-              <div className="card-header">
-                <h4 className="card-header">
-                  <a
-                    className="accordion-toggle collapsed"
-                    data-toggle="collapse"
-                    data-parent="#accordion"
-                    href="#collapseFifteen"
-                  >
-                    I seem to have received a damaged item. Who do I inform?
-                  </a>
-                </h4>
-              </div>
-              <div id="collapseFifteen" className="panel-collapse collapse">
-                <div className="card-block">
-                  We regret the experience and apologies for the inconvenience.
-                  In an unlikely event that your order arrives in a damaged
-                  condition, please email us with an image of the damaged
-                  merchandise at info@ethicallearner.com To be eligible for a
-                  return, you must notify us of the damage within 48 hours of
-                  receiving the order
-                </div>
-              </div>
-            </div>
-
-            <div className="card ">
-              <div className="card-header">
-                <h4 className="card-header">
-                  <a
-                    className="accordion-toggle collapsed"
-                    data-toggle="collapse"
-                    data-parent="#accordion"
-                    href="#collapseSixteen"
-                  >
-                    I seem to have received an incorrect item. What should I do?
-                  </a>
-                </h4>
-              </div>
-              <div id="collapseSixteen" className="panel-collapse collapse">
-                <div className="card-block">
-                  We apologise for the inconvenience. Please contact us at
-                  info@ethicallearner.com or call us on 0000000000 to speak to
-                  the Foaxx executive. We are available from 11 am to 10.00 pm
-                  on all days of the week
-                </div>
-              </div>
-            </div>
-
-            <div className="card ">
-              <div className="card-header">
-                <h4 className="card-header">
-                  <a
-                    className="accordion-toggle collapsed"
-                    data-toggle="collapse"
-                    data-parent="#accordion"
-                    href="#collapseSeventeen"
-                  >
-                    How can I cancel an order that I placed online?
-                  </a>
-                </h4>
-              </div>
-              <div id="collapseSeventeen" className="panel-collapse collapse">
-                <div className="card-block">
-                  You may cancel your order by calling us on 1123456456785252
-                  and we will be happy to assist you. We are available from 11
-                  am to 10.00 pm on all days of the week However, an order can
-                  be cancelled only before the product(s) has been shipped out
-                  of the warehouse, which is generally within 2-4 hours of
-                  placing the order.
-                </div>
-              </div>
-            </div>
-
-            <div className="card ">
-              <div className="card-header">
-                <h4 className="card-header">
-                  <a
-                    className="accordion-toggle collapsed"
-                    data-toggle="collapse"
-                    data-parent="#accordion"
-                    href="#collapseEighteen"
-                  >
-                    I am not interested in receiving any communication. What
-                    will I need to do?
-                  </a>
-                </h4>
-              </div>
-              <div id="collapseEighteen" className="panel-collapse collapse">
-                <div className="card-block">
-                  We respect your need for privacy. Please click on the
-                  unsubscribe link embedded in our online communication to
-                  unsubscribe yourself. If the problem persists, just give us a
-                  call at 1123456456785252 or email us at (((( email )))) and we
-                  will take care of it.
-                </div>
-              </div>
-            </div>
-
-            <div className="card ">
-              <div className="card-header">
-                <h4 className="card-header">
-                  <a
-                    className="accordion-toggle collapsed"
-                    data-toggle="collapse"
-                    data-parent="#accordion"
-                    href="#collapseNineteen"
-                  >
-                    What are the working hours of your customer service?
-                  </a>
-                </h4>
-              </div>
-              <div id="collapseNineteen" className="panel-collapse collapse">
-                <div className="card-block">
-                  Our office hours are from 11 am to 10:00 pm on all days of the
-                  week. You can also reach us at (((( email )))) and we assure
-                  you of a response within 2 business days.
+                  an alternate address. You just need to correct Email and
+                  shipping Address.
                 </div>
               </div>
             </div>
@@ -569,14 +446,15 @@ export default function Faq() {
                     data-parent="#accordion"
                     href="#collapseTwenty"
                   >
-                    Do you have a loyalty programme?
+                    Do you have any offer on placing order?
                   </a>
                 </h4>
               </div>
               <div id="collapseTwenty" className="panel-collapse collapse">
                 <div className="card-block">
-                  Currently, we do not have a loyalty programme on our website
-                  but we are working on it.
+                  Yes, I are planning to achieve a goal of 500 Tshirts Order.
+                  And if we will be able to do so. We will send 25% cashbacks to
+                  our first 50 customers who placed orders.
                 </div>
               </div>
             </div>

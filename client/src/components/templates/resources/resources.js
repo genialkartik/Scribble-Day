@@ -189,7 +189,12 @@ export default function Resources() {
                     <li>
                       You must ensure to mention correct email address while
                       ordering your scribble Tshirt, It should be same as you
-                      registered with us on foaxx.com
+                      registered with us on{" "}
+                      <strong>
+                        <a href="/" target="_blank" rel="norefferrer">
+                          www.foaxx.com
+                        </a>
+                      </strong>{" "}
                     </li>
                     <li>
                       Please write us an email (info@ethicallearner.com) or
