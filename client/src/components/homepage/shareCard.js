@@ -30,7 +30,7 @@ export default function ShareCard(props) {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [msgSnackbar, setMsgSnackbar] = useState("");
   const [shareText, setShareText] = useState(
-    "Hey dear friend, Lets Celebrate Scribble Day 2021 virtullay together | Write a Scribble Message for me || www.thirsty-goldwasser-7273c9.netlify.app/"
+    "Hey dear friend, Lets Celebrate Scribble Day 2021 virtullay together | Write a Scribble Message for me || www.foaxx.com/"
   );
 
   return (
@@ -81,39 +81,40 @@ export default function ShareCard(props) {
       </CardContent>
       <CardActions disableSpacing>
         <div className="part socials">
-          {!props.userdata && (
-            <Button
-              variant="contained"
-              color="default"
-              onClick={() => {
-                navigator.clipboard.writeText(shareText);
-                setOpenSnackbar(true);
-                setMsgSnackbar("Copied");
-                setTimeout(() => setOpenSnackbar(false), 1000);
-              }}
-            >
-              <span className={"fa fa-copy"}></span>
-            </Button>
-          )}
           <Button
             variant="contained"
-            style={{ backgroundColor: "#8A374A", color: "#fff" }}
+            color="default"
             onClick={() => {
               navigator.clipboard.writeText(shareText);
               setOpenSnackbar(true);
               setMsgSnackbar("Copied");
-              setTimeout(() => {
-                setOpenSnackbar(false);
-                window.open("https://www.instagram.com/");
-              }, 1000);
+              setTimeout(() => setOpenSnackbar(false), 1000);
+              return false;
             }}
           >
-            <span className={"fa fa-instagram"}></span>
+            <span className={"fa fa-copy"}></span>
           </Button>
+          <a href="https://www.instagram.com/">
+            <Button
+              variant="contained"
+              style={{ backgroundColor: "#8A374A", color: "#fff" }}
+              onClick={() => {
+                navigator.clipboard.writeText(shareText);
+                setOpenSnackbar(true);
+                setMsgSnackbar("Copied! share on Instagram now");
+                setTimeout(() => {
+                  setOpenSnackbar(false);
+                }, 1000);
+                return false;
+              }}
+            >
+              <span className={"fa fa-instagram"}></span>
+            </Button>
+          </a>
           <a
             target="_blank"
             rel="noopener noreferrer"
-            href="https://www.linkedin.com/shareArticle?url=www.thirsty-goldwasser-7273c9.netlify.app/%20&title=Pandemic%20could%20ruin%20our%20studies%20But%20not%20our%20last%20day%20of%20college%20%7C%20%20%F0%9F%91%95%20Happy%20Scribble%20Day%202021%20%F0%9F%A5%B3%20%7C%20%20%20Write%20a%20Scribble%20for%20me%20"
+            href="https://www.linkedin.com/shareArticle?url=www.foaxx.com&title=Let's%20celebrate%20%F0%9F%91%95Scribble%20Day%202021%20%F0%9F%A5%B3%20Write%20a%20Scribble%20for%20me%20%F0%9F%98%8E"
           >
             <Button
               variant="contained"
@@ -133,7 +134,7 @@ export default function ShareCard(props) {
             }}
             onClick={() => {
               window.open(
-                "https://www.facebook.com/sharer/sharer.php?u=https%3A//thirsty-goldwasser-7273c9.netlify.app"
+                "https://www.facebook.com/sharer.php?u=www.foaxx.com"
               );
               return false;
             }}
@@ -143,7 +144,7 @@ export default function ShareCard(props) {
           <a
             target="_blank"
             rel="noopener noreferrer"
-            href="https://twitter.com/intent/tweet?text=Pandemic%20could%20ruin%20our%20studies%20But%20not%20our%20last%20day%20of%20college%20%7C%0A%0A%F0%9F%91%95%20Happy%20Scribble%20Day%202021%20%F0%9F%A5%B3%20%7C%20%0A%0AWrite%20a%20Scribble%20for%20me%20%0A%0Awww.thirsty-goldwasser-7273c9.netlify.app/%20%0A%0A%23scribbleday2021%20"
+            href="https://twitter.com/intent/tweet?url=www.foaxx.com&text=Let's%20celebrate%20%F0%9F%91%95Scribble%20Day%202021%20%F0%9F%A5%B3%20Write%20a%20Scribble%20for%20me%20%F0%9F%98%8E"
           >
             <Button
               variant="contained"
@@ -156,8 +157,7 @@ export default function ShareCard(props) {
             </Button>
           </a>
           <a
-            href="whatsapp.com://send?text=Pandemic%20could%20ruin%20our%20studies%20But%20not%20our%20last%20day%20of%20college%20%7C%20%20%F0%9F%91%95%20Happy%20Scribble%20Day%202021%20%F0%9F%A5%B3%20%7C%20%20%20Write%20a%20Scribble%20for%20me%20%20%20https%3A//thirsty-goldwasser-7273c9.netlify.app/%20%20%20#scribbleday2021%20%20"
-            // href="https://web.whatsapp.com/send?text=Pandemic%20could%20ruin%20our%20studies%20But%20not%20our%20last%20day%20of%20college%20%7C%20%20%F0%9F%91%95%20Happy%20Scribble%20Day%202021%20%F0%9F%A5%B3%20%7C%20%20%20Write%20a%20Scribble%20for%20me%20%20%20https%3A//thirsty-goldwasser-7273c9.netlify.app/%20%20%20#scribbleday2021%20%20"
+            href="whatsapp://send?text=Let's%20celebrate%20%F0%9F%91%95Scribble%20Day%202021%20%F0%9F%A5%B3%20Write%20a%20Scribble%20for%20me%20%F0%9F%98%8Ehttps%3A//foaxx.com/%20%20%20#scribbleday2021%20%20"
             data-action="share/whatsapp/share"
             target="_blank"
             rel="noopener noreferrer"
@@ -172,6 +172,16 @@ export default function ShareCard(props) {
               <span className={"fa fa-whatsapp"}></span>
             </Button>
           </a>
+
+          <Snackbar
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "center",
+            }}
+            open={openSnackbar}
+            autoHideDuration={1000}
+            message={msgSnackbar}
+          />
         </div>
       </CardActions>
 
@@ -180,6 +190,7 @@ export default function ShareCard(props) {
           vertical: "top",
           horizontal: "center",
         }}
+        style={{ zIndex: 10 }}
         open={openSnackbar}
         autoHideDuration={1000}
         message={msgSnackbar}

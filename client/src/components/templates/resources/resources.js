@@ -87,11 +87,11 @@ export default function Resources() {
                 <div className="d-flex flex-column align-items-center">
                   <div className="text-center">
                     <p>
-                      Whether it’s your first or fiftieth pull request, there’s
-                      always more to learn! We’ve put together a few resources
-                      that can help you create quality pull requests, keep your
-                      repositories pristine, and build on your open source
-                      knowledge.
+                      This Pandemic (Covid-19) already caused a lot of
+                      mishappening this year and the last year. We must stay
+                      safe, healthy and connected. Scribble Day is supposed to
+                      bring remarkable and unforgettable moments in our lives
+                      and so do this year's Virtual Scribble Day.
                     </p>
                   </div>
                 </div>
@@ -100,112 +100,100 @@ export default function Resources() {
             <div className="row justify-content-center pt-5 pb-5">
               <div className="col-12 col-sm-8">
                 <div className="border-bottom">
-                  <h4>Values</h4>
+                  <h4>Let's make this year's Scribble Day remarkable</h4>
                 </div>
-                <div>
-                  <p className="pt-3">
-                    Inspired by you, the community, through your actions and
-                    stories.
-                  </p>
-                  <ol>
-                    <li className="mb-3">
-                      Everyone is welcome! Participants in Hacktoberfest
-                      represented 151 countries and thousands of unique skill
-                      sets. This program welcomes everyone already who’s already
-                      part of the open source software community, and anyone who
-                      is interested in diving in.
-                    </li>
-                    <li className="mb-3">
-                      Everyone is welcome! Participants in Hacktoberfest
-                      represented 151 countries and thousands of unique skill
-                      sets. This program welcomes everyone already who’s already
-                      part of the open source software community, and anyone who
-                      is interested in diving in.
-                    </li>
-                    <li className="mb-3">
-                      Everyone is welcome! Participants in Hacktoberfest
-                      represented 151 countries and thousands of unique skill
-                      sets. This program welcomes everyone already who’s already
-                      part of the open source software community, and anyone who
-                      is interested in diving in.
-                    </li>
-                  </ol>
-                </div>
-              </div>
-            </div>
 
-            <div className="row justify-content-center mb-5">
-              <div className="col-12 col-sm-8">
-                <div>
-                  <div className="title_wrap">Web</div>
+                <p className="pt-3">
+                  A detailed video demonstration of how to write a scribble
+                  message to your friend
+                </p>
+                <div className="row justify-content-center mb-5">
                   <div className="video_wrapper">
                     <video
                       style={{ width: "100%", height: "100%" }}
-                      controls
                       src="https://assets.mixkit.co/videos/preview/mixkit-skyline-of-a-desert-with-the-moon-at-night-40047-large.mp4"
                     ></video>
                   </div>
+                  <div className="title_wrap">v.1 Web Browser</div>
                 </div>
-              </div>
-            </div>
 
-            <div className="row justify-content-center mb-5">
-              <div className="col-12 col-sm-8">
-                <div>
-                  <div className="title_wrap">Mobile</div>
+                <div className="row justify-content-center mb-5">
                   <div className="video_wrapper">
                     <video
                       style={{ width: "100%", height: "100%" }}
-                      controls
                       src="https://assets.mixkit.co/videos/preview/mixkit-skyline-of-a-desert-with-the-moon-at-night-40047-large.mp4"
                     ></video>
                   </div>
+                  <div className="title_wrap">v.2 Mobile View</div>
                 </div>
               </div>
             </div>
 
             <div className="row justify-content-center pb-5">
               <div className="col-12 col-sm-8">
+                <div>
+                  <div className="border-bottom">
+                    <h4>Does it have any Values?</h4>
+                  </div>
+
+                  <p className="pt-3">
+                    The most beautiful thing in the world is{" "}
+                    <span style={{ color: "#ED72C0" }}>'Happiness'</span> and
+                    we're trying to bring it on your 🙂 faces.
+                  </p>
+                  <ol style={{ textAlign: "justify", color: "#93C2DBaa" }}>
+                    <li className="mb-3">
+                      This year (2021) and the last year (2020), Covid-19 has
+                      shown us numerous gloomy days, and most of them were
+                      vicious. We designed and planned to celebrate Scribble Day
+                      virtually this year, to bring some happiness on faces and,
+                      create {"&"} collect some beautiful memories.
+                    </li>
+                    <li className="mb-3">
+                      Though It's a Scribble Day 2021, but Everyone is welcome!
+                      to celebrate and Participants in Virtual Scribble Day
+                      2021. Students anywhere and everywhere can participate and
+                      write Scribble messages to their friends.
+                    </li>
+                    <li className="mb-3">
+                      There are more strings in this Virtual Scribble Day.
+                      Celebaate your Scribble Day and store your memories by
+                      ordering your Scribble Tshirts online on our platform,
+                      safe and secure to your doorsteps.
+                    </li>
+                  </ol>
+                </div>
+
                 <div className="para_wrapper">
-                  <h3>Let's work together to reduce spam</h3>
-                  <ul>
+                  <h4 className="border-bottom pt-3">Guidelines</h4>
+                  <ul className="pt-3" style={{ color: "#93C2DB" }}>
                     <li>
-                      Spammy pull requests can be labeled as "invalid."
-                      Maintainers are faced with the majority of spam that
-                      occurs during Hacktoberfest, and we dislike spam just as
-                      much as you. If you're a maintainer, please label any
-                      spammy pull requests submitted to the repositories you
-                      maintain as invalid, and close them. Pull requests with
-                      this label won't count toward Hacktoberfest.
+                      You could write a scribble to anyone studying in any
+                      university. But we encourage you to write a scribble
+                      message to your college/university friends only.
                     </li>
                     <li>
-                      There's a seven-day review window for all pull requests
-                      before they count toward completing the challenge. Once a
-                      participant has submitted four eligible pull requests
-                      (ready-to-review, not drafts), the review window begins.
-                      This period gives maintainers time to identify and label
-                      spammy pull requests as invalid. If the pull requests are
-                      not marked as invalid within that window, they will allow
-                      the user to complete the Hacktoberfest challenge. If any
-                      of the pull requests are labeled as invalid, the user will
-                      return to the pending state until they have four eligible
-                      pull requests, at which point the review period will start
-                      again.
+                      We encourage you to write a Scribble Message only if this
+                      is the year(2020) or the last year (2020) was the final
+                      year of your college/university graduation.
                     </li>
                     <li>
-                      Bad repositories will be excluded. In the past, we've seen
-                      many repositories that encourage participants to make
-                      simple pull requests – such as adding their name to a file
-                      – to quickly gain a pull request toward completing
-                      Hacktoberfest. While this may be a learning tool for new
-                      contributors, it goes against one of our core values for
-                      Hacktoberfest. The quality of pull requests is paramount;
-                      quantity comes second. These repositories do not encourage
-                      quality contributions and provide an unfair advantage in
-                      completing the Hacktoberfest challenge. We've implemented
-                      a system to block these repositories, and any pull
-                      requests submitted to such repositories will not be
-                      counted.
+                      You could invite your college/university's faculty and
+                      staff members to write a scribble message for you.
+                    </li>
+                    <li>
+                      Please do not intend to offend or troll someone by writing
+                      false and ugly scribble messages to anyone. Writing
+                      offensive words is strictly prohibited.
+                    </li>
+                    <li>
+                      You must ensure to mention correct email address while
+                      ordering your scribble Tshirt, It should be same as you
+                      registered with us on foaxx.com
+                    </li>
+                    <li>
+                      Please write us an email (info@ethicallearner.com) or
+                      contact (+91-9517716419) us 24/7 in case of any query.
                     </li>
                   </ul>
                 </div>

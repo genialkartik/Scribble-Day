@@ -34,6 +34,13 @@ export default function Footer() {
                   <div className="fa fa-linkedin px-2"></div>
                   <div className="fa fa-twitter px-2"></div>
                   <div className="fa fa-instagram px-2"></div>
+                  <a
+                    href="https://github.com/genialkartik"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <div className="fa fa-github px-2"></div>
+                  </a>
                 </div>
               </div>
             </div>

@@ -4,13 +4,15 @@ const session = require("express-session");
 const cors = require("cors");
 const fileUpload = require("express-fileupload");
 const mongoose = require("mongoose");
+const { MONGODB_URI } = require("./config");
 const path = require("path");
 
 app.use(cors());
-var PORT = process.env.PORT || 4000;
+var PORT = process.env.PORT || 8080;
 // prevent CORS
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE");
   res.header(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept"
@@ -20,12 +22,20 @@ app.use(function (req, res, next) {
 app.use(express.json());
 app.use(fileUpload());
 
+// Error Handler
+app.use((error, req, res, next) => {
+  const status = error.statusCode || 500;
+  const message = error.message;
+  const data = error.data; // Passing original error data
+  res.status(status).json({ message: message, data: data });
+});
+
 //User's session
 var MemoryStore = session.MemoryStore;
 app.use(
   session({
     name: "scribbleday",
-    secret: process.env.EXPRESS_SESSION_SECRET,
+    secret: "scribbleday",
     resave: false,
     store: new MemoryStore(),
     saveUninitialized: false,
@@ -34,7 +44,7 @@ app.use(
 );
 
 mongoose
-  .connect(process.env.MONGODB_URI, {
+  .connect(MONGODB_URI, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true,
@@ -43,13 +53,9 @@ mongoose
   .catch((err) => console.log(err));
 
 app.use(require("./routes/index"));
-app.use(require("./routes/verify"));
 
-// Serve static assets in production
 // if (process.env.NODE_ENV === "production") {
-// Set static folder
 app.use(express.static("client/build"));
-
 app.get("*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
 });

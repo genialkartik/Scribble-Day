@@ -142,7 +142,7 @@ function Home() {
   const [isUlistFocus, setUlistFocus] = useState(false);
   const [scribbleList, setScribbleList] = useState([]);
   const [userdata, setUserData] = useState(null);
-  const [friendData, setFriendData] = useState({});
+  const [friendData, setFriendData] = useState(null);
   const [message, setMessage] = useState("");
   const [messageColor, setMessageColor] = useState("#000000");
   const [rotateValue, setRotateValue] = useState(0);
@@ -197,9 +197,6 @@ function Home() {
   const { userId } = useParams();
 
   useEffect(() => {
-    // let search = window.location.search;
-    // let params = new URLSearchParams(search);
-    // const userId = params.get("id");
     if (userId) {
       (async () => {
         const resp = await axios.post("/friend/param", {
@@ -218,9 +215,13 @@ function Home() {
           });
           setScribbleList(res.scribbles);
         } else {
+          setFriendData(null);
           setOpenSnackbar(true);
           setMsgSnackbar(resp.data.respMessage);
-          setTimeout(() => setOpenSnackbar(false), 3000);
+          setTimeout(() => {
+            setOpenSnackbar(false);
+            window.location.replace("/");
+          }, 2000);
         }
       })();
     }
@@ -249,21 +250,15 @@ function Home() {
   const handleFixClick = () => {
     if (!friendData) {
       setOpenSnackbar(true);
-      setMsgSnackbar(
-        "Please Select a Friend and must write a Scribble message"
-      );
+      setMsgSnackbar("Please Select a Friend and write a Scribble message");
       setTimeout(() => setOpenSnackbar(false), 3000);
     } else {
-      // setDimensions(getPositions);
       setDimensions(
         GetPosition(
           imageRef.current.getBoundingClientRect(),
           messageRef.current.getBoundingClientRect()
         )
       );
-      // console.log(getPositions);
-      // setDimensions(messageRef.current.getBoundingClientRect());
-      // console.log(useGetPosition(getImgWrapperDimensions, getMsgDimensions));
       setDragBool(true);
       setIsFixed(true);
     }
@@ -353,7 +348,7 @@ function Home() {
           setInsertVerifyCode(false);
           setFriendFocus(false);
           setUlistFocus(false);
-          setFriendData({});
+          setFriendData(null);
           setEnterFriendName("");
           setFriendLogo();
           setUniversityLogo();
@@ -584,13 +579,14 @@ function Home() {
 
   function PlaceOrder(props) {
     const { onClose, open } = props;
-    const handleClose = () => {
+    const handlePlaceOrderClose = () => {
       onClose();
     };
+    console.log(userdata);
 
     return (
       <Dialog
-        onClose={handleClose}
+        onClose={handlePlaceOrderClose}
         aria-labelledby="simple-dialog-title"
         open={open}
       >
@@ -666,7 +662,7 @@ function Home() {
             <div className={"column"}>
               <div
                 className="details-of-site"
-                style={{ marginTop: "50px", float: "left", width: '100%' }}
+                style={{ marginTop: "50px", float: "left", width: "100%" }}
               >
                 <div className="part">
                   <ButtonGroup
@@ -701,10 +697,7 @@ function Home() {
                 </div>
               </div>
 
-              <div
-                style={{ textAlign: "left" }}
-                className="d-none d-sm-block"
-              >
+              <div style={{ textAlign: "left" }} className="d-none d-sm-block">
                 {userdata && userDetailsBool && (
                   <>
                     <Button
@@ -786,28 +779,25 @@ function Home() {
                           window.location.replace("/");
                         }}
                         startIcon={<HomeIcon />}
-                      >
-                      </Button>
+                      ></Button>
                     </div>
                     <Link className={"actions"} to={"/resources"}>
                       <Button
                         variant="contained"
                         startIcon={<InfoIcon />}
-                      >
-                      </Button>
+                      ></Button>
                     </Link>
                     <Link className={"actions"} to={"/faq"}>
                       <Button
                         variant="contained"
                         startIcon={<HelpIcon />}
-                      >
-                      </Button>
+                      ></Button>
                     </Link>
-                    <div className={"actions"} style={{flex: '1 0 auto'}}>
+                    <div className={"actions"} style={{ flex: "1 0 auto" }}>
                       <Button
                         variant="contained"
                         onClick={handleMyScribbleClick}
-                        style={{ backgroundColor: "#0A0", color: "#fff" }}
+                        style={{ backgroundColor: "#183D5D", color: "#fff" }}
                         startIcon={
                           userdata ? <PermIdentityIcon /> : <SecurityIcon />
                         }
@@ -825,29 +815,42 @@ function Home() {
                     }}
                   />
                   {userDetailsBool && userdata && (
-                    <Button
-                      variant="contained"
-                      size="small"
-                      onClick={async () => {
-                        const resp = await axios.get("/logout");
-                        if (resp.data.loggedout) {
-                          setUserDetailsBool(false);
-                          setLandingPageBool(true);
-                          setUserData(null);
-                        } else {
-                          setOpenSnackbar(true);
-                          setMsgSnackbar("You're not logged in!");
-                          setTimeout(() => setOpenSnackbar(false), 3000);
+                    <>
+                      <Button
+                        variant="contained"
+                        size="small"
+                        onClick={async () => {
+                          const resp = await axios.get("/logout");
+                          if (resp.data.loggedout) {
+                            setUserDetailsBool(false);
+                            setLandingPageBool(true);
+                            setUserData(null);
+                          } else {
+                            setOpenSnackbar(true);
+                            setMsgSnackbar("You're not logged in!");
+                            setTimeout(() => setOpenSnackbar(false), 3000);
+                          }
+                        }}
+                        style={{
+                          backgroundColor: "#1C3750",
+                          color: "rgba(255,255,255,.4)",
+                          marginInline: 20,
+                        }}
+                      >
+                        <span>Logout</span>
+                      </Button>
+
+                      <Button
+                        variant="contained"
+                        onClick={() => setPlaceOrderDialog(true)}
+                        style={{ backgroundColor: "#0A0", color: "#fff" }}
+                        startIcon={
+                          <span className={"fa fa-shopping-cart"}></span>
                         }
-                      }}
-                      style={{
-                        backgroundColor: "#1C3750",
-                        color: "rgba(255,255,255,.4)",
-                        marginInline: 20,
-                      }}
-                    >
-                      <span>Logout</span>
-                    </Button>
+                      >
+                        Place Order
+                      </Button>
+                    </>
                   )}
                 </div>
                 <div
@@ -926,7 +929,7 @@ function Home() {
 
                                         // reset friend data
 
-                                        setFriendData({});
+                                        setFriendData(null);
                                         setEnterFriendName("");
                                         setFriendLogo();
                                         setFriendFocus(false);
@@ -1108,7 +1111,7 @@ function Home() {
 
                       <div className="fontWrapper">
                         <div
-                          className="info"
+                          className={"info"}
                           style={{ flex: "1 0 auto" }}
                           onClick={() => handleFixClick()}
                         >
@@ -1359,7 +1362,7 @@ function Home() {
                               variant="contained"
                               onClick={() => {
                                 navigator.clipboard.writeText(
-                                  "Hey dear friend, Lets Celebrate Scribble Day 2021 virtullay together | Write a Scribble Message for me || www.thirsty-goldwasser-7273c9.netlify.app/"
+                                  "Hey dear friend, Lets Celebrate Scribble Day 2021 virtullay together | Write a Scribble Message for me || www.foaxx.com/"
                                 );
                                 setOpenSnackbar(true);
                                 setMsgSnackbar(
@@ -1378,7 +1381,7 @@ function Home() {
                           <a
                             target="_blank"
                             rel="noopener noreferrer"
-                            href="https://www.linkedin.com/shareArticle?url=www.thirsty-goldwasser-7273c9.netlify.app/%20&title=Pandemic%20could%20ruin%20our%20studies%20But%20not%20our%20last%20day%20of%20college%20%7C%20%20%F0%9F%91%95%20Happy%20Scribble%20Day%202021%20%F0%9F%A5%B3%20%7C%20%20%20Write%20a%20Scribble%20for%20me%20"
+                            href="https://www.linkedin.com/shareArticle?url=www.foaxx.com/%20&title=Pandemic%20could%20ruin%20our%20studies%20But%20not%20our%20last%20day%20of%20college%20%7C%20%20%F0%9F%91%95%20Happy%20Scribble%20Day%202021%20%F0%9F%A5%B3%20%7C%20%20%20Write%20a%20Scribble%20for%20me%20"
                           >
                             <Button
                               variant="contained"
@@ -1398,7 +1401,7 @@ function Home() {
                             }}
                             onClick={() => {
                               window.open(
-                                "https://www.facebook.com/sharer/sharer.php?u=https%3A//thirsty-goldwasser-7273c9.netlify.app"
+                                "https://www.facebook.com/sharer/sharer.php?u=https%3A//foaxx.com"
                               );
                               return false;
                             }}
@@ -1409,7 +1412,7 @@ function Home() {
                             target="_blank"
                             rel="noopener noreferrer"
                             href={
-                              "https://twitter.com/intent/tweet?text=Pandemic%20could%20ruin%20our%20studies%20But%20not%20our%20last%20day%20of%20college%20%7C%0A%0A%F0%9F%91%95%20Happy%20Scribble%20Day%202021%20%F0%9F%A5%B3%20%7C%20%0A%0AWrite%20a%20Scribble%20for%20me%20%0A%0Ahttps%3A//thirsty-goldwasser-7273c9.netlify.app/u/" +
+                              "https://twitter.com/intent/tweet?text=Pandemic%20could%20ruin%20our%20studies%20But%20not%20our%20last%20day%20of%20college%20%7C%0A%0A%F0%9F%91%95%20Happy%20Scribble%20Day%202021%20%F0%9F%A5%B3%20%7C%20%0A%0AWrite%20a%20Scribble%20for%20me%20%0A%0Ahttps%3A//foaxx.com/u/" +
                               userdata.userId +
                               "%20%0A%0A%23scribbleday2021%20"
                             }
@@ -1425,7 +1428,7 @@ function Home() {
                             </Button>
                           </a>
                           <a
-                            href="https://web.whatsapp.com/send?text=Pandemic%20could%20ruin%20our%20studies%20But%20not%20our%20last%20day%20of%20college%20%7C%20%20%F0%9F%91%95%20Happy%20Scribble%20Day%202021%20%F0%9F%A5%B3%20%7C%20%20%20Write%20a%20Scribble%20for%20me%20%20%20https%3A//thirsty-goldwasser-7273c9.netlify.app/%20%20%20#scribbleday2021%20%20"
+                            href="https://web.whatsapp.com/send?text=Pandemic%20could%20ruin%20our%20studies%20But%20not%20our%20last%20day%20of%20college%20%7C%20%20%F0%9F%91%95%20Happy%20Scribble%20Day%202021%20%F0%9F%A5%B3%20%7C%20%20%20Write%20a%20Scribble%20for%20me%20%20%20https%3A//foaxx.com/%20%20%20#scribbleday2021%20%20"
                             data-action="share/whatsapp/share"
                             target="_blank"
                             rel="noopener noreferrer"
@@ -1777,82 +1780,86 @@ function Home() {
                 </>
               )}
             </div>
-            <Row className="justify-content-center" style={{padding: 16}}>
-              <Col xs={12} sm={10} lg={8} className="d-flex flex-column">
-            <h3
-              className={"center text-center"}
-              style={{
-                color: "#FF8AE2",
-                fontFamily: "sans",
-                textAlign: "left",
-              }}
-            >
-              A Day worth Remembering
-            </h3>
-            <div className="details-of-site">
-              <div className="part">
-                <div>
-                  <a
-                    href={"https://rzp.io/l/Up18AjAWH"}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Button
-                      variant="contained"
-                      onClick={() => {
-                        setPlaceOrderDialog(true);
-                      }}
-                      style={{ backgroundColor: "#0A0", color: "#fff" }}
-                    >
-                      <span className={"fa fa-shopping-cart"}></span>
-                      Place Order
-                    </Button>
-                  </a>
-                </div>
-                <div className="col-12">
-                  <PlaceOrder
-                    open={openPlaceOrderDialog}
-                    onClose={() => {
-                      setPlaceOrderDialog(false);
+            {!userDetailsBool && (
+              <Row className="justify-content-center" style={{ padding: 16 }}>
+                <Col xs={12} sm={10} lg={8} className="d-flex flex-column">
+                  <h3
+                    className={"center text-center"}
+                    style={{
+                      color: "#FF8AE2",
+                      fontFamily: "sans",
+                      textAlign: "left",
                     }}
-                  />
-                </div>
-              </div>
-
-              <div className="part">
-                <div>
-                  <Button
-                    variant="contained"
-                    onClick={handleInviteOpen}
-                    style={{ backgroundColor: "#05ABFF", color: "#fff" }}
                   >
-                    <span className={"fa fa-share"}></span>
-                    Invite Friend
-                  </Button>
-                </div>
-              </div>
-            </div>
+                    A Day worth Remembering
+                  </h3>
+                  <div className="details-of-site">
+                    <div className="part">
+                      <div>
+                        <Button
+                          variant="contained"
+                          onClick={() => {
+                            if (userdata) {
+                              {
+                                setPlaceOrderDialog(true);
+                              }
+                            } else {
+                              setMsgSnackbar("Login First");
+                              setOpenSnackbar(true);
+                              setTimeout(() => setOpenSnackbar(false), 1000);
+                              setLandingPageBool(false);
+                              setEnterEmailBool(true);
+                            }
+                          }}
+                          style={{ backgroundColor: "#0A0", color: "#fff" }}
+                          startIcon={
+                            <span className={"fa fa-shopping-cart"}></span>
+                          }
+                        >
+                          Place Order
+                        </Button>
+                      </div>
+                      <div className="col-12">
+                        <PlaceOrder
+                          open={openPlaceOrderDialog}
+                          onClose={() => {
+                            setPlaceOrderDialog(false);
+                          }}
+                        />
+                      </div>
+                    </div>
 
-            <footer
-              className={"center"}
-              style={{
-                textAlign: "center"
-              }}
-            >
-              <p>
-                Spread the happiness among your friends, juniors, seniors and
-                connections to celebrate this year's{" "}
-                <a
-                  href="https://hacktoberfest.digitalocean.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Scribble Day
-                </a>
-              </p>
-            </footer>
-              </Col>
-            </Row>
+                    <div className="part">
+                      <div>
+                        <Button
+                          variant="contained"
+                          onClick={handleInviteOpen}
+                          style={{ backgroundColor: "#05ABFF", color: "#fff" }}
+                          startIcon={<span className={"fa fa-share"}></span>}
+                        >
+                          Invite Friend
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <footer
+                    className={"center"}
+                    style={{
+                      textAlign: "center",
+                    }}
+                  >
+                    <p>
+                      Spread the happiness among your friends, juniors, seniors
+                      and connections to celebrate this year's{" "}
+                      <a href="/" target="_blank" rel="noopener noreferrer">
+                        Scribble Day
+                      </a>
+                    </p>
+                  </footer>
+                </Col>
+              </Row>
+            )}
           </div>
           <div className={"column"}>
             {/* RIGHT COLUMN */}

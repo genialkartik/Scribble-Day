@@ -3,14 +3,16 @@ import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
-import CardActions from "@material-ui/core/CardActions";
-import Snackbar from "@material-ui/core/Snackbar";
 import Avatar from "@material-ui/core/Avatar";
-import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import { red } from "@material-ui/core/colors";
 import Button from "@material-ui/core/Button";
-import FileCopyIcon from "@material-ui/icons/FileCopy";
+import SecurityIcon from "@material-ui/icons/Security";
+
+import Stepper from "@material-ui/core/Stepper";
+import Step from "@material-ui/core/Step";
+import StepLabel from "@material-ui/core/StepLabel";
+import StepContent from "@material-ui/core/StepContent";
+import Paper from "@material-ui/core/Paper";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,21 +23,68 @@ const useStyles = makeStyles((theme) => ({
     color: "#fff",
   },
   avatar: {
-    backgroundColor: red[500],
+    backgroundColor: "red",
+  },
+  button: {
+    marginTop: theme.spacing(1),
+    marginRight: theme.spacing(1),
+  },
+  actionsContainer: {
+    marginBottom: theme.spacing(2),
+  },
+  resetContainer: {
+    padding: theme.spacing(3),
+    backgroundColor: "#0f4a77",
   },
 }));
 
+function getSteps() {
+  return [
+    "First, Click on Checkout",
+    "Order Confirmation Details",
+    "Shipping Details",
+  ];
+}
+
+function getStepContent(step) {
+  switch (step) {
+    case 0:
+      return `Clicking on 'Checkout', you will be directed to Razorpay Payment Gateway. 
+      On Payment Successful, You will receive an Email and SMS with Order confirmation`;
+    case 1:
+      return `Within 12 hours of Order Confirmation, you will receive another email from 
+      'info@ethicallearner.com' with subject 'Scribble Order Received Successfully' and 
+      a Call (in-office hours). This email confirms your Order has been Received Successfully'. 
+      Any Query? Reach us 24/7 on info@ethicallearner.com`;
+    case 2:
+      return `Now let us fabricate your T-shirt with your memories you gathered in 
+      your graduation with friends and friends of friend`;
+    default:
+      return `Within a week, you will receive your Shipping Details on your registered
+      Email with Order ID, Tracking Id and Shipping Details`;
+  }
+}
+
 export default function OrderCard(props) {
   const classes = useStyles();
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [msgSnackbar, setMsgSnackbar] = useState("");
-  const [shareText, setShareText] = useState(
-    "Hey dear friend, Lets Celebrate Scribble Day 2021 virtullay together | Write a Scribble Message for me || www.thirsty-goldwasser-7273c9.netlify.app/"
-  );
+  const [activeStep, setActiveStep] = React.useState(0);
+  const steps = getSteps();
 
-  return (
-    <Card className={classes.root}>
-      {props.userdata ? (
+  const handleNext = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  const handleReset = () => {
+    setActiveStep(0);
+  };
+
+  return props.userdata ? (
+    <>
+      <Card className={classes.root}>
         <CardHeader
           avatar={
             <Avatar
@@ -45,17 +94,19 @@ export default function OrderCard(props) {
             ></Avatar>
           }
           action={
-            <IconButton
-              aria-label="settings"
-              onClick={() => {
-                navigator.clipboard.writeText(shareText);
-                setOpenSnackbar(true);
-                setMsgSnackbar("Copied");
-                setTimeout(() => setOpenSnackbar(false), 1000);
-              }}
+            <a
+              href={"https://rzp.io/l/Up18AjAWH"}
+              target="_blank"
+              rel="noopener noreferrer"
             >
-              <FileCopyIcon style={{ color: "#fff" }} />
-            </IconButton>
+              <Button
+                variant="contained"
+                style={{ backgroundColor: "#0a0", color: "#fff" }}
+                startIcon={<span className={"fa fa-credit-card"}></span>}
+              >
+                Checkout
+              </Button>
+            </a>
           }
           title={
             <Typography gutterBottom variant="h5">
@@ -63,127 +114,91 @@ export default function OrderCard(props) {
             </Typography>
           }
         />
-      ) : (
-        <Typography gutterBottom variant="h5" style={{ textAlign: "center" }}>
-          Virtual Scribble Day 2021
-        </Typography>
-      )}
-      <CardContent
-        style={{
-          border: "1px solid  rgb(233, 233, 223, 0.2)",
-          marginBlock: 10,
-          borderRadius: 6,
-        }}
-      >
-        <Typography variant="body2" component="p">
-          {shareText}
-        </Typography>
-      </CardContent>
-      <CardActions disableSpacing>
-        <div className="part socials">
-          {!props.userdata && (
-            <Button
-              variant="contained"
-              color="default"
-              onClick={() => {
-                navigator.clipboard.writeText(shareText);
-                setOpenSnackbar(true);
-                setMsgSnackbar("Copied");
-                setTimeout(() => setOpenSnackbar(false), 1000);
-              }}
-            >
-              <span className={"fa fa-copy"}></span>
+        <CardContent
+          style={{
+            border: "1px solid  rgb(233, 233, 223, 0.2)",
+            marginBlock: 10,
+            borderRadius: 6,
+            backgroundColor: "#7ef1",
+          }}
+        >
+          <Typography variant="body2" component="p" style={{ color: "#7EFa" }}>
+            Hey {props.userdata.name}, We think you deserve to know
+            <div style={{ color: "#7EFf" }}>
+              how you will receive your Scribble T-shirt after placing this
+              Order.
+            </div>
+          </Typography>
+        </CardContent>
+      </Card>
+      {/* Stepper ///////// */}
+      <div>
+        <Stepper
+          style={{ backgroundColor: "#073e6d" }}
+          activeStep={activeStep}
+          orientation="vertical"
+        >
+          {steps.map((label, index) => (
+            <Step key={label}>
+              <StepLabel>
+                <Typography style={{ color: "#7EFa" }}>{label}</Typography>
+              </StepLabel>
+              <StepContent>
+                <Typography style={{ color: "#7EF" }}>
+                  {getStepContent(index)}
+                </Typography>
+                <div className={classes.actionsContainer}>
+                  <div>
+                    <Button
+                      disabled={activeStep === 0}
+                      onClick={handleBack}
+                      className={classes.button}
+                    >
+                      Back
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleNext}
+                      className={classes.button}
+                    >
+                      {activeStep === steps.length - 1 ? "Finish" : "Next"}
+                    </Button>
+                  </div>
+                </div>
+              </StepContent>
+            </Step>
+          ))}
+        </Stepper>
+        {activeStep === steps.length && (
+          <Paper square elevation={0} className={classes.resetContainer}>
+            <Typography style={{ color: "#7EF" }}>
+              And that's it - you will receive your package delivered at your
+              doorstep <br />
+              <SecurityIcon /> safe and secure
+            </Typography>
+            <Button onClick={handleReset} className={classes.button}>
+              Reset
             </Button>
-          )}
-          <Button
-            variant="contained"
-            style={{ backgroundColor: "#8A374A", color: "#fff" }}
-            onClick={() => {
-              navigator.clipboard.writeText(shareText);
-              setOpenSnackbar(true);
-              setMsgSnackbar("Copied");
-              setTimeout(() => {
-                setOpenSnackbar(false);
-                window.open("https://www.instagram.com/");
-              }, 1000);
-            }}
-          >
-            <span className={"fa fa-instagram"}></span>
-          </Button>
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href="https://www.linkedin.com/shareArticle?url=www.thirsty-goldwasser-7273c9.netlify.app/%20&title=Pandemic%20could%20ruin%20our%20studies%20But%20not%20our%20last%20day%20of%20college%20%7C%20%20%F0%9F%91%95%20Happy%20Scribble%20Day%202021%20%F0%9F%A5%B3%20%7C%20%20%20Write%20a%20Scribble%20for%20me%20"
-          >
-            <Button
-              variant="contained"
-              style={{
-                backgroundColor: "#2E73AD",
-                color: "#fff",
-              }}
+            <a
+              href={"https://rzp.io/l/Up18AjAWH"}
+              target="_blank"
+              rel="noopener noreferrer"
             >
-              <span className={"fa fa-linkedin"}></span>
-            </Button>
-          </a>
-          <Button
-            variant="contained"
-            style={{
-              backgroundColor: "#4095ED",
-              color: "#fff",
-            }}
-            onClick={() => {
-              window.open(
-                "https://www.facebook.com/sharer/sharer.php?u=https%3A//thirsty-goldwasser-7273c9.netlify.app"
-              );
-              return false;
-            }}
-          >
-            <span className={"fa fa-facebook"}></span>
-          </Button>
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href="https://twitter.com/intent/tweet?text=Pandemic%20could%20ruin%20our%20studies%20But%20not%20our%20last%20day%20of%20college%20%7C%0A%0A%F0%9F%91%95%20Happy%20Scribble%20Day%202021%20%F0%9F%A5%B3%20%7C%20%0A%0AWrite%20a%20Scribble%20for%20me%20%0A%0Awww.thirsty-goldwasser-7273c9.netlify.app/%20%0A%0A%23scribbleday2021%20"
-          >
-            <Button
-              variant="contained"
-              style={{
-                backgroundColor: "#05ABFF",
-                color: "#fff",
-              }}
-            >
-              <span className={"fa fa-twitter"}></span>
-            </Button>
-          </a>
-          <a
-            href="whatsapp.com://send?text=Pandemic%20could%20ruin%20our%20studies%20But%20not%20our%20last%20day%20of%20college%20%7C%20%20%F0%9F%91%95%20Happy%20Scribble%20Day%202021%20%F0%9F%A5%B3%20%7C%20%20%20Write%20a%20Scribble%20for%20me%20%20%20https%3A//thirsty-goldwasser-7273c9.netlify.app/%20%20%20#scribbleday2021%20%20"
-            // href="https://web.whatsapp.com/send?text=Pandemic%20could%20ruin%20our%20studies%20But%20not%20our%20last%20day%20of%20college%20%7C%20%20%F0%9F%91%95%20Happy%20Scribble%20Day%202021%20%F0%9F%A5%B3%20%7C%20%20%20Write%20a%20Scribble%20for%20me%20%20%20https%3A//thirsty-goldwasser-7273c9.netlify.app/%20%20%20#scribbleday2021%20%20"
-            data-action="share/whatsapp/share"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Button
-              variant="contained"
-              style={{
-                backgroundColor: "#0DC143",
-                color: "#fff",
-              }}
-            >
-              <span className={"fa fa-whatsapp"}></span>
-            </Button>
-          </a>
-        </div>
-      </CardActions>
-
-      <Snackbar
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "center",
-        }}
-        open={openSnackbar}
-        autoHideDuration={1000}
-        message={msgSnackbar}
-      />
-    </Card>
+              <Button
+                variant="contained"
+                style={{ backgroundColor: "#0a0", color: "#fff" }}
+                onClick={() => {}}
+                startIcon={<span className={"fa fa-credit-card"}></span>}
+              >
+                Checkout Now
+              </Button>
+            </a>
+          </Paper>
+        )}
+      </div>
+    </>
+  ) : (
+    <></>
   );
 }
