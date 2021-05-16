@@ -1650,8 +1650,8 @@ function Home() {
                             </Button>
                           </a>
                           <a
-                            href={`https://web.whatsapp.com/send?text=Let's%20celebrate%20%F0%9F%91%95Scribble%20Day%202021%20%F0%9F%A5%B3%20Write%20a%20Scribble%20for%20me%20%F0%9F%98%8Ehttps%3A//foaxx.com/u/${userdata.userId}%20%20%20#scribbleday2021%20%20`}
-                            // href={`whatsapp://send?text=Let's%20celebrate%20%F0%9F%91%95Scribble%20Day%202021%20%F0%9F%A5%B3%20Write%20a%20Scribble%20for%20me%20%F0%9F%98%8Ehttps%3A//foaxx.com/u/${userdata.userId}%20%20%20#scribbleday2021%20%20`}
+                            href={windowWidth>568?`https://web.whatsapp.com/send?text=Let's%20celebrate%20%F0%9F%91%95Scribble%20Day%202021%20%F0%9F%A5%B3%20Write%20a%20Scribble%20for%20me%20%F0%9F%98%8Ehttps%3A//foaxx.com/u/${userdata.userId}%20%20%20#scribbleday2021%20%20`:
+                            `whatsapp://send?text=Let's%20celebrate%20%F0%9F%91%95Scribble%20Day%202021%20%F0%9F%A5%B3%20Write%20a%20Scribble%20for%20me%20%F0%9F%98%8Ehttps%3A//foaxx.com/u/${userdata.userId}%20%20%20#scribbleday2021%20%20`}
                             data-action="share/whatsapp/share"
                             target="_blank"
                             rel="noopener noreferrer"
