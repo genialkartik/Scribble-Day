@@ -8,7 +8,7 @@
 }
 
 .footer-cont::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 100%;
   left: 0;
@@ -53,9 +53,9 @@ footer a:hover {
   justify-content: space-between;
   margin-top: 6px;
 }
-.footer-socials div.fa {
+.footer-socials a div.fa {
   color: #4b7492;
 }
-.footer-socials div.fa:hover {
+.footer-socials a:hover div.fa {
   color: #fff;
 }

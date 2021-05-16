@@ -16,7 +16,7 @@ export default function Resources() {
     <>
       <SuperHeader />
       <div className="about-cont">
-        <div class="container">
+        <div className="container">
           <br />
           <br />
 
@@ -209,7 +209,7 @@ export default function Resources() {
                     </h2>
                   </div>
                   <div className="d-flex justify-content-center partners">
-                    <a href="">
+                    <a href="/" target="_blank" rel="noopener noreferrer">
                       <div>
                         <img
                           src={
@@ -219,7 +219,9 @@ export default function Resources() {
                         />
                       </div>
                     </a>
-                    <a href="">
+                  </div>
+                  <div className="d-flex justify-content-center partners">
+                    <a href="/" target="_blank" rel="noopener noreferrer">
                       <div>
                         <img
                           src={
@@ -229,12 +231,22 @@ export default function Resources() {
                         />
                       </div>
                     </a>
-                    <a href="">
+                  </div>
+                  <div className="d-flex justify-content-center partners">
+                    <a href="/" target="_blank" rel="noopener noreferrer">
                       <div>
                         <img
-                          src={
-                            "https://ethicallearner.com/assets/images/el.png"
-                          }
+                          src={require("../../../assets/CSLlogo.png")}
+                          alt=""
+                        />
+                      </div>
+                    </a>
+                  </div>
+                  <div className="d-flex justify-content-center partners">
+                    <a href="/" target="_blank" rel="noopener noreferrer">
+                      <div>
+                        <img
+                          src={require("../../../assets/Bway Logo.png")}
                           alt=""
                         />
                       </div>

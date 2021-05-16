@@ -17,7 +17,7 @@ export default function Faq() {
     <>
       <SuperHeader />
       <div className="about-cont">
-        <div class="container">
+        <div className="container">
           <br />
           <br />
           <div
@@ -79,10 +79,10 @@ export default function Faq() {
             </div>
           </div>
 
-          <div class="alert alert-warning alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert">
+          <div className="alert alert-warning alert-dismissible" role="alert">
+            <button type="button" className="close" data-dismiss="alert">
               <span aria-hidden="true">&times;</span>
-              <span class="sr-only">Close</span>
+              <span className="sr-only">Close</span>
             </button>
             This section contains a wealth of information, related to{" "}
             <strong>Placing Order and Demo</strong> and its ease of use. If you
@@ -91,13 +91,13 @@ export default function Faq() {
 
           <br />
 
-          <div class="" id="accordion">
-            <div class="faqHeader">General questions</div>
-            <div class="card ">
-              <div class="card-header">
-                <h4 class="card-header">
+          <div className="" id="accordion">
+            <div className="faqHeader">General questions</div>
+            <div className="card ">
+              <div className="card-header">
+                <h4 className="card-header">
                   <a
-                    class="accordion-toggle"
+                    className="accordion-toggle"
                     data-toggle="collapse"
                     data-parent="#accordion"
                     href="#collapseOne"
@@ -106,8 +106,8 @@ export default function Faq() {
                   </a>
                 </h4>
               </div>
-              <div id="collapseOne" class="panel-collapse collapse in">
-                <div class="card-block">
+              <div id="collapseOne" className="panel-collapse collapse in">
+                <div className="card-block">
                   While you may enjoy writing the scribble at leisure, we advise
                   you to register at the time of check out for the first time to
                   enjoy a superior shopping experience every time you visit us.
@@ -117,11 +117,11 @@ export default function Faq() {
                 </div>
               </div>
             </div>
-            <div class="card ">
-              <div class="card-header">
-                <h4 class="card-header">
+            <div className="card ">
+              <div className="card-header">
+                <h4 className="card-header">
                   <a
-                    class="accordion-toggle collapsed"
+                    className="accordion-toggle collapsed"
                     data-toggle="collapse"
                     data-parent="#accordion"
                     href="#collapseTen"
@@ -130,17 +130,17 @@ export default function Faq() {
                   </a>
                 </h4>
               </div>
-              <div id="collapseTen" class="panel-collapse collapse">
-                <div class="card-block">
+              <div id="collapseTen" className="panel-collapse collapse">
+                <div className="card-block">
                   The core of the brand is to provide branded scribble t-shirts.
                 </div>
               </div>
             </div>
-            <div class="card ">
-              <div class="card-header">
-                <h4 class="card-header">
+            <div className="card ">
+              <div className="card-header">
+                <h4 className="card-header">
                   <a
-                    class="accordion-toggle collapsed"
+                    className="accordion-toggle collapsed"
                     data-toggle="collapse"
                     data-parent="#accordion"
                     href="#collapseEleven"
@@ -150,17 +150,17 @@ export default function Faq() {
                   </a>
                 </h4>
               </div>
-              <div id="collapseEleven" class="panel-collapse collapse">
-                <div class="card-block">No!</div>
+              <div id="collapseEleven" className="panel-collapse collapse">
+                <div className="card-block">No!</div>
               </div>
             </div>
 
-            <div class="faqHeader">Shipping</div>
-            <div class="card ">
-              <div class="card-header">
-                <h4 class="card-header">
+            <div className="faqHeader">Shipping</div>
+            <div className="card ">
+              <div className="card-header">
+                <h4 className="card-header">
                   <a
-                    class="accordion-toggle collapsed"
+                    className="accordion-toggle collapsed"
                     data-toggle="collapse"
                     data-parent="#accordion"
                     href="#collapseTwo"
@@ -169,8 +169,8 @@ export default function Faq() {
                   </a>
                 </h4>
               </div>
-              <div id="collapseTwo" class="panel-collapse collapse">
-                <div class="card-block">
+              <div id="collapseTwo" className="panel-collapse collapse">
+                <div className="card-block">
                   At Foaxx, we ensure that our customers receive the purchased
                   items in the finest condition and on time. Depending on your
                   location, the product will be delivered to your doorstep upto
@@ -178,11 +178,11 @@ export default function Faq() {
                 </div>
               </div>
             </div>
-            <div class="card ">
-              <div class="card-header">
-                <h4 class="card-header">
+            <div className="card ">
+              <div className="card-header">
+                <h4 className="card-header">
                   <a
-                    class="accordion-toggle collapsed"
+                    className="accordion-toggle collapsed"
                     data-toggle="collapse"
                     data-parent="#accordion"
                     href="#collapseThree"
@@ -191,8 +191,8 @@ export default function Faq() {
                   </a>
                 </h4>
               </div>
-              <div id="collapseThree" class="panel-collapse collapse">
-                <div class="card-block">
+              <div id="collapseThree" className="panel-collapse collapse">
+                <div className="card-block">
                   The steps involved in this process are really simple. All you
                   need to do is:
                   <ul>
@@ -203,7 +203,7 @@ export default function Faq() {
                     <li>
                       Click on{" "}
                       <strong>
-                        <a href="">Place Order</a>
+                        <a href="/">Place Order</a>
                       </strong>{" "}
                       button and Place the order on the page your are directed
                       to.
@@ -222,11 +222,11 @@ export default function Faq() {
                 </div>
               </div>
             </div>
-            <div class="card ">
-              <div class="card-header">
-                <h4 class="card-header">
+            <div className="card ">
+              <div className="card-header">
+                <h4 className="card-header">
                   <a
-                    class="accordion-toggle collapsed"
+                    className="accordion-toggle collapsed"
                     data-toggle="collapse"
                     data-parent="#accordion"
                     href="#collapseFive"
@@ -235,8 +235,8 @@ export default function Faq() {
                   </a>
                 </h4>
               </div>
-              <div id="collapseFive" class="panel-collapse collapse">
-                <div class="card-block">
+              <div id="collapseFive" className="panel-collapse collapse">
+                <div className="card-block">
                   At present, we are only offering local shipping of orders. But
                   we would love to help you out, so call our Foaxx executive and
                   we can see if it can be worked out.
@@ -244,11 +244,11 @@ export default function Faq() {
                 </div>
               </div>
             </div>
-            <div class="card ">
-              <div class="card-header">
-                <h4 class="card-header">
+            <div className="card ">
+              <div className="card-header">
+                <h4 className="card-header">
                   <a
-                    class="accordion-toggle collapsed"
+                    className="accordion-toggle collapsed"
                     data-toggle="collapse"
                     data-parent="#accordion"
                     href="#collapseSix"
@@ -257,8 +257,8 @@ export default function Faq() {
                   </a>
                 </h4>
               </div>
-              <div id="collapseSix" class="panel-collapse collapse">
-                <div class="card-block">
+              <div id="collapseSix" className="panel-collapse collapse">
+                <div className="card-block">
                   You cannot change your shipping address at the time of placing
                   the order in your account. But you cannot change the address
                   after placing your order. You will be required to send us an
@@ -267,11 +267,11 @@ export default function Faq() {
                 </div>
               </div>
             </div>
-            <div class="card ">
-              <div class="card-header">
-                <h4 class="card-header">
+            <div className="card ">
+              <div className="card-header">
+                <h4 className="card-header">
                   <a
-                    class="accordion-toggle collapsed"
+                    className="accordion-toggle collapsed"
                     data-toggle="collapse"
                     data-parent="#accordion"
                     href="#collapseEight"
@@ -280,17 +280,17 @@ export default function Faq() {
                   </a>
                 </h4>
               </div>
-              <div id="collapseEight" class="panel-collapse collapse">
-                <div class="card-block">
+              <div id="collapseEight" className="panel-collapse collapse">
+                <div className="card-block">
                   Just drop an email to info@ethicallearner.com
                 </div>
               </div>
             </div>
-            <div class="card ">
-              <div class="card-header">
-                <h4 class="card-header">
+            <div className="card ">
+              <div className="card-header">
+                <h4 className="card-header">
                   <a
-                    class="accordion-toggle collapsed"
+                    className="accordion-toggle collapsed"
                     data-toggle="collapse"
                     data-parent="#accordion"
                     href="#collapseNine"
@@ -299,20 +299,20 @@ export default function Faq() {
                   </a>
                 </h4>
               </div>
-              <div id="collapseNine" class="panel-collapse collapse">
-                <div class="card-block">
+              <div id="collapseNine" className="panel-collapse collapse">
+                <div className="card-block">
                   We will keep you informed through SMS & Email till your
                   purchase is delivered to you.
                 </div>
               </div>
             </div>
 
-            <div class="faqHeader">Guidelines</div>
-            <div class="card ">
-              <div class="card-header">
-                <h4 class="card-header">
+            <div className="faqHeader">Guidelines</div>
+            <div className="card ">
+              <div className="card-header">
+                <h4 className="card-header">
                   <a
-                    class="accordion-toggle collapsed"
+                    className="accordion-toggle collapsed"
                     data-toggle="collapse"
                     data-parent="#accordion"
                     href="#collapseFour"
@@ -322,8 +322,8 @@ export default function Faq() {
                   </a>
                 </h4>
               </div>
-              <div id="collapseFour" class="panel-collapse collapse">
-                <div class="card-block">
+              <div id="collapseFour" className="panel-collapse collapse">
+                <div className="card-block">
                   Our Delivery partner will make three attempts to deliver
                   before returning the product to our warehouse. You may contact
                   us at info@ethicallearner.com or call Foaxx on 0000000000 to
@@ -332,11 +332,11 @@ export default function Faq() {
                 </div>
               </div>
             </div>
-            <div class="card ">
-              <div class="card-header">
-                <h4 class="card-header">
+            <div className="card ">
+              <div className="card-header">
+                <h4 className="card-header">
                   <a
-                    class="accordion-toggle collapsed"
+                    className="accordion-toggle collapsed"
                     data-toggle="collapse"
                     data-parent="#accordion"
                     href="#collapseSeven"
@@ -345,19 +345,19 @@ export default function Faq() {
                   </a>
                 </h4>
               </div>
-              <div id="collapseSeven" class="panel-collapse collapse">
-                <div class="card-block">
+              <div id="collapseSeven" className="panel-collapse collapse">
+                <div className="card-block">
                   Sorry! At this point of time we don’t have any return and
                   cancellation policy.
                 </div>
               </div>
             </div>
 
-            <div class="card ">
-              <div class="card-header">
-                <h4 class="card-header">
+            <div className="card ">
+              <div className="card-header">
+                <h4 className="card-header">
                   <a
-                    class="accordion-toggle collapsed"
+                    className="accordion-toggle collapsed"
                     data-toggle="collapse"
                     data-parent="#accordion"
                     href="#collapseEleven"
@@ -366,19 +366,19 @@ export default function Faq() {
                   </a>
                 </h4>
               </div>
-              <div id="collapseEleven" class="panel-collapse collapse">
-                <div class="card-block">
+              <div id="collapseEleven" className="panel-collapse collapse">
+                <div className="card-block">
                   We regret that we are not offering cash on delivery at this
                   point in time
                 </div>
               </div>
             </div>
 
-            <div class="card ">
-              <div class="card-header">
-                <h4 class="card-header">
+            <div className="card ">
+              <div className="card-header">
+                <h4 className="card-header">
                   <a
-                    class="accordion-toggle collapsed"
+                    className="accordion-toggle collapsed"
                     data-toggle="collapse"
                     data-parent="#accordion"
                     href="#collapseTwelve"
@@ -387,8 +387,8 @@ export default function Faq() {
                   </a>
                 </h4>
               </div>
-              <div id="collapseTwelve" class="panel-collapse collapse">
-                <div class="card-block">
+              <div id="collapseTwelve" className="panel-collapse collapse">
+                <div className="card-block">
                   Thank you for shopping at Foaxx. Your purchase will be
                   delivered at your shipping address upto 7-10 days of placing
                   an order.
@@ -396,11 +396,11 @@ export default function Faq() {
               </div>
             </div>
 
-            <div class="card ">
-              <div class="card-header">
-                <h4 class="card-header">
+            <div className="card ">
+              <div className="card-header">
+                <h4 className="card-header">
                   <a
-                    class="accordion-toggle collapsed"
+                    className="accordion-toggle collapsed"
                     data-toggle="collapse"
                     data-parent="#accordion"
                     href="#collapseThirteen"
@@ -410,19 +410,19 @@ export default function Faq() {
                   </a>
                 </h4>
               </div>
-              <div id="collapseThirteen" class="panel-collapse collapse">
-                <div class="card-block">
+              <div id="collapseThirteen" className="panel-collapse collapse">
+                <div className="card-block">
                   Yes. We will be happy to have a product delivered as a gift to
                   an alternate address.
                 </div>
               </div>
             </div>
 
-            <div class="card ">
-              <div class="card-header">
-                <h4 class="card-header">
+            <div className="card ">
+              <div className="card-header">
+                <h4 className="card-header">
                   <a
-                    class="accordion-toggle collapsed"
+                    className="accordion-toggle collapsed"
                     data-toggle="collapse"
                     data-parent="#accordion"
                     href="#collapseFouteen"
@@ -431,8 +431,8 @@ export default function Faq() {
                   </a>
                 </h4>
               </div>
-              <div id="collapseFourteen" class="panel-collapse collapse">
-                <div class="card-block">
+              <div id="collapseFourteen" className="panel-collapse collapse">
+                <div className="card-block">
                   At Foaxx, we would like to offer you the best shopping
                   experience. We will be happy to gift wrap your purchase as a
                   service gesture.
@@ -440,11 +440,11 @@ export default function Faq() {
               </div>
             </div>
 
-            <div class="card ">
-              <div class="card-header">
-                <h4 class="card-header">
+            <div className="card ">
+              <div className="card-header">
+                <h4 className="card-header">
                   <a
-                    class="accordion-toggle collapsed"
+                    className="accordion-toggle collapsed"
                     data-toggle="collapse"
                     data-parent="#accordion"
                     href="#collapseFifteen"
@@ -453,8 +453,8 @@ export default function Faq() {
                   </a>
                 </h4>
               </div>
-              <div id="collapseFifteen" class="panel-collapse collapse">
-                <div class="card-block">
+              <div id="collapseFifteen" className="panel-collapse collapse">
+                <div className="card-block">
                   We regret the experience and apologies for the inconvenience.
                   In an unlikely event that your order arrives in a damaged
                   condition, please email us with an image of the damaged
@@ -465,11 +465,11 @@ export default function Faq() {
               </div>
             </div>
 
-            <div class="card ">
-              <div class="card-header">
-                <h4 class="card-header">
+            <div className="card ">
+              <div className="card-header">
+                <h4 className="card-header">
                   <a
-                    class="accordion-toggle collapsed"
+                    className="accordion-toggle collapsed"
                     data-toggle="collapse"
                     data-parent="#accordion"
                     href="#collapseSixteen"
@@ -478,8 +478,8 @@ export default function Faq() {
                   </a>
                 </h4>
               </div>
-              <div id="collapseSixteen" class="panel-collapse collapse">
-                <div class="card-block">
+              <div id="collapseSixteen" className="panel-collapse collapse">
+                <div className="card-block">
                   We apologise for the inconvenience. Please contact us at
                   info@ethicallearner.com or call us on 0000000000 to speak to
                   the Foaxx executive. We are available from 11 am to 10.00 pm
@@ -488,11 +488,11 @@ export default function Faq() {
               </div>
             </div>
 
-            <div class="card ">
-              <div class="card-header">
-                <h4 class="card-header">
+            <div className="card ">
+              <div className="card-header">
+                <h4 className="card-header">
                   <a
-                    class="accordion-toggle collapsed"
+                    className="accordion-toggle collapsed"
                     data-toggle="collapse"
                     data-parent="#accordion"
                     href="#collapseSeventeen"
@@ -501,8 +501,8 @@ export default function Faq() {
                   </a>
                 </h4>
               </div>
-              <div id="collapseSeventeen" class="panel-collapse collapse">
-                <div class="card-block">
+              <div id="collapseSeventeen" className="panel-collapse collapse">
+                <div className="card-block">
                   You may cancel your order by calling us on 1123456456785252
                   and we will be happy to assist you. We are available from 11
                   am to 10.00 pm on all days of the week However, an order can
@@ -513,11 +513,11 @@ export default function Faq() {
               </div>
             </div>
 
-            <div class="card ">
-              <div class="card-header">
-                <h4 class="card-header">
+            <div className="card ">
+              <div className="card-header">
+                <h4 className="card-header">
                   <a
-                    class="accordion-toggle collapsed"
+                    className="accordion-toggle collapsed"
                     data-toggle="collapse"
                     data-parent="#accordion"
                     href="#collapseEighteen"
@@ -527,8 +527,8 @@ export default function Faq() {
                   </a>
                 </h4>
               </div>
-              <div id="collapseEighteen" class="panel-collapse collapse">
-                <div class="card-block">
+              <div id="collapseEighteen" className="panel-collapse collapse">
+                <div className="card-block">
                   We respect your need for privacy. Please click on the
                   unsubscribe link embedded in our online communication to
                   unsubscribe yourself. If the problem persists, just give us a
@@ -538,11 +538,11 @@ export default function Faq() {
               </div>
             </div>
 
-            <div class="card ">
-              <div class="card-header">
-                <h4 class="card-header">
+            <div className="card ">
+              <div className="card-header">
+                <h4 className="card-header">
                   <a
-                    class="accordion-toggle collapsed"
+                    className="accordion-toggle collapsed"
                     data-toggle="collapse"
                     data-parent="#accordion"
                     href="#collapseNineteen"
@@ -551,8 +551,8 @@ export default function Faq() {
                   </a>
                 </h4>
               </div>
-              <div id="collapseNineteen" class="panel-collapse collapse">
-                <div class="card-block">
+              <div id="collapseNineteen" className="panel-collapse collapse">
+                <div className="card-block">
                   Our office hours are from 11 am to 10:00 pm on all days of the
                   week. You can also reach us at (((( email )))) and we assure
                   you of a response within 2 business days.
@@ -560,11 +560,11 @@ export default function Faq() {
               </div>
             </div>
 
-            <div class="card ">
-              <div class="card-header">
-                <h4 class="card-header">
+            <div className="card ">
+              <div className="card-header">
+                <h4 className="card-header">
                   <a
-                    class="accordion-toggle collapsed"
+                    className="accordion-toggle collapsed"
                     data-toggle="collapse"
                     data-parent="#accordion"
                     href="#collapseTwenty"
@@ -573,8 +573,8 @@ export default function Faq() {
                   </a>
                 </h4>
               </div>
-              <div id="collapseTwenty" class="panel-collapse collapse">
-                <div class="card-block">
+              <div id="collapseTwenty" className="panel-collapse collapse">
+                <div className="card-block">
                   Currently, we do not have a loyalty programme on our website
                   but we are working on it.
                 </div>

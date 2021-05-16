@@ -10,7 +10,14 @@ import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import { red } from "@material-ui/core/colors";
 import Button from "@material-ui/core/Button";
-import FileCopyIcon from "@material-ui/icons/FileCopy";
+import {
+  LinkedIn as LinkedInIcon,
+  Facebook as FacebookIcon,
+  Instagram as InstagramIcon,
+  FileCopy as FileCopyIcon,
+  WhatsApp as WhatsAppIcon,
+  Twitter as TwitterIcon,
+} from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,9 +36,7 @@ export default function ShareCard(props) {
   const classes = useStyles();
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [msgSnackbar, setMsgSnackbar] = useState("");
-  const [shareText, setShareText] = useState(
-    "Hey dear friend, Lets Celebrate Scribble Day 2021 virtullay together | Write a Scribble Message for me || www.foaxx.com/"
-  );
+  const shareText = `Hey dear friend, Lets Celebrate Scribble Day 2021 virtullay together | Write a Scribble Message for me || www.foaxx.com`;
 
   return (
     <Card className={classes.root}>
@@ -62,6 +67,7 @@ export default function ShareCard(props) {
               {props.userdata.name}
             </Typography>
           }
+          subheader={props.userdata.userId}
         />
       ) : (
         <Typography gutterBottom variant="h5" style={{ textAlign: "center" }}>
@@ -81,19 +87,21 @@ export default function ShareCard(props) {
       </CardContent>
       <CardActions disableSpacing>
         <div className="part socials">
-          <Button
-            variant="contained"
-            color="default"
-            onClick={() => {
-              navigator.clipboard.writeText(shareText);
-              setOpenSnackbar(true);
-              setMsgSnackbar("Copied");
-              setTimeout(() => setOpenSnackbar(false), 1000);
-              return false;
-            }}
-          >
-            <span className={"fa fa-copy"}></span>
-          </Button>
+          {!props.userdata && (
+            <Button
+              variant="contained"
+              color="default"
+              onClick={() => {
+                navigator.clipboard.writeText(shareText);
+                setOpenSnackbar(true);
+                setMsgSnackbar("Copied");
+                setTimeout(() => setOpenSnackbar(false), 1000);
+                return false;
+              }}
+            >
+              <FileCopyIcon />
+            </Button>
+          )}
           <a href="https://www.instagram.com/">
             <Button
               variant="contained"
@@ -108,7 +116,7 @@ export default function ShareCard(props) {
                 return false;
               }}
             >
-              <span className={"fa fa-instagram"}></span>
+              <InstagramIcon />
             </Button>
           </a>
           <a
@@ -123,7 +131,7 @@ export default function ShareCard(props) {
                 color: "#fff",
               }}
             >
-              <span className={"fa fa-linkedin"}></span>
+              <LinkedInIcon />
             </Button>
           </a>
           <Button
@@ -139,7 +147,7 @@ export default function ShareCard(props) {
               return false;
             }}
           >
-            <span className={"fa fa-facebook"}></span>
+            <FacebookIcon />
           </Button>
           <a
             target="_blank"
@@ -153,7 +161,7 @@ export default function ShareCard(props) {
                 color: "#fff",
               }}
             >
-              <span className={"fa fa-twitter"}></span>
+              <TwitterIcon />
             </Button>
           </a>
           <a
@@ -169,7 +177,7 @@ export default function ShareCard(props) {
                 color: "#fff",
               }}
             >
-              <span className={"fa fa-whatsapp"}></span>
+              <WhatsAppIcon />
             </Button>
           </a>
 

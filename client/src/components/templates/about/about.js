@@ -177,22 +177,42 @@ export default function About() {
                   <span className="small text-uppercase  ">Project Lead</span>
                   <ul className="social mb-0 list-inline mt-3">
                     <li className="list-inline-item">
-                      <a href="#" className="social-link">
-                        <i className="fa fa-facebook-f"></i>
+                      <a
+                        href="https://github.com/genialkartik"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="social-link"
+                      >
+                        <i className="fa fa-github"></i>
                       </a>
                     </li>
                     <li className="list-inline-item">
-                      <a href="#" className="social-link">
+                      <a
+                        href="https://twitter.com/genialkartik"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="social-link"
+                      >
                         <i className="fa fa-twitter"></i>
                       </a>
                     </li>
                     <li className="list-inline-item">
-                      <a href="#" className="social-link">
+                      <a
+                        href="https://instagram.com/genialkartik"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="social-link"
+                      >
                         <i className="fa fa-instagram"></i>
                       </a>
                     </li>
                     <li className="list-inline-item">
-                      <a href="#" className="social-link">
+                      <a
+                        href="https://linkedin.com/in/genialkartik"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="social-link"
+                      >
                         <i className="fa fa-linkedin"></i>
                       </a>
                     </li>
@@ -212,22 +232,32 @@ export default function About() {
                   <span className="small text-uppercase  ">Developer</span>
                   <ul className="social mb-0 list-inline mt-3">
                     <li className="list-inline-item">
-                      <a href="#" className="social-link">
-                        <i className="fa fa-facebook-f"></i>
-                      </a>
-                    </li>
-                    <li className="list-inline-item">
-                      <a href="#" className="social-link">
+                      <a
+                        href="https://twitter.com/MadanPa74002488"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="social-link"
+                      >
                         <i className="fa fa-twitter"></i>
                       </a>
                     </li>
                     <li className="list-inline-item">
-                      <a href="#" className="social-link">
-                        <i className="fa fa-instagram"></i>
+                      <a
+                        href="https://github.com/NorinMp143"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="social-link"
+                      >
+                        <i className="fa fa-github"></i>
                       </a>
                     </li>
                     <li className="list-inline-item">
-                      <a href="#" className="social-link">
+                      <a
+                        href="https://www.linkedin.com/in/madan-lal/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="social-link"
+                      >
                         <i className="fa fa-linkedin"></i>
                       </a>
                     </li>
@@ -248,22 +278,42 @@ export default function About() {
                   <span className="small text-uppercase  ">Manager</span>
                   <ul className="social mb-0 list-inline mt-3">
                     <li className="list-inline-item">
-                      <a href="#" className="social-link">
+                      <a
+                        href="https://www.facebook.com/tajwarkhan2"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="social-link"
+                      >
                         <i className="fa fa-facebook-f"></i>
                       </a>
                     </li>
                     <li className="list-inline-item">
-                      <a href="#" className="social-link">
+                      <a
+                        href="https://www.twitter.com/in/tajwar_khan_"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="social-link"
+                      >
                         <i className="fa fa-twitter"></i>
                       </a>
                     </li>
                     <li className="list-inline-item">
-                      <a href="#" className="social-link">
+                      <a
+                        href="https://www.instagram.com/tajwar_khan_/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="social-link"
+                      >
                         <i className="fa fa-instagram"></i>
                       </a>
                     </li>
                     <li className="list-inline-item">
-                      <a href="#" className="social-link">
+                      <a
+                        href="https://www.linkedin.com/in/tajwar-khan/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="social-link"
+                      >
                         <i className="fa fa-linkedin"></i>
                       </a>
                     </li>

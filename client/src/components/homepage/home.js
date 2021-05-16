@@ -10,6 +10,7 @@ import HelpIcon from "@material-ui/icons/Help";
 import SecurityIcon from "@material-ui/icons/Security";
 import PermIdentityIcon from "@material-ui/icons/PermIdentity";
 import InputLabel from "@material-ui/core/InputLabel";
+import RateReviewIcon from "@material-ui/icons/RateReview";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import FormControl from "@material-ui/core/FormControl";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -28,6 +29,9 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormLabel from "@material-ui/core/FormLabel";
 import Snackbar from "@material-ui/core/Snackbar";
 import HomeIcon from "@material-ui/icons/Home";
+import Paper from "@material-ui/core/Paper";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
 import Tooltip from "@material-ui/core/Tooltip";
 import SendIcon from "@material-ui/icons/Send";
 import VpnKeyIcon from "@material-ui/icons/VpnKey";
@@ -37,6 +41,15 @@ import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Button from "@material-ui/core/Button";
 import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
+import {
+  LinkedIn as LinkedInIcon,
+  Facebook as FacebookIcon,
+  Instagram as InstagramIcon,
+  WhatsApp as WhatsAppIcon,
+  Twitter as TwitterIcon,
+  DeleteOutline as DeleteOutlineIcon,
+} from "@material-ui/icons";
+import Badge from "@material-ui/core/Badge";
 import ShareCard from "./shareCard.js";
 import { getFontSize } from "../useGetPosition";
 import useWindowDimensions from "../dimension";
@@ -107,7 +120,7 @@ function Home() {
   const classes = useStyles();
   const imageRef = React.createRef(null);
   const [imageRefWidth, setImageRefWidth] = useState(0);
-  const [imageRefHeight, setImageRefHeight] = useState(0);
+  // const [imageRefHeight, setImageRefHeight] = useState(0);
   const messageRef = React.createRef(null);
   const imageWrap = useRef(null);
   const { image, takeScreenshot } = useScreenshot({ ref: imageWrap });
@@ -151,6 +164,7 @@ function Home() {
   const [fontFam, setFontFam] = useState("Jazz LET, fantasy");
 
   const [tshirtSide, setTshirtSide] = useState("front");
+  const [tshirtGender, setTshirtGender] = useState("male");
   const [isFixed, setIsFixed] = useState(false);
   const [dimensions, setDimensions] = useState({});
 
@@ -189,10 +203,15 @@ function Home() {
     useState("signup");
   const [avatar, setAvatar] = useState();
 
+  const [scribblesCount, setScribblesCount] = useState(0);
+  const [scribbleSentCount, setScribbleSentCount] = useState("0");
+  const [scribbleReceivedCount, setScribbleReceivedCount] = useState("0");
+  const [scribbleBool, setscribbleBool] = useState("Received");
+
   useEffect(() => {
     setImageRefWidth(imageRef.current.getBoundingClientRect().width);
-    setImageRefHeight(imageRef.current.getBoundingClientRect().height);
-  }, [imageRef, imageRef.current, windowWidth]);
+    // setImageRefHeight(imageRef.current.getBoundingClientRect().height);
+  }, [imageRef, windowWidth]);
 
   const { userId } = useParams();
 
@@ -212,7 +231,9 @@ function Home() {
             friendUserId: res.friendData.userId,
             friendName: res.friendData.name,
             friendAvatar: res.friendData.avatar,
+            friendGender: res.friendData.gender,
           });
+          setTshirtGender(res.friendData.gender);
           setScribbleList(res.scribbles);
         } else {
           setFriendData(null);
@@ -245,7 +266,14 @@ function Home() {
         );
       }
     })();
-  }, [landingPageBool]);
+
+    setInterval(async () => {
+      const resp = await axios.get("/all/scribble");
+      if (resp.data && resp.data.scribblesCount) {
+        setScribblesCount(resp.data.scribblesCount);
+      }
+    }, 2000);
+  }, [landingPageBool, userId]);
 
   const handleFixClick = () => {
     if (!friendData) {
@@ -269,7 +297,7 @@ function Home() {
     const rootHeight = rootDimensions.height;
     const rootX = rootDimensions.x;
     const rootY = rootDimensions.y;
-    const selfWidth = selfDimensions.width;
+    // const selfWidth = selfDimensions.width;
     const selfX = selfDimensions.x;
     const selfY = selfDimensions.y;
 
@@ -287,7 +315,6 @@ function Home() {
   }
 
   const download = (imageUrl) => {
-    console.log(imageUrl);
     if (imageUrl) {
       const url = imageUrl;
       const link = document.createElement("a");
@@ -312,10 +339,28 @@ function Home() {
   const handleMyScribbleClick = async () => {
     setLandingPageBool(false);
     setEnterFriendName("");
+    setFriendLogo();
     if (userdata) {
       setLoadingBool(true);
       setUserDetailsBool(true);
-      const scribbleResp = await axios.get("/get/scribbles");
+      setTshirtGender(userdata.gender);
+
+      setScribbleReceivedCount("0");
+      setScribbleSentCount(0);
+      const scribbleCountResp = await axios.get("/count/scribble");
+      if (scribbleCountResp.data) {
+        setScribbleReceivedCount(
+          scribbleCountResp.data.received > 0
+            ? scribbleCountResp.data.received
+            : "0"
+        );
+        setScribbleSentCount(
+          scribbleCountResp.data.sent > 0 ? scribbleCountResp.data.sent : "0"
+        );
+      }
+
+      setScribbleList([]);
+      const scribbleResp = await axios.get("/scribbles/received");
       if (scribbleResp.data) {
         setScribbleList(scribbleResp.data.scribbleList);
       }
@@ -362,6 +407,7 @@ function Home() {
             friendUserId: friendData.friendUserId,
             friendName: friendData.friendName,
             friendAvatar: friendData.friendAvatar,
+            friendGender: friendData.friendGender,
             dimensions,
             message,
             angle: rotateValue,
@@ -371,12 +417,12 @@ function Home() {
             side: tshirtSide,
           });
           setLoadingBool(false);
+          setMsgSnackbar(resp.data.respMessage);
           setOpenSnackbar(true);
-          setTimeout(() => setOpenSnackbar(false), 1000);
+          setTimeout(() => setOpenSnackbar(false), 3000);
           if (resp.data && resp.data.scribbled) {
-            setMsgSnackbar("Send Scribble Successfully");
+            setIsFixed(false);
           } else {
-            setMsgSnackbar("Something went wrong");
             setTimeout(() => window.location.reload(), 3000);
           }
         }
@@ -433,7 +479,7 @@ function Home() {
     if (!pinCodeToVerify) alert("Insert Code to verify");
     else if (!inputEmail) alert("Insert Email first");
     else {
-      if (codeToCheck == pinCodeToVerify) {
+      if (codeToCheck.toString() === pinCodeToVerify.toString()) {
         setInsertVerifyCode(false);
         setEnterPinOrCodeBool("");
         setSignUpformBool(true);
@@ -550,8 +596,22 @@ function Home() {
     }
   };
 
-  const handleOnDragStart = () => {
-    // set
+  const handleDeleteScribble = async (scribbleId) => {
+    const resp = await axios.post("/scribble/delete", { scribbleId });
+    setOpenSnackbar(true);
+    setTimeout(() => setOpenSnackbar(false), 3000);
+    setMsgSnackbar(resp.data.respMessage);
+    if (resp.data.deleted) {
+      let _scribbleList = scribbleList.filter(
+        (scribble) => scribble.scribbleId !== scribbleId
+      );
+      setScribbleList(_scribbleList);
+      if (scribbleBool === "Received") {
+        setScribbleReceivedCount(scribbleReceivedCount - 1);
+      } else {
+        setScribbleSentCount(scribbleSentCount - 1);
+      }
+    }
   };
 
   function InviteFriend(props) {
@@ -574,7 +634,6 @@ function Home() {
   InviteFriend.propTypes = {
     onClose: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired,
-    selectedValue: PropTypes.string.isRequired,
   };
 
   function PlaceOrder(props) {
@@ -582,7 +641,6 @@ function Home() {
     const handlePlaceOrderClose = () => {
       onClose();
     };
-    console.log(userdata);
 
     return (
       <Dialog
@@ -598,7 +656,6 @@ function Home() {
   PlaceOrder.propTypes = {
     onClose: PropTypes.func.isRequired,
     open: PropTypes.bool.isRequired,
-    selectedValue: PropTypes.string.isRequired,
   };
   function DownloadForm(props) {
     const { onClose, selectedValue, open, image } = props;
@@ -612,7 +669,14 @@ function Home() {
         aria-labelledby="simple-dialog-title"
         open={open}
       >
-        <div style={{ padding: 12, display: "flex", flexDirection: "column" }}>
+        <div
+          style={{
+            padding: 12,
+            display: "flex",
+            flexDirection: "column",
+            backgroundColor: "#02203C",
+          }}
+        >
           {image ? (
             <img src={image} alt="Scribble Preview" />
           ) : (
@@ -625,9 +689,35 @@ function Home() {
               marginInline: 10,
               color: "#fff",
             }}
+            onClick={async () => {
+              setDownloadClicked(!downloadClicked);
+              if (!downloadClicked) {
+                setLoadingFor("downloadTshirt");
+                await takeScreenshot();
+                setTimeout(() => setLoadingFor(""), 1000);
+              } else {
+                setLoadingFor("downloadTshirt");
+                await takeScreenshot();
+                const clear = setInterval(async () => {
+                  if (true) {
+                    const imageBool = await download(image);
+                    if (imageBool) {
+                      setLoadingFor("");
+                      clearInterval(clear);
+                    }
+                  }
+                }, 3000);
+              }
+            }}
           >
-            <span className={"fa fa-download"}></span>
-            Download
+            {loadingFor === "downloadTshirt" ? (
+              <CircularProgress size={20} style={{ color: "white" }} />
+            ) : (
+              <>
+                <span className={"fa fa-download"}> </span>
+                {downloadClicked ? "Click to Download" : "Download"}
+              </>
+            )}
           </Button>
         </div>
       </Dialog>
@@ -726,6 +816,7 @@ function Home() {
                         marginInline: 10,
                         color: "#fff",
                       }}
+                      startIcon={<span className={"fa fa-download"}> </span>}
                     >
                       {loadingFor === "downloadTshirt" ? (
                         <CircularProgress
@@ -734,7 +825,6 @@ function Home() {
                         />
                       ) : (
                         <>
-                          <span className={"fa fa-download"}> </span>
                           {downloadClicked ? "Click to Download" : "Download"}
                         </>
                       )}
@@ -754,8 +844,8 @@ function Home() {
                         marginInline: 10,
                         color: "#fff",
                       }}
+                      startIcon={<span className={"fa fa-user"}></span>}
                     >
-                      <span className={"fa fa-user"}></span>
                       Preview
                     </Button>
                   </>
@@ -824,6 +914,7 @@ function Home() {
                           if (resp.data.loggedout) {
                             setUserDetailsBool(false);
                             setLandingPageBool(true);
+                            setMessage("");
                             setUserData(null);
                           } else {
                             setOpenSnackbar(true);
@@ -842,6 +933,7 @@ function Home() {
 
                       <Button
                         variant="contained"
+                        size="small"
                         onClick={() => setPlaceOrderDialog(true)}
                         style={{ backgroundColor: "#0A0", color: "#fff" }}
                         startIcon={
@@ -850,6 +942,15 @@ function Home() {
                       >
                         Place Order
                       </Button>
+
+                      <div className="col-12">
+                        <PlaceOrder
+                          open={openPlaceOrderDialog}
+                          onClose={() => {
+                            setPlaceOrderDialog(false);
+                          }}
+                        />
+                      </div>
                     </>
                   )}
                 </div>
@@ -888,7 +989,7 @@ function Home() {
                             Didn't find University?
                           </Typography>
                           <Form.Control
-                            className={" form"}
+                            className={"form"}
                             type="text"
                             placeholder="Search University"
                             name="message"
@@ -933,6 +1034,7 @@ function Home() {
                                         setEnterFriendName("");
                                         setFriendLogo();
                                         setFriendFocus(false);
+                                        setMessage("");
                                       }}
                                     >
                                       {uObj.name}
@@ -982,7 +1084,7 @@ function Home() {
                             Didn't find your Friend?
                           </Typography>
                           <Form.Control
-                            className={" form"}
+                            className={"form"}
                             type="text"
                             placeholder="Search Friend"
                             name="friendname"
@@ -1020,7 +1122,9 @@ function Home() {
                                       friendUserId: uObj.userId,
                                       friendName: uObj.name,
                                       friendAvatar: uObj.avatar,
+                                      friendGender: uObj.gender,
                                     });
+                                    setTshirtGender(uObj.gender);
                                     setEnterFriendName(uObj.name);
                                     setFriendLogo(uObj.avatar);
                                     setFriendFocus(false);
@@ -1060,6 +1164,7 @@ function Home() {
                         name="message"
                         maxLength={250}
                         multiple={true}
+                        value={message}
                         as="textarea"
                         onChange={(e) => setMessage(e.target.value)}
                         required
@@ -1259,25 +1364,31 @@ function Home() {
                         <Button
                           variant="contained"
                           onClick={() => {
-                            if (isFixed) {
-                              if (!userdata) {
-                                setOpenSnackbar(true);
-                                setMsgSnackbar("Login first to give Scribble");
-                                setLandingPageBool(false);
-                                setEnterEmailBool(true);
-                                setTimeout(() => setOpenSnackbar(false), 6000);
-                              } else if (
-                                window.confirm(
-                                  "You won't be able to edit again. Are you sure to continue?"
-                                )
-                              ) {
-                                handleSendScribbleForm();
-                              }
+                            if (!userdata) {
+                              setOpenSnackbar(true);
+                              setMsgSnackbar("Login first to give Scribble");
+                              setLandingPageBool(false);
+                              setEnterEmailBool(true);
+                              setTimeout(() => setOpenSnackbar(false), 6000);
                             } else {
-                              handleFixClick();
+                              if (isFixed) {
+                                const respBool = window.confirm(
+                                  "You won't be able to edit again. Are you sure to continue?"
+                                );
+                                if (respBool) {
+                                  handleSendScribbleForm();
+                                } else {
+                                  setIsFixed(false);
+                                }
+                              } else {
+                                handleFixClick();
+                              }
                             }
                           }}
-                          style={{ backgroundColor: "#ED72C0", color: "#fff" }}
+                          style={{
+                            backgroundColor: isFixed ? "#0a0" : "#ED72C0",
+                            color: "#fff",
+                          }}
                         >
                           {loadingBool ? (
                             <CircularProgress
@@ -1297,64 +1408,168 @@ function Home() {
                       <CircularProgress />
                     ) : (
                       <>
-                        <div className="detailWrapper">
+                        <div className="detailWrapper" elevation={5}>
+                          <label>ID: {userdata.userId}</label>
                           <label>{userdata.name}</label>
                           <label>{userdata.email}</label>
                           <label>{userdata.university}</label>
                         </div>
                         <div className="detailWrapper">
-                          <label>Scribbles Messages Received</label>
-                          <div
+                          <Paper
                             style={{
-                              width: "100%",
-                              height: 1,
-                              margin: "12px 0 16px",
-                              backgroundColor: "#999",
-                            }}
-                          />
-                          <div
-                            style={{
-                              overflowY: "scroll",
-                              maxHeight: "200px",
+                              backgroundColor: "#1B354D",
                             }}
                           >
-                            {scribbleList.length > 0 ? (
-                              scribbleList.map((scribble) => (
-                                <div
-                                  key={scribble._id}
+                            <Tabs
+                              value={scribbleBool}
+                              onChange={async (e, newValue) => {
+                                setLoadingFor("scribbleMessages");
+                                setscribbleBool(newValue);
+                                setScribbleList([]);
+                                let scribbleResp = [];
+                                if (newValue === "Received") {
+                                  scribbleResp = await axios.get(
+                                    "/scribbles/received"
+                                  );
+                                } else {
+                                  scribbleResp = await axios.get(
+                                    "/scribbles/sent"
+                                  );
+                                }
+                                if (scribbleResp.data) {
+                                  setScribbleList(
+                                    scribbleResp.data.scribbleList
+                                  );
+                                }
+                                setLoadingFor("");
+                              }}
+                              variant="fullWidth"
+                              indicatorColor="primary"
+                              textColor="#A1D2FA"
+                              aria-label="scribbles"
+                            >
+                              <Tab
+                                style={{
+                                  fontSize: ".7em",
+                                  color: "#A1D2FA",
+                                }}
+                                icon={
+                                  <Badge
+                                    badgeContent={scribbleReceivedCount}
+                                  ></Badge>
+                                }
+                                label="Scribbles Received"
+                                value="Received"
+                              />
+
+                              <Tab
+                                style={{ fontSize: ".7em", color: "#A1D2FA" }}
+                                icon={
+                                  <Badge
+                                    badgeContent={scribbleSentCount}
+                                  ></Badge>
+                                }
+                                label="Scribbles Sent"
+                                value="Sent"
+                              />
+                            </Tabs>
+                          </Paper>
+                          {loadingFor === "scribbleMessages" ? (
+                            <CircularProgress className="pt-3" />
+                          ) : (
+                            <div
+                              style={{
+                                overflowY: "scroll",
+                                maxHeight: "200px",
+                              }}
+                              className="pt-3"
+                            >
+                              {scribbleList.length > 0 ? (
+                                scribbleList.map((scribble) => (
+                                  <div
+                                    key={scribble._id}
+                                    style={{
+                                      fontSize: "14px",
+                                    }}
+                                  >
+                                    <CardHeader
+                                      avatar={
+                                        <Avatar
+                                          aria-label="recipe"
+                                          className={classes.avatar}
+                                          src={
+                                            scribbleBool === "Sent"
+                                              ? scribble.sendToAvatar
+                                              : scribble.sendByAvatar
+                                          }
+                                        ></Avatar>
+                                      }
+                                      action={
+                                        <>
+                                          {scribbleBool === "Received" && (
+                                            <Link
+                                              to={`/u/${scribble.sendByUserId}`}
+                                              target="_blank"
+                                              rel="noopener noreferrer"
+                                            >
+                                              <Button
+                                                variant="contained"
+                                                style={{
+                                                  backgroundColor: "#2E73AD",
+                                                  color: "#fff",
+                                                  transform: "scale(0.8)",
+                                                }}
+                                                startIcon={
+                                                  <span
+                                                    className={"fa fa-reply"}
+                                                  ></span>
+                                                }
+                                              >
+                                                Scribble Back
+                                              </Button>
+                                            </Link>
+                                          )}
+                                          <DeleteOutlineIcon
+                                            className={"scribbleDelete"}
+                                            onClick={() =>
+                                              handleDeleteScribble(
+                                                scribble.scribbleId
+                                              )
+                                            }
+                                          />
+                                        </>
+                                      }
+                                      title={
+                                        scribbleBool === "Sent"
+                                          ? scribble.sendToName
+                                          : scribble.sendByName
+                                      }
+                                      subheader={scribble.message}
+                                    />
+                                    <div
+                                      style={{
+                                        width: "100%",
+                                        height: 1,
+                                        margin: "12px 0 16px",
+                                        backgroundColor: "#555",
+                                      }}
+                                    />
+                                  </div>
+                                ))
+                              ) : (
+                                <p
                                   style={{
-                                    fontSize: "14px",
+                                    color: "rgba(255,255,255,0.5)",
+                                    textAlign: "center",
                                   }}
                                 >
-                                  <CardHeader
-                                    avatar={
-                                      <Avatar
-                                        aria-label="recipe"
-                                        className={classes.avatar}
-                                        src={scribble.sendByAvatar}
-                                      ></Avatar>
-                                    }
-                                    title={scribble.sendByName}
-                                    subheader={scribble.message}
-                                  />
-                                  <div
-                                    style={{
-                                      width: "100%",
-                                      height: 1,
-                                      margin: "12px 0 16px",
-                                      backgroundColor: "#555",
-                                    }}
-                                  />
-                                </div>
-                              ))
-                            ) : (
-                              <p style={{ color: "rgba(255,255,255,0.5)" }}>
-                                You didn't received any scribble yet!
-                                <br /> Invite your friends to write scribbles
-                                for you.
-                              </p>
-                            )}
-                          </div>
+                                  You didn't {scribbleBool} any scribble yet!
+                                  <br /> Invite your friends to write scribbles
+                                  for you.
+                                </p>
+                              )}
+                            </div>
+                          )}
                         </div>
                         <div className="part">
                           <a href={image}>
@@ -1362,7 +1577,7 @@ function Home() {
                               variant="contained"
                               onClick={() => {
                                 navigator.clipboard.writeText(
-                                  "Hey dear friend, Lets Celebrate Scribble Day 2021 virtullay together | Write a Scribble Message for me || www.foaxx.com/"
+                                  `Hey dear friend, Lets Celebrate Scribble Day 2021 virtullay together | Write a Scribble Message for me || www.foaxx.com/u/${userdata.userId}`
                                 );
                                 setOpenSnackbar(true);
                                 setMsgSnackbar(
@@ -1375,13 +1590,13 @@ function Home() {
                                 color: "#fff",
                               }}
                             >
-                              <span className={"fa fa-instagram"}></span>
+                              <InstagramIcon />
                             </Button>
                           </a>
                           <a
                             target="_blank"
                             rel="noopener noreferrer"
-                            href="https://www.linkedin.com/shareArticle?url=www.foaxx.com/%20&title=Pandemic%20could%20ruin%20our%20studies%20But%20not%20our%20last%20day%20of%20college%20%7C%20%20%F0%9F%91%95%20Happy%20Scribble%20Day%202021%20%F0%9F%A5%B3%20%7C%20%20%20Write%20a%20Scribble%20for%20me%20"
+                            href={`https://www.linkedin.com/shareArticle?mini=true&url=www.foaxx.com/u/${userdata.userId}&title=Let's%20celebrate%20%F0%9F%91%95Scribble%20Day%202021%20%F0%9F%A5%B3%20Write%20a%20Scribble%20for%20me%20%F0%9F%98%8E%20&summary=Pandemic%20could%20ruin%20oour%20studies%20But%20not%20our%20last%20day%20of%20college%20%7C%20%F0%9F%91%95%20Happy%20Scribble%20Day%202021%20%F0%9F%A5%B3%20%7C%20Write%20a%20Scribble%20for%20me%20%F0%9F%98%8E&source=www.foaxx.com`}
                           >
                             <Button
                               variant="contained"
@@ -1390,7 +1605,7 @@ function Home() {
                                 color: "#fff",
                               }}
                             >
-                              <span className={"fa fa-linkedin"}></span>
+                              <LinkedInIcon />
                             </Button>
                           </a>
                           <Button
@@ -1401,21 +1616,17 @@ function Home() {
                             }}
                             onClick={() => {
                               window.open(
-                                "https://www.facebook.com/sharer/sharer.php?u=https%3A//foaxx.com"
+                                `https://www.facebook.com/sharer/sharer.php?u=https%3A//foaxx.com/u/${userdata.userId}`
                               );
                               return false;
                             }}
                           >
-                            <span className={"fa fa-facebook"}></span>
+                            <FacebookIcon />
                           </Button>
                           <a
                             target="_blank"
                             rel="noopener noreferrer"
-                            href={
-                              "https://twitter.com/intent/tweet?text=Pandemic%20could%20ruin%20our%20studies%20But%20not%20our%20last%20day%20of%20college%20%7C%0A%0A%F0%9F%91%95%20Happy%20Scribble%20Day%202021%20%F0%9F%A5%B3%20%7C%20%0A%0AWrite%20a%20Scribble%20for%20me%20%0A%0Ahttps%3A//foaxx.com/u/" +
-                              userdata.userId +
-                              "%20%0A%0A%23scribbleday2021%20"
-                            }
+                            href={`https://twitter.com/intent/tweet?url=www.foaxx.com/u/${userdata.userId}&text=Let's%20celebrate%20%F0%9F%91%95Scribble%20Day%202021%20%F0%9F%A5%B3%20Write%20a%20Scribble%20for%20me%20%F0%9F%98%8E%20%0A%23scribbleday2021%20%0A%0A`}
                           >
                             <Button
                               variant="contained"
@@ -1424,11 +1635,12 @@ function Home() {
                                 color: "#fff",
                               }}
                             >
-                              <span className={"fa fa-twitter"}></span>
+                              <TwitterIcon />
                             </Button>
                           </a>
                           <a
-                            href="https://web.whatsapp.com/send?text=Pandemic%20could%20ruin%20our%20studies%20But%20not%20our%20last%20day%20of%20college%20%7C%20%20%F0%9F%91%95%20Happy%20Scribble%20Day%202021%20%F0%9F%A5%B3%20%7C%20%20%20Write%20a%20Scribble%20for%20me%20%20%20https%3A//foaxx.com/%20%20%20#scribbleday2021%20%20"
+                            href={`https://web.whatsapp.com/send?text=Let's%20celebrate%20%F0%9F%91%95Scribble%20Day%202021%20%F0%9F%A5%B3%20Write%20a%20Scribble%20for%20me%20%F0%9F%98%8Ehttps%3A//foaxx.com/u/${userdata.userId}%20%20%20#scribbleday2021%20%20`}
+                            // href={`whatsapp://send?text=Let's%20celebrate%20%F0%9F%91%95Scribble%20Day%202021%20%F0%9F%A5%B3%20Write%20a%20Scribble%20for%20me%20%F0%9F%98%8Ehttps%3A//foaxx.com/u/${userdata.userId}%20%20%20#scribbleday2021%20%20`}
                             data-action="share/whatsapp/share"
                             target="_blank"
                             rel="noopener noreferrer"
@@ -1440,7 +1652,7 @@ function Home() {
                                 color: "#fff",
                               }}
                             >
-                              <span className={"fa fa-whatsapp"}></span>
+                              <WhatsAppIcon />
                             </Button>
                           </a>
                         </div>
@@ -1502,7 +1714,7 @@ function Home() {
                           "Send Verification Code"
                         )}
                       </Button>
-                      <span class="previewText">to {inputEmail}</span>
+                      <span className="previewText">to {inputEmail}</span>
                     </div>
                   )}
                   {enterEmailBool && (
@@ -1651,7 +1863,10 @@ function Home() {
                           onClick={handleSubmitSignupForm}
                         >
                           {loadingBool ? (
-                            <CircularProgress style={{ margin: "9px auto" }} />
+                            <CircularProgress
+                              size={20}
+                              style={{ margin: "9px auto" }}
+                            />
                           ) : (
                             "Submit"
                           )}
@@ -1748,14 +1963,12 @@ function Home() {
                       marginInline: 10,
                       color: "#fff",
                     }}
+                    startIcon={<span className={"fa fa-download"}> </span>}
                   >
                     {loadingFor === "downloadTshirt" ? (
                       <CircularProgress size={20} style={{ color: "white" }} />
                     ) : (
-                      <>
-                        <span className={"fa fa-download"}> </span>
-                        {downloadClicked ? "Click to Download" : "Download"}
-                      </>
+                      <>{downloadClicked ? "Click to Download" : "Download"}</>
                     )}
                   </Button>
                   <DownloadForm
@@ -1773,8 +1986,8 @@ function Home() {
                       marginInline: 10,
                       color: "#fff",
                     }}
+                    startIcon={<span className={"fa fa-user"}></span>}
                   >
-                    <span className={"fa fa-user"}></span>
                     Preview
                   </Button>
                 </>
@@ -1783,16 +1996,21 @@ function Home() {
             {!userDetailsBool && (
               <Row className="justify-content-center" style={{ padding: 16 }}>
                 <Col xs={12} sm={10} lg={8} className="d-flex flex-column">
-                  <h3
+                  <p
                     className={"center text-center"}
                     style={{
-                      color: "#FF8AE2",
-                      fontFamily: "sans",
+                      color: "#B5D7F3",
                       textAlign: "left",
+                      backgroundColor: "#183D5D",
+                      width: "max-content",
+                      borderRadius: "25px",
+                      paddingInline: "30px",
+                      paddingBlock: "10px",
                     }}
                   >
-                    A Day worth Remembering
-                  </h3>
+                    <RateReviewIcon size="small" /> {786 + scribblesCount}{" "}
+                    scribbles
+                  </p>
                   <div className="details-of-site">
                     <div className="part">
                       <div>
@@ -1800,11 +2018,9 @@ function Home() {
                           variant="contained"
                           onClick={() => {
                             if (userdata) {
-                              {
-                                setPlaceOrderDialog(true);
-                              }
+                              setPlaceOrderDialog(true);
                             } else {
-                              setMsgSnackbar("Login First");
+                              setMsgSnackbar("Login to Place Order");
                               setOpenSnackbar(true);
                               setTimeout(() => setOpenSnackbar(false), 1000);
                               setLandingPageBool(false);
@@ -1849,12 +2065,13 @@ function Home() {
                       textAlign: "center",
                     }}
                   >
-                    <p>
-                      Spread the happiness among your friends, juniors, seniors
-                      and connections to celebrate this year's{" "}
+                    <p style={{ color: "#B5D7F3" }}>
+                      Celebrate Scribble Day with us. Share with your friends to
+                      make this year's{" "}
                       <a href="/" target="_blank" rel="noopener noreferrer">
                         Scribble Day
-                      </a>
+                      </a>{" "}
+                      worth Remembering
                     </p>
                   </footer>
                 </Col>
@@ -1865,17 +2082,33 @@ function Home() {
             {/* RIGHT COLUMN */}
 
             <div className={"scribble-image1"} ref={imageWrap}>
-              {tshirtSide === "front" ? (
+              {tshirtGender === "male" ? (
+                tshirtSide === "front" ? (
+                  <Image
+                    alt=""
+                    src={require("../../assets/malefront.png")}
+                    className={"male-front loading"}
+                    ref={imageRef}
+                  />
+                ) : (
+                  <Image
+                    alt=""
+                    src={require("../../assets/maleback.png")}
+                    className={"male-front loading"}
+                    ref={imageRef}
+                  />
+                )
+              ) : tshirtSide === "front" ? (
                 <Image
                   alt=""
-                  src={require("../../assets/malefront.png")}
+                  src={require("../../assets/femalefront.png")}
                   className={"male-front loading"}
                   ref={imageRef}
                 />
               ) : (
                 <Image
                   alt=""
-                  src={require("../../assets/maleback.png")}
+                  src={require("../../assets/femaleback.png")}
                   className={"male-front loading"}
                   ref={imageRef}
                 />
@@ -1920,11 +2153,7 @@ function Home() {
                     </span>
                   </p>
                 ))}
-              <Draggable
-                bounds="parent"
-                disabled={dragBool}
-                onStart={handleOnDragStart}
-              >
+              <Draggable bounds="parent" disabled={dragBool}>
                 <div
                   className={"scribble-message1"}
                   style={
@@ -1968,7 +2197,10 @@ function Home() {
                         cursor: dragBool ? "default" : "move",
                       }}
                     >
-                      <p>Select a Friend to write a Scribble message</p>
+                      <p>
+                        Select a Friend to write a Scribble message and Move
+                        this block
+                      </p>
                     </div>
                   )}
                 </div>

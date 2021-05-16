@@ -26,6 +26,7 @@ const scribbleSchema = mongoose.Schema({
     required: true,
   },
   sendToAvatar: String,
+  sendToGender: String,
   dimensions: Object,
   message: {
     type: String,
