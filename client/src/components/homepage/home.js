@@ -1353,7 +1353,7 @@ function Home() {
                             )}
                           </div>
                         </div>
-                        <div className="part">
+                        <div className="part socials">
                           <a href={image}>
                             <Button
                               variant="contained"
