@@ -1503,7 +1503,66 @@ function Home() {
                                       fontSize: "14px",
                                     }}
                                   >
-                                    <CardHeader
+                                    <div className="scr-msg-wrapper">
+                                      <div style={{
+                                        display: 'flex',
+                                        justifyContent: 'space-between'
+                                      }}>
+                                      <div>
+                                        <Avatar
+                                          aria-label="recipe"
+                                          className={classes.avatar}
+                                          src={
+                                            scribbleBool === "Sent"
+                                              ? scribble.sendToAvatar
+                                              : scribble.sendByAvatar
+                                          }
+                                        ></Avatar>
+                                      </div>
+                                      <div>
+                                          {scribbleBool === "Received" && (
+                                            <Link
+                                              to={`/u/${scribble.sendByUserId}`}
+                                              target="_blank"
+                                              rel="noopener noreferrer"
+                                            >
+                                              <Button
+                                                variant="contained"
+                                                style={{
+                                                  backgroundColor: "#2E73AD",
+                                                  color: "#fff",
+                                                  transform: "scale(0.8)",
+                                                }}
+                                                startIcon={
+                                                  <span
+                                                    className={"fa fa-reply"}
+                                                  ></span>
+                                                }
+                                              >
+                                                Scribble Back
+                                              </Button>
+                                            </Link>
+                                          )}
+                                          <DeleteOutlineIcon
+                                            className={"scribbleDelete"}
+                                            onClick={() =>
+                                              handleDeleteScribble(
+                                                scribble.scribbleId
+                                              )
+                                            }
+                                          />
+                                        </div>
+                                        </div>
+                                        <div>
+                                        <span style={{fontWeight: 'bold', color:'#fff'}}>{
+                                        scribbleBool === "Sent"
+                                          ? scribble.sendToName
+                                          : scribble.sendByName
+                                        }</span><br/>
+                                        {scribble.message}
+                                        </div>
+                                    </div>
+                                    {/* <CardHeader
                                       avatar={
                                         <Avatar
                                           aria-label="recipe"
@@ -1556,7 +1615,7 @@ function Home() {
                                           : scribble.sendByName
                                       }
                                       subheader={scribble.message}
-                                    />
+                                    /> */}
                                     <div
                                       style={{
                                         width: "100%",
