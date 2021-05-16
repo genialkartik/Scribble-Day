@@ -904,6 +904,7 @@ function Home() {
                               }
                             }}
                             onChange={(e) => {
+                              setUniversity(e.target.value)
                               setIsFixed(false);
                               setDragBool(false);
                               searchFilterFunction(
@@ -1001,6 +1002,7 @@ function Home() {
                               }
                             }}
                             onChange={(e) => {
+                              setEnterFriendName(e.target.value);
                               searchFilterFunction(
                                 e.target.value,
                                 dfriendList,
