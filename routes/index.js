@@ -258,7 +258,7 @@ rtr.post("/institute/add", async (req, res) => {
           else {
             mv(
               __dirname + "/" + req.files.logo.name,
-              "client/build/images/" + req.files.logo.name.replace(/\s/g, ""),
+              "build/images/" + req.files.logo.name.replace(/\s/g, ""),
               function (err) {
                 if (err) throw err;
               }
