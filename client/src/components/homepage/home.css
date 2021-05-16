@@ -199,8 +199,6 @@ input:-internal-autofill-selected {
 
 .scribble-image1 {
   position: relative;
-  /* top: 25%;
-  left: 55%; */
 }
 
 .male-front {
@@ -236,7 +234,7 @@ input:-internal-autofill-selected {
   flex-wrap: wrap;
 }
 @media screen and (min-width: 568px) {
-  .navWrapper{
+  .navWrapper {
     flex-wrap: nowrap;
     justify-content: start;
     margin: 0;
@@ -284,7 +282,7 @@ input:-internal-autofill-selected {
   cursor: pointer;
 }
 
-.colorfontwrapper{
+.colorfontwrapper {
   width: 100%;
   display: flex;
   justify-content: space-around;
@@ -338,6 +336,8 @@ input:-internal-autofill-selected {
   margin-bottom: 12px;
   background: rgba(255, 255, 255, 0.1);
   padding: 4px 16px;
+  border-radius: 10px;
+  box-shadow: 5px 5px 5px #0004;
 }
 .detailWrapper label {
   display: flex;
@@ -399,7 +399,7 @@ input:-internal-autofill-selected {
 }
 
 .loading {
-  background: transparent url('../../assets/spinner.gif') center no-repeat;
+  background: transparent url("../../assets/spinner.gif") center no-repeat;
   display: block;
   min-width: 200px;
   min-height: 100px;
@@ -410,4 +410,10 @@ input:-internal-autofill-selected {
   right: 12px;
   top: 50%;
   transform: translateY(-50%);
+}
+.scribbleDelete {
+  color: "#A1D2FA";
+}
+.scribbleDelete:hover {
+  cursor: pointer;
 }

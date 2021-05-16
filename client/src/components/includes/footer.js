@@ -30,10 +30,34 @@ export default function Footer() {
               </div>
               <div className="col-12">
                 <div className="footer-socials">
-                  <div className="fa fa-facebook px-2"></div>
-                  <div className="fa fa-linkedin px-2"></div>
-                  <div className="fa fa-twitter px-2"></div>
-                  <div className="fa fa-instagram px-2"></div>
+                  <a
+                    href="https://fb.com/genialkartik"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <div className="fa fa-facebook px-2"></div>
+                  </a>
+                  <a
+                    href="https://linkedin.com/in/genialkartik"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <div className="fa fa-linkedin px-2"></div>
+                  </a>
+                  <a
+                    href="https://twitter.com/genialkartik"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <div className="fa fa-twitter px-2"></div>
+                  </a>
+                  <a
+                    href="https://instagram.com/genialkartik"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <div className="fa fa-instagram px-2"></div>
+                  </a>
                   <a
                     href="https://github.com/genialkartik"
                     target="_blank"
@@ -61,12 +85,20 @@ export default function Footer() {
                       About
                     </div>
                   </Link>
-                  <a target="_blank" href="https://ethicallearner.com/tnc">
+                  <a
+                    href="https://ethicallearner.com/tnc"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <div className="p-2 flex-fill d-flex bd-highlight">
                       Terms
                     </div>
                   </a>
-                  <a target="_blank" href="https://ethicallearner.com/privacy">
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href="https://ethicallearner.com/privacy"
+                  >
                     <div className="p-2 flex-fill d-flex bd-highlight">
                       Privacy
                     </div>

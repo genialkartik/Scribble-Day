@@ -34,10 +34,45 @@ rtr.get("/check/session", async (req, res) => {
   });
 });
 
-rtr.get("/get/scribbles", async (req, res) => {
+rtr.get("/all/scribble", async (req, res) => {
+  const resp = await Scribble.countDocuments();
+  res.json({
+    scribblesCount: resp ? resp : 0,
+  });
+});
+
+rtr.get("/count/scribble", async (req, res) => {
+  if (req.session.userdata) {
+    const [received = 0, sent = 0] = await Promise.all([
+      Scribble.countDocuments({
+        sendToUserId: req.session.userdata.userId,
+      }),
+      Scribble.countDocuments({
+        sendByUserId: req.session.userdata.userId,
+      }),
+    ]);
+    res.json({
+      received: received,
+      sent: sent,
+    });
+  }
+});
+
+rtr.get("/scribbles/received", async (req, res) => {
   if (req.session.userdata) {
     const resp = await Scribble.find({
       sendToUserId: req.session.userdata.userId,
+    });
+    res.json({
+      scribbleList: resp ? resp : [],
+    });
+  }
+});
+
+rtr.get("/scribbles/sent", async (req, res) => {
+  if (req.session.userdata) {
+    const resp = await Scribble.find({
+      sendByUserId: req.session.userdata.userId,
     });
     res.json({
       scribbleList: resp ? resp : [],
@@ -168,10 +203,15 @@ rtr.post("/create", async (req, res) => {
 
 rtr.post("/save/scribble", async (req, res) => {
   try {
-    // console.log(req.body);
     if (!req.session.userdata) {
       throw "Login first! by clicking on My Scribble";
     }
+    const checkExistingScribble = await Scribble.findOne({
+      sendByUserId: req.session.userdata.userId,
+      sendToUserId: req.body.friendUserId,
+    });
+    if (checkExistingScribble)
+      throw `You've already sent a Scribble to ${req.body.friendName}`;
     const newScribble = new Scribble({
       scribbleId: uuidv4(),
       sendByUserId: req.session.userdata.userId,
@@ -180,6 +220,7 @@ rtr.post("/save/scribble", async (req, res) => {
       sendToUserId: req.body.friendUserId,
       sendToName: req.body.friendName,
       sendToAvatar: req.body.friendAvatar,
+      sendToGender: req.body.friendGender,
       dimensions: req.body.dimensions,
       message: req.body.message,
       angle: req.body.angle,
@@ -210,7 +251,6 @@ rtr.post("/institute/add", async (req, res) => {
         respMessage: "No file selected",
       });
     } else {
-      // const imageLocation = await uploadToS3B(req.files.logo);
       req.files.logo.mv(
         __dirname + "/" + req.files.logo.name,
         async function (err) {
@@ -225,10 +265,8 @@ rtr.post("/institute/add", async (req, res) => {
             );
           }
 
-          // if (imageLocation) {
           const newInstitute = new Institute({
             name: req.body.name,
-            // logo: imageLocation,
             logo: "./images/" + req.files.logo.name.replace(/\s/g, ""),
           });
           const institute = await newInstitute.save();
@@ -237,13 +275,6 @@ rtr.post("/institute/add", async (req, res) => {
             institute: institute ? institute : {},
             respMessage: "Saved",
           });
-          // } else {
-          //   res.json({
-          //     added: false,
-          //     institute: {},
-          //     respMessage: "Unable to upload Logo",
-          //   });
-          // }
         }
       );
     }
@@ -280,6 +311,24 @@ rtr.post("/university/detail", async (req, res) => {
     university: resp ? resp : {},
     respMessage: resp ? "" : "Error finding University",
   });
+});
+
+rtr.post("/scribble/delete", async (req, res) => {
+  try {
+    const resp = await Scribble.deleteOne({
+      scribbleId: req.body.scribbleId,
+    });
+    console.log(resp);
+    res.json({
+      deleted: resp.deletedCount == 1 ? true : false,
+      respMessage: resp.deletedCount == 1 ? "delete" : "error",
+    });
+  } catch (error) {
+    res.json({
+      deleted: false,
+      respMessage: error,
+    });
+  }
 });
 
 rtr.get("/logout", async (req, res) => {
@@ -386,7 +435,6 @@ rtr.post("/user/sendcode", async (req, res) => {
 
 rtr.post("/user/reset-password", async (req, res) => {
   try {
-    console.log(req.body);
     if (!req.body.password) {
       res.json({
         updated: false,
