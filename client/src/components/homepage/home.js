@@ -92,6 +92,9 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: "#bbb",
     },
   },
+  tabLabel:{
+    minHeight: 48
+  }
 }));
 
 function ValueLabelComponent(props) {
@@ -1462,6 +1465,9 @@ function Home() {
                                 }
                                 label="Scribbles Received"
                                 value="Received"
+                                classes={{
+                                  labelIcon: classes.tabLabel
+                                }}
                               />
 
                               <Tab
@@ -1473,6 +1479,9 @@ function Home() {
                                 }
                                 label="Scribbles Sent"
                                 value="Sent"
+                                classes={{
+                                  labelIcon: classes.tabLabel
+                                }}
                               />
                             </Tabs>
                           </Paper>
@@ -1878,7 +1887,7 @@ function Home() {
                   )}
                   {newUniversityBool && (
                     <>
-                      <Form.Control
+                      <Form.Control 
                         className={"col-12 form"}
                         type="text"
                         placeholder="Univesity Name"
@@ -2008,9 +2017,14 @@ function Home() {
                       borderRadius: "25px",
                       paddingInline: "30px",
                       paddingBlock: "10px",
+                      marginLeft: 'auto',
+                      marginRight: 'auto'
                     }}
                   >
-                    <RateReviewIcon size="small" /> {786 + scribblesCount}{" "}
+                    <RateReviewIcon size="small" /> <span style={{
+                      fontWeight: 'bold',
+                      color: '#fff'
+                    }}>{786 + scribblesCount}</span> {" "}
                     scribbles
                   </p>
                   <div className="details-of-site">
