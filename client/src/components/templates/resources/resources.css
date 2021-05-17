@@ -52,15 +52,22 @@
 .para_wrapper ul li {
   margin-bottom: 2rem;
 }
+
+.partners {
+  flex-wrap: wrap;
+  align-items: center;
+}
+
 .partners a {
-  padding: 0.5rem 1rem;
-  margin: 0 2rem 1rem;
+  margin: 0 2rem 3rem;
+  display: block;
+  width: 260px;
 }
 
 .partners img {
   position: relative;
-  background-color: #aed8f8;
-  width: 80%;
+  background-color: #fff;
+  width: 100%;
   padding-inline: 5%;
   padding-block: 2%;
   border-radius: 15px;

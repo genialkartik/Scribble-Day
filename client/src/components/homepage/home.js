@@ -1935,7 +1935,7 @@ function Home() {
                           {loadingBool ? (
                             <CircularProgress
                               size={20}
-                              style={{ margin: "9px auto" }}
+                              style={{ margin: "0 auto" }}
                             />
                           ) : (
                             "Submit"
