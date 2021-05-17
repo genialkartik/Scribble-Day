@@ -224,8 +224,6 @@ export default function Resources() {
                         />
                       </div>
                     </a>
-                  </div>
-                  <div className="d-flex justify-content-center partners">
                     <a href="/" target="_blank" rel="noopener noreferrer">
                       <div>
                         <img
@@ -236,8 +234,6 @@ export default function Resources() {
                         />
                       </div>
                     </a>
-                  </div>
-                  <div className="d-flex justify-content-center partners">
                     <a href="/" target="_blank" rel="noopener noreferrer">
                       <div>
                         <img
@@ -246,8 +242,6 @@ export default function Resources() {
                         />
                       </div>
                     </a>
-                  </div>
-                  <div className="d-flex justify-content-center partners">
                     <a href="/" target="_blank" rel="noopener noreferrer">
                       <div>
                         <img
