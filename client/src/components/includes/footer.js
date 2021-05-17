@@ -26,7 +26,7 @@ export default function Footer() {
                 &nbsp;&nbsp;+91-9517716419
               </div>
               <div className="fa fa-envelope-o px-2 grey-text">
-                &nbsp;&nbsp;info@ethicallearner.com
+                &nbsp;&nbsp;foaxxofficial@gmail.com
               </div>
               <div className="col-12">
                 <div className="footer-socials">

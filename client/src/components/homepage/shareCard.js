@@ -18,7 +18,7 @@ import {
   WhatsApp as WhatsAppIcon,
   Twitter as TwitterIcon,
 } from "@material-ui/icons";
-import useWindowDimensions from '../dimension';
+import useWindowDimensions from "../dimension";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function ShareCard(props) {
-  const { width : windowWidth } = useWindowDimensions();
+  const { width: windowWidth } = useWindowDimensions();
   const classes = useStyles();
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [msgSnackbar, setMsgSnackbar] = useState("");
@@ -124,7 +124,9 @@ export default function ShareCard(props) {
           <a
             target="_blank"
             rel="noopener noreferrer"
-            href="https://www.linkedin.com/shareArticle?url=www.foaxx.com&title=Let's%20celebrate%20%F0%9F%91%95Scribble%20Day%202021%20%F0%9F%A5%B3%20Write%20a%20Scribble%20for%20me%20%F0%9F%98%8E"
+            href={`https://www.linkedin.com/shareArticle?url=www.foaxx.com${
+              props.userdata ? `/u/${props.userdata.userId}` : "/"
+            }&title=Let's%20celebrate%20%F0%9F%91%95Scribble%20Day%202021%20%F0%9F%A5%B3%20Write%20a%20Scribble%20for%20me%20%F0%9F%98%8E`}
           >
             <Button
               variant="contained"
@@ -144,7 +146,9 @@ export default function ShareCard(props) {
             }}
             onClick={() => {
               window.open(
-                "https://www.facebook.com/sharer.php?u=www.foaxx.com"
+                `https://www.facebook.com/sharer.php?u=www.foaxx.com${
+                  props.userdata ? `/u/${props.userdata.userId}` : "/"
+                }`
               );
               return false;
             }}
@@ -154,7 +158,9 @@ export default function ShareCard(props) {
           <a
             target="_blank"
             rel="noopener noreferrer"
-            href="https://twitter.com/intent/tweet?url=www.foaxx.com&text=Let's%20celebrate%20%F0%9F%91%95Scribble%20Day%202021%20%F0%9F%A5%B3%20Write%20a%20Scribble%20for%20me%20%F0%9F%98%8E"
+            href={`https://twitter.com/intent/tweet?url=www.foaxx.com${
+              props.userdata ? `/u/${props.userdata.userId}` : "/"
+            }&text=Let's%20celebrate%20%F0%9F%91%95Scribble%20Day%202021%20%F0%9F%A5%B3%20Write%20a%20Scribble%20for%20me%20%F0%9F%98%8E`}
           >
             <Button
               variant="contained"
@@ -167,9 +173,17 @@ export default function ShareCard(props) {
             </Button>
           </a>
           <a
-            href={windowWidth>568?`https://web.whatsapp.com/send?text=Let's%20celebrate%20%F0%9F%91%95Scribble%20Day%202021%20%F0%9F%A5%B3%20Write%20a%20Scribble%20for%20me%20%F0%9F%98%8Ehttps%3A//foaxx.com/%20%20%20#scribbleday2021%20%20"
-            data-action="share/whatsapp/share`:`whatsapp://send?text=Let's%20celebrate%20%F0%9F%91%95Scribble%20Day%202021%20%F0%9F%A5%B3%20Write%20a%20Scribble%20for%20me%20%F0%9F%98%8Ehttps%3A//foaxx.com/%20%20%20#scribbleday2021%20%20"
-            data-action="share/whatsapp/share`}
+            href={
+              windowWidth > 568
+                ? `https://web.whatsapp.com/send?text=Let's%20celebrate%20%F0%9F%91%95Scribble%20Day%202021%20%F0%9F%A5%B3%20Write%20a%20Scribble%20for%20me%20%F0%9F%98%8Ehttps%3A//foaxx.com${
+                    props.userdata ? `/u/${props.userdata.userId}` : "/"
+                  }%20%20%20#scribbleday2021%20%20"
+            data-action="share/whatsapp/share`
+                : `whatsapp://send?text=Let's%20celebrate%20%F0%9F%91%95Scribble%20Day%202021%20%F0%9F%A5%B3%20Write%20a%20Scribble%20for%20me%20%F0%9F%98%8Ehttps%3A//foaxx.com${
+                    props.userdata ? `/u/${props.userdata.userId}` : "/"
+                  }%20%20%20#scribbleday2021%20%20"
+            data-action="share/whatsapp/share`
+            }
             target="_blank"
             rel="noopener noreferrer"
           >

@@ -53,9 +53,9 @@ function getStepContent(step) {
       On Payment Successful, You will receive an Email and SMS with Order confirmation`;
     case 1:
       return `Within 12 hours of Order Confirmation, you will receive another email from 
-      'info@ethicallearner.com' with subject 'Scribble Order Received Successfully' and 
+      'foaxxofficial@gmail.com' with subject 'Scribble Order Received Successfully' and 
       a Call (in-office hours). This email confirms your Order has been Received Successfully'. 
-      Any Query? Reach us 24/7 on info@ethicallearner.com`;
+      Any Query? Reach us 24/7 on foaxxofficial@gmail.com`;
     case 2:
       return `Now let us fabricate your T-shirt with your memories you gathered in 
       your graduation with friends and friends of friend`;

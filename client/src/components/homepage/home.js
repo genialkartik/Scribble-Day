@@ -996,7 +996,7 @@ function Home() {
                           <Typography
                             gutterBottom
                             style={{
-                              fontSize: "0.8em",
+                              fontSize: "0.7em",
                               color: "#71E2F0",
                               cursor: "pointer",
                               float: "right",
@@ -1092,7 +1092,7 @@ function Home() {
                           <Typography
                             gutterBottom
                             style={{
-                              fontSize: "0.8em",
+                              fontSize: "0.7em",
                               color: "#71E2F0",
                               cursor: "pointer",
                               float: "right",
@@ -2298,10 +2298,10 @@ function Home() {
                         cursor: dragBool ? "default" : "move",
                       }}
                     >
-                      <p>
+                      <strong>
                         Select a Friend to write a Scribble message and Move
                         this block.
-                      </p>
+                      </strong>
                     </div>
                   )}
                 </div>
