@@ -1,0 +1,58 @@
+/*
+*
+* ==========================================
+* About 
+* ==========================================
+*
+*/
+
+.about-cont {
+  background-color: #02203c;
+  color: white;
+}
+
+.about-section-2,
+.team-cards {
+  background-color: #183d5d;
+  color: white;
+}
+
+.social-link {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #ed72c0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ed72c0;
+  border-radius: 50%;
+  transition: all 0.3s;
+  font-size: 0.9rem;
+}
+
+.social-link:hover,
+.social-link:focus {
+  background: rgb(50, 140, 241);
+  text-decoration: none;
+  color: rgb(255, 255, 255);
+}
+
+/* custom */
+.fox-intro h4,
+.about-cont p,
+.about-cont span {
+  color: #93c2db;
+}
+
+.about-cont a {
+  color: #ed72c0;
+  text-decoration: none;
+  font-style: normal;
+}
+
+.logo img {
+  position: relative;
+  width: 60%;
+  left: 50%;
+  transform: translate(-20%);
+}
