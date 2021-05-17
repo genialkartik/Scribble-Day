@@ -15,8 +15,8 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import FormControl from "@material-ui/core/FormControl";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
+import Popover from "@material-ui/core/Popover";
 import InfoIcon from "@material-ui/icons/Info";
-import CardHeader from "@material-ui/core/CardHeader";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import Dialog from "@material-ui/core/Dialog";
 import Avatar from "@material-ui/core/Avatar";
@@ -212,6 +212,16 @@ function Home() {
   const [scribbleSentCount, setScribbleSentCount] = useState("0");
   const [scribbleReceivedCount, setScribbleReceivedCount] = useState("0");
   const [scribbleBool, setscribbleBool] = useState("Received");
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  // Popover
+  const openZoomImage = Boolean(anchorEl);
+  const popOverId = openZoomImage ? "simple-popover" : undefined;
+  const handleZoomImageClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleZoomImageClose = () => {
+    setAnchorEl(null);
+  };
 
   useEffect(() => {
     setImageRefWidth(imageRef.current.getBoundingClientRect().width);
@@ -513,7 +523,12 @@ function Home() {
   };
 
   const handleSubmitSignupForm = async () => {
-    if (signupFormInputs === {} || signupFormInputs.university === "other") {
+    if (
+      signupFormInputs === {} ||
+      !avatar ||
+      !inputEmail ||
+      signupFormInputs.university === "other"
+    ) {
       setOpenSnackbar(true);
       setMsgSnackbar("Enter all Inputs");
       setTimeout(() => setOpenSnackbar(false), 3000);
@@ -1157,7 +1172,36 @@ function Home() {
                               ? friendLogo
                               : require("../../assets/userdemoimage.jpg")
                           }
+                          aria-describedby={popOverId}
+                          onClick={handleZoomImageClick}
                         />
+                        <Popover
+                          id={popOverId}
+                          open={openZoomImage}
+                          anchorEl={anchorEl}
+                          onClose={handleZoomImageClose}
+                          anchorOrigin={{
+                            vertical: "bottom",
+                            horizontal: "left",
+                          }}
+                          transformOrigin={{
+                            vertical: "top",
+                            horizontal: "left",
+                          }}
+                        >
+                          <img
+                            style={{
+                              width: "300px",
+                              height: "300px",
+                            }}
+                            alt="F"
+                            src={
+                              friendLogo
+                                ? friendLogo
+                                : require("../../assets/userdemoimage.jpg")
+                            }
+                          />
+                        </Popover>
                       </div>
                       <Form.Control
                         className={"col-12 form"}
@@ -2212,6 +2256,8 @@ function Home() {
                     <>
                       <div
                         style={{
+                          msTransform: `rotate(${rotateValue}deg)`,
+                          transform: `rotate(${rotateValue}deg)`,
                           rotate: rotateValue + "deg",
                           color: messageColor,
                           fontSize: getFontSize(messageFont, imageRefWidth),
