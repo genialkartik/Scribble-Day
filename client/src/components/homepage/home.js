@@ -472,7 +472,7 @@ function Home() {
   };
 
   const handleVerifyPin = async () => {
-    if (!pinCodeToVerify) alert("Insert PIN to verify");
+    if (!pinCodeToVerify) alert("Insert Password to verify");
     else if (!inputEmail) alert("Insert Email first");
     else {
       const resp = await axios.post("/login", {
@@ -1737,7 +1737,7 @@ function Home() {
                           id="input-with-icon-adornment"
                           placeholder={
                             enterPinOrCodeBool === "pin"
-                              ? "Enter PIN"
+                              ? "Enter Password"
                               : "Verification Code"
                           }
                           variant="filled"
@@ -1854,7 +1854,7 @@ function Home() {
                                 setNewUniversityOnSuccess("signup");
                               }}
                             >
-                              Other
+                              Add your University
                             </MenuItem>
                           </Select>
                         </FormControl>
@@ -1893,7 +1893,7 @@ function Home() {
                         <Form.Control
                           className={"col-12 form"}
                           type="text"
-                          placeholder="Enter a 4 digit's PIN"
+                          placeholder="Enter Password"
                           name="pin"
                           value={signupFormInputs.pin}
                           onChange={handleInputChange}
@@ -2233,9 +2233,6 @@ function Home() {
                       }}
                     >
                       {scribble.message}
-                      <span>
-                        <br />~ {scribble.sendByName}
-                      </span>
                     </p>
                   ))}
               <Draggable bounds="parent" disabled={dragBool}>
@@ -2266,10 +2263,9 @@ function Home() {
                         }}
                       >
                         <p ref={messageRef}>
-                          {message ? message : "Scribble Message"}
-                          <span>
-                            <br />~ {userdata ? userdata.name : "Your name"}
-                          </span>
+                          {message
+                            ? message
+                            : "Your Scribble message visible here"}
                         </p>
                       </div>
                     </>

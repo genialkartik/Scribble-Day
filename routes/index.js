@@ -394,13 +394,48 @@ rtr.post("/user/sendcode", async (req, res) => {
         from: "krtyagikr@gmail.com", // enter complete email. eg: kartik@gmail.com
         to: req.body.email,
         subject: "AreaGG verification code",
-        html:
-          "<div><b>We would like to verify your account." +
-          "<br/>Kindly enter the below" +
-          "Verification Code to verify your account to reset your password.</b><br/><br/>" +
-          "Verification Code: " +
-          randomcode +
-          "</div>",
+        html: `￼
+          <div style="background:#efefef;display:flex;font-family:Helvetica,sans-serif">
+  <div style="background:#fff;width:600px;height:100%;padding:10px 20px">
+<div style="margin:40px 0 44px 0">
+  <a style="color:#009ac7;text-decoration:none" href="https://dashboard.EthicalLearner.com/" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://dashboard.EthicalLearner.com/&amp;source=gmail&amp;ust=1615896337341000&amp;usg=AFQjCNE6ljjnknFuN70E_APOLwqgFfqiIQ">
+    <img src="./BANNER.png" style="vertical-align:middle;width:100%;height:auto;max-width:100%;border-width:0" alt="EthicalLearner" data-image-whitelisted="" class="CToWUd">
+  </a>
+  <div>
+    <div>
+      <h1 style="font-family:Verdana,Helvetica,sans-serif;font-weight:normal;font-size:32px;line-height:48px">
+                    Verify your email address
+                </h1>
+    </div>
+</div>
+</div>
+
+<div>
+  <div style="margin-top:24px;font-size:16px">
+    Hi Madan,
+  </div>
+
+  <div>
+    <p style="font-size:16px;margin-bottom:16px;line-height:24px">Thanks for signing up to EthicalLearner.</p>
+    <p style="font-size:16px;margin-bottom:16px;line-height:24px">To get access to your account please verify your email address by clicking the link below.</p>
+    <p style="font-size:16px;margin-bottom:16px;line-height:24px">
+      <span>${randomcode}</span>
+    </p>
+  </div>
+</div>
+
+<p>
+    <span style="line-height:24px;font-size:16px">Regards,</span><br>
+    <span style="line-height:24px;font-size:16px">The EthicalLearner Team</span>
+  </p>
+    <hr style="margin:40px 0 20px 0;display:block;height:1px;border:0;border-top:1px solid #c4cdd5;padding:0">
+    <footer style="margin-bottom:40px">
+      <span style="color:#919eab;line-height:28px;font-size:12px">EthicalLearner, Near Alaunus Hospital, Gardan City, Bisalpur Chauraha, Bareilly, Uttar Pradesh 243005</span><br>
+      <span style="color:#919eab;line-height:28px;font-size:12px">You received this because you're a registered EthicalLearner user. Do not reply</span><br>
+    </footer><div class="yj6qo"></div><div class="adL">
+    </div></div><div class="adL">
+</div></div>
+          `,
       };
       const info = await transporter.sendMail(mailOptions);
       if (info) {
@@ -482,13 +517,47 @@ rtr.post("/email/verify", async (req, res) => {
       from: "krtyagikr@gmail.com",
       to: req.body.email,
       subject: "Scribble verification code",
-      html:
-        "<div><b>We would like to verify your account." +
-        "<br/>Kindly enter the below" +
-        "Verify your account to save your worth remembering day</b><br/><br/>" +
-        "Verification Code: " +
-        randomcode +
-        "</div>",
+      html: `
+      <div style="background:#efefef;display:flex;font-family:Helvetica,sans-serif">
+       <div style="background:#fff;width:600px;height:100%;padding:10px 20px">
+     <div style="margin:40px 0 44px 0">
+       <a style="color:#009ac7;text-decoration:none" href="https://dashboard.EthicalLearner.com/" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://dashboard.EthicalLearner.com/&amp;source=gmail&amp;ust=1615896337341000&amp;usg=AFQjCNE6ljjnknFuN70E_APOLwqgFfqiIQ">
+         <img src="./BANNER.png" style="vertical-align:middle;width:100%;height:auto;max-width:100%;border-width:0" alt="EthicalLearner" data-image-whitelisted="" class="CToWUd">
+       </a>
+       <div>
+         <div>
+           <h1 style="font-family:Verdana,Helvetica,sans-serif;font-weight:normal;font-size:32px;line-height:48px">
+                         Verify your email address
+                     </h1>
+         </div>
+     </div>
+     </div>
+     
+     <div>
+       <div style="margin-top:24px;font-size:16px">
+         Hi Madan,
+       </div>
+     
+       <div>
+         <p style="font-size:16px;margin-bottom:16px;line-height:24px">Thanks for signing up to EthicalLearner.</p>
+         <p style="font-size:16px;margin-bottom:16px;line-height:24px">To get access to your account please verify your email address by clicking the link below.</p>
+         <p style="font-size:16px;margin-bottom:16px;line-height:24px">
+           <span>${randomcode}</span>
+         </p>
+       </div>
+     </div>
+     
+     <p>
+         <span style="line-height:24px;font-size:16px">Regards,</span><br>
+         <span style="line-height:24px;font-size:16px">The EthicalLearner Team</span>
+       </p>
+         <hr style="margin:40px 0 20px 0;display:block;height:1px;border:0;border-top:1px solid #c4cdd5;padding:0">
+         <footer style="margin-bottom:40px">
+           <span style="color:#919eab;line-height:28px;font-size:12px">EthicalLearner, Near Alaunus Hospital, Gardan City, Bisalpur Chauraha, Bareilly, Uttar Pradesh 243005</span><br>
+           <span style="color:#919eab;line-height:28px;font-size:12px">You received this because you're a registered EthicalLearner user. Do not reply</span><br>
+         </footer><div class="yj6qo"></div><div class="adL">
+         </div></div><div class="adL">
+     </div></div>`,
     };
     const info = await transporter.sendMail(mailOptions);
     if (info) {
