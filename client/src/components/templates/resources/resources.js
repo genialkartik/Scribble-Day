@@ -97,7 +97,7 @@ export default function Resources() {
                 </div>
               </div>
             </div>
-            <div className="row justify-content-center pt-5 pb-5">
+            {/* <div className="row justify-content-center pt-5 pb-5">
               <div className="col-12 col-sm-8">
                 <div className="border-bottom">
                   <h4>Let's make this year's Scribble Day remarkable</h4>
@@ -109,21 +109,13 @@ export default function Resources() {
                 </p>
                 <div className="row justify-content-center mb-5">
                   <div className="video_wrapper">
-                    {/* <video
+                    <video
                       style={{
                         width: "100%",
                         height: "100%",
                       }}
                       src="https://youtu.be/C85cOVrD2NA"
-                    ></video> */}
-                    <iframe
-                      style={{ width: "100%", height: "100%" }}
-                      src="https://www.youtube.com/embed/C85cOVrD2NA?controls=0"
-                      title="YouTube video player"
-                      frameborder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowfullscreen
-                    ></iframe>
+                    ></video>
                   </div>
                   <div className="title_wrap">v.1 Web Browser</div>
                 </div>
@@ -139,7 +131,7 @@ export default function Resources() {
                   <div className="title_wrap">v.2 Mobile View</div>
                 </div>
               </div>
-            </div>
+            </div> */}
 
             <div className="row justify-content-center pb-5">
               <div className="col-12 col-sm-8">
@@ -246,11 +238,11 @@ export default function Resources() {
                         />
                       </div>
                     </a>
-                    
+
                     <a href="/" target="_blank" rel="noopener noreferrer">
                       <div>
                         <img
-                        style={{backgroundColor: 'transparent'}}
+                          style={{ backgroundColor: "transparent" }}
                           src={require("../../../assets/bwayventure.png")}
                           alt=""
                         />
@@ -272,7 +264,6 @@ export default function Resources() {
                         />
                       </div>
                     </a>
-                    
                   </div>
                 </div>
               </div>

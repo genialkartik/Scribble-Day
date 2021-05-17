@@ -1,35 +1,31 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "9b3c72c54e41dbaeab9839c6f4439f66",
+    "revision": "f9c121eb16eb9bf0abd37036b276c436",
     "url": "/index.html"
   },
   {
-    "revision": "2ac9cec4e944870cf760",
+    "revision": "ecd021120738456269f7",
     "url": "/static/css/2.9233ae65.chunk.css"
   },
   {
-    "revision": "39f525c925de799af3e5",
-    "url": "/static/css/main.fc2ec1c0.chunk.css"
+    "revision": "7a055893e2dd2ef1f559",
+    "url": "/static/css/main.55a4dda8.chunk.css"
   },
   {
-    "revision": "2ac9cec4e944870cf760",
-    "url": "/static/js/2.f87d4a8f.chunk.js"
+    "revision": "ecd021120738456269f7",
+    "url": "/static/js/2.b6b1a9c3.chunk.js"
   },
   {
     "revision": "cafcc370d63a5458b5275818cb29b08a",
-    "url": "/static/js/2.f87d4a8f.chunk.js.LICENSE.txt"
+    "url": "/static/js/2.b6b1a9c3.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "39f525c925de799af3e5",
-    "url": "/static/js/main.311ec2a1.chunk.js"
+    "revision": "7a055893e2dd2ef1f559",
+    "url": "/static/js/main.69de86f9.chunk.js"
   },
   {
     "revision": "0fe3e9068501b9f93f25",
     "url": "/static/js/runtime-main.0abaaac7.js"
-  },
-  {
-    "revision": "7d3b19d8c592d9180fbcf7d24256cbc2",
-    "url": "/static/media/Bway Logo.7d3b19d8.png"
   },
   {
     "revision": "27b835201eff11b84f23b7238161e67b",
@@ -38,6 +34,10 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "ea18e75f1d045af5ce52983868cb6258",
     "url": "/static/media/announcement.ea18e75f.png"
+  },
+  {
+    "revision": "817ef2580a108f2958e3d09d34ece415",
+    "url": "/static/media/bwayventure.817ef258.png"
   },
   {
     "revision": "461c71136e1e0c3f2f7652628321e871",
@@ -56,12 +56,20 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/static/media/foaxx.fb20c590.png"
   },
   {
+    "revision": "cb6b76bd88e060047fecfb3116d58ba1",
+    "url": "/static/media/gola_tourism.cb6b76bd.jpg"
+  },
+  {
     "revision": "5520076adcaf0a420dd379ddd7e2e429",
     "url": "/static/media/maleback.5520076a.png"
   },
   {
     "revision": "0d52d1ec470f0248971721906ca1cc5d",
     "url": "/static/media/malefront.0d52d1ec.png"
+  },
+  {
+    "revision": "a7ab1787054d5497626df5e42f8fc66c",
+    "url": "/static/media/offer.a7ab1787.gif"
   },
   {
     "revision": "648365ae63630dd9bab9c37d16a5dfb3",

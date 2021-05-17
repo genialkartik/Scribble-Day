@@ -188,6 +188,30 @@ export default function Faq() {
                 </div>
               </div>
             </div>
+            <div className="card ">
+              <div className="card-header">
+                <h4 className="card-header">
+                  <a
+                    className="accordion-toggle collapsed"
+                    data-toggle="collapse"
+                    data-parent="#accordion"
+                    href="#collapse45"
+                  >
+                    I'm not in final year of Graduation, Can I participate?
+                  </a>
+                </h4>
+              </div>
+              <div id="collapse45" className="panel-collapse collapse">
+                <div className="card-block">
+                  Yes! We developed this platform to help people stay connected.{" "}
+                  <br />
+                  Final year students didn't enjoyed their last moments of
+                  Graduation together and so do other students as well. We want
+                  everyone to be happy, connect and stay safe in covid-19
+                  situation.
+                </div>
+              </div>
+            </div>
 
             <div className="faqHeader">Shipping</div>
             <div className="card ">
@@ -330,14 +354,14 @@ export default function Faq() {
                     className="accordion-toggle collapsed"
                     data-toggle="collapse"
                     data-parent="#accordion"
-                    href="#collapseNine"
+                    href="#collapse89"
                   >
                     What happens if my package does not reach my shipping
                     address?
                   </a>
                 </h4>
               </div>
-              <div id="collapseNine" className="panel-collapse collapse">
+              <div id="collapse89" className="panel-collapse collapse">
                 <div className="card-block">
                   Our Delivery partner will make three attempts to deliver
                   before returning the product to our warehouse. You may contact
@@ -354,13 +378,13 @@ export default function Faq() {
                     className="accordion-toggle collapsed"
                     data-toggle="collapse"
                     data-parent="#accordion"
-                    href="#collapseNine"
+                    href="#collapse98"
                   >
                     Is there any refund policy?
                   </a>
                 </h4>
               </div>
-              <div id="collapseNine" className="panel-collapse collapse">
+              <div id="collapse98" className="panel-collapse collapse">
                 <div className="card-block">
                   At present, we are commited to deliver you the best quality
                   and nicely decorated products as much as possible. Due lots of
