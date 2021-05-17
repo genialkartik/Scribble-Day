@@ -873,20 +873,19 @@ function Home() {
                         onClick={() => {
                           window.location.replace("/");
                         }}
-                        startIcon={<HomeIcon />}
-                      ></Button>
+                      >
+                        <HomeIcon />
+                      </Button>
                     </div>
                     <Link className={"actions"} to={"/resources"}>
-                      <Button
-                        variant="contained"
-                        startIcon={<InfoIcon />}
-                      ></Button>
+                      <Button variant="contained">
+                        <InfoIcon />
+                      </Button>
                     </Link>
                     <Link className={"actions"} to={"/faq"}>
-                      <Button
-                        variant="contained"
-                        startIcon={<HelpIcon />}
-                      ></Button>
+                      <Button variant="contained">
+                        <HelpIcon />
+                      </Button>
                     </Link>
                     <div className={"actions"} style={{ flex: "1 0 auto" }}>
                       <Button
@@ -1053,7 +1052,7 @@ function Home() {
                         <Avatar
                           style={{ marginLeft: 12 }}
                           alt="U"
-                          src={universityLogo}
+                          src={process.env.PUBLIC_URL + universityLogo.slice(1)}
                         />
                       </div>
 
@@ -2098,7 +2097,7 @@ function Home() {
                     >
                       {786 + scribblesCount}
                     </span>{" "}
-                    scribbles
+                    scribbles sent
                   </p>
                   <div className="details-of-site">
                     <div className="part">
@@ -2214,13 +2213,13 @@ function Home() {
               )}
               <div className={"university-logo"}>
                 {tshirtSide === "front" && (
-                  <img
+                  <Avatar
                     style={{
                       width: getFontSize(60, imageRefWidth),
                       height: getFontSize(60, imageRefWidth),
                     }}
-                    alt={universityLogo}
-                    src={universityLogo}
+                    alt="U"
+                    src={process.env.PUBLIC_URL + universityLogo.slice(1)}
                   />
                 )}
               </div>
@@ -2275,9 +2274,7 @@ function Home() {
                         }}
                       >
                         <p ref={messageRef}>
-                          {message
-                            ? message
-                            : "Scribble Message" + universityLogo}
+                          {message ? message : "Scribble Message"}
                           <span>
                             <br />~ {userdata ? userdata.name : "Your name"}
                           </span>
