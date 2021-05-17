@@ -1567,60 +1567,6 @@ function Home() {
                                         {scribble.message}
                                       </div>
                                     </div>
-                                    {/* <CardHeader
-                                      avatar={
-                                        <Avatar
-                                          aria-label="recipe"
-                                          className={classes.avatar}
-                                          src={
-                                            scribbleBool === "Sent"
-                                              ? scribble.sendToAvatar
-                                              : scribble.sendByAvatar
-                                          }
-                                        ></Avatar>
-                                      }
-                                      action={
-                                        <>
-                                          {scribbleBool === "Received" && (
-                                            <Link
-                                              to={`/u/${scribble.sendByUserId}`}
-                                              target="_blank"
-                                              rel="noopener noreferrer"
-                                            >
-                                              <Button
-                                                variant="contained"
-                                                style={{
-                                                  backgroundColor: "#2E73AD",
-                                                  color: "#fff",
-                                                  transform: "scale(0.8)",
-                                                }}
-                                                startIcon={
-                                                  <span
-                                                    className={"fa fa-reply"}
-                                                  ></span>
-                                                }
-                                              >
-                                                Scribble Back
-                                              </Button>
-                                            </Link>
-                                          )}
-                                          <DeleteOutlineIcon
-                                            className={"scribbleDelete"}
-                                            onClick={() =>
-                                              handleDeleteScribble(
-                                                scribble.scribbleId
-                                              )
-                                            }
-                                          />
-                                        </>
-                                      }
-                                      title={
-                                        scribbleBool === "Sent"
-                                          ? scribble.sendToName
-                                          : scribble.sendByName
-                                      }
-                                      subheader={scribble.message}
-                                    /> */}
                                     <div
                                       style={{
                                         width: "100%",
