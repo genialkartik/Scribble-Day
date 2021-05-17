@@ -591,6 +591,8 @@ function Home() {
           ...instituteList,
           resp.data.institute,
         ]);
+        setNewUniversityName("");
+        setNewUniversityLogo();
         if (newUniversityOnSuccess === "signup") {
           setSignUpformBool(true);
         } else {
@@ -1944,6 +1946,20 @@ function Home() {
                   )}
                   {newUniversityBool && (
                     <>
+                      <p
+                        style={{
+                          color: "#B5D7F397",
+                          fontSize: ".8em",
+                          textAlign: "justify",
+                        }}
+                      >
+                        If you want to celebrate Scribble Day with your friends
+                        in your University. But did not find your university in
+                        Scribble List. Then Don't worry! You may upload your
+                        University Detail by your own. Fill the form below for
+                        the same: <br />
+                        <br />
+                      </p>
                       <Form.Control
                         className={"col-12 form"}
                         type="text"
@@ -1956,7 +1972,7 @@ function Home() {
                       />
                       <input
                         type="file"
-                        accept="image/*"
+                        accept="image/png"
                         hidden="true"
                         onChange={(e) =>
                           setNewUniversityLogo(e.target.files[0])
@@ -2182,7 +2198,7 @@ function Home() {
                   style={{
                     position: "relative",
                     top: "40px",
-                    transform: "scale(1.2)",
+                    transform: "scale(1.15)",
                   }}
                   src={require("../../assets/femalefront.png")}
                   className={"male-front loading"}
@@ -2194,7 +2210,7 @@ function Home() {
                   style={{
                     position: "relative",
                     top: "40px",
-                    transform: "scale(1.2)",
+                    transform: "scale(1.15)",
                   }}
                   src={require("../../assets/femaleback.png")}
                   className={"male-front loading"}
@@ -2203,7 +2219,7 @@ function Home() {
               )}
               <div className={"university-logo"}>
                 {tshirtSide === "front" && (
-                  <Avatar
+                  <img
                     style={{
                       width: getFontSize(60, imageRefWidth),
                       height: getFontSize(60, imageRefWidth),

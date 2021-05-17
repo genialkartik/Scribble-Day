@@ -401,6 +401,30 @@ export default function Faq() {
                     className="accordion-toggle collapsed"
                     data-toggle="collapse"
                     data-parent="#accordion"
+                    href="#collapseSeven"
+                  >
+                    How could I reset password?
+                  </a>
+                </h4>
+              </div>
+              <div id="collapseSeven" className="panel-collapse collapse">
+                <div className="card-block">
+                  Creating password is a one-time activity. You cannot change
+                  your password. Though, If you really want change your
+                  password. Please feel free to drop an Email with subject
+                  'Change my Password'. We will update your password on your
+                  behalf.
+                </div>
+              </div>
+            </div>
+
+            <div className="card ">
+              <div className="card-header">
+                <h4 className="card-header">
+                  <a
+                    className="accordion-toggle collapsed"
+                    data-toggle="collapse"
+                    data-parent="#accordion"
                     href="#collapseEleven"
                   >
                     Do you offer Cash on Delivery - COD?

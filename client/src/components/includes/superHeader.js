@@ -10,14 +10,28 @@ export default function SuperHeader() {
         <Row className={"container text-center"}>
           <Col>
             <img src={announcement} height="40px" alt="announcement" />{" "}
-            &nbsp;Make your virtual Scribble Day more exciting by
+            &nbsp;Order your Scribble Tee now and get a change to win
             <a
               href={"https://rzp.io/l/Up18AjAWH"}
               target="_blank"
               rel="noopener noreferrer"
             >
               {" "}
-              Placing ORDER of your SCRRIBLE TSHIRT
+              <strong
+                style={{
+                  backgroundColor: "#02203C",
+                  color: "#fff",
+                  paddingBlock: "3px",
+                  paddingInline: "40px",
+                  borderRadius: "5px",
+                }}
+              >
+                25% CASHBACK offer
+              </strong>
+              <img
+                style={{ width: "40px" }}
+                src={require("../../assets/offer.gif")}
+              />
             </a>
           </Col>
           <div className="nav-github-icon">
@@ -26,7 +40,7 @@ export default function SuperHeader() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <GitHubIcon />
+              <GitHubIcon style={{ color: "#000" }} />
             </a>
           </div>
         </Row>

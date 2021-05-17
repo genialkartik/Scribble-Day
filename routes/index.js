@@ -137,6 +137,12 @@ rtr.post("/profile", async (req, res) => {
 
 rtr.post("/create", async (req, res) => {
   try {
+    if (!req.files.avatar) {
+      res.json({
+        signUp: false,
+        respMessage: "avatar file missing",
+      });
+    }
     const user = await User.findOne({ email: req.body.email });
     if (user) {
       res.json({
@@ -144,51 +150,44 @@ rtr.post("/create", async (req, res) => {
         respMessage: "User with same email already exists",
       });
     } else {
-      if (!req.files.avatar) {
+      const avatarLocation = await uploadToS3B(req.files.avatar);
+      if (!avatarLocation) {
         res.json({
           signUp: false,
-          respMessage: "avatar file missing",
+          respMessage: "Avatar not uploaded",
         });
       } else {
-        const avatarLocation = await uploadToS3B(req.files.avatar);
-        if (!avatarLocation) {
+        const formdata = JSON.parse(req.body.formInput);
+        const newUser = new User({
+          // userId: uuidv4(),
+          userId: Math.floor(100000 + Math.random() * 900000),
+          name: formdata.name,
+          email: req.body.email,
+          pin: formdata.pin,
+          avatar: avatarLocation,
+          university: formdata.university,
+          gender: formdata.gender,
+          scribbledBy: [],
+        });
+        const newUserResp = await newUser.save();
+        if (newUserResp) {
+          req.session.userdata = {
+            userId: newUserResp.userId,
+            email: newUserResp.email,
+            name: newUserResp.name,
+            avatar: newUserResp.avatar,
+            university: newUserResp.university,
+            gender: newUserResp.gender,
+          };
           res.json({
-            signUp: false,
-            respMessage: "Avatar not uploaded",
+            signUp: true,
+            respMessage: "Saved",
           });
         } else {
-          const formdata = JSON.parse(req.body.formInput);
-          const newUser = new User({
-            // userId: uuidv4(),
-            userId: Math.floor(100000 + Math.random() * 900000),
-            name: formdata.name,
-            email: req.body.email,
-            pin: formdata.pin,
-            avatar: avatarLocation,
-            university: formdata.university,
-            gender: formdata.gender,
-            scribbledBy: [],
+          res.json({
+            signUp: false,
+            respMessage: "Unable to Save",
           });
-          const newUserResp = await newUser.save();
-          if (newUserResp) {
-            req.session.userdata = {
-              userId: newUserResp.userId,
-              email: newUserResp.email,
-              name: newUserResp.name,
-              avatar: newUserResp.avatar,
-              university: newUserResp.university,
-              gender: newUserResp.gender,
-            };
-            res.json({
-              signUp: true,
-              respMessage: "Saved",
-            });
-          } else {
-            res.json({
-              signUp: false,
-              respMessage: "Unable to Save",
-            });
-          }
         }
       }
     }
@@ -245,11 +244,20 @@ rtr.post("/save/scribble", async (req, res) => {
 
 rtr.post("/institute/add", async (req, res) => {
   try {
+    const universityExist = await Institute.findOne({ name: req.body.name });
+    if (universityExist) {
+      res.json({
+        added: false,
+        respMessage: "University with same name already exist",
+      });
+      return;
+    }
     if (!req.files.logo) {
       res.json({
         added: false,
-        respMessage: "No file selected",
+        respMessage: "University Logo not selected",
       });
+      return;
     } else {
       req.files.logo.mv(
         __dirname + "/" + req.files.logo.name,
@@ -386,55 +394,16 @@ rtr.post("/user/sendcode", async (req, res) => {
         ignoreTLS: false,
         service: "gmail",
         auth: {
-          user: "krtyagikr", // eg: "kartik@gmail.com" is email, then write "kartik" only
-          pass: "8954191698", // password of the email
+          user: "foaxxofficial", // eg: "kartik@gmail.com" is email, then write "kartik" only
+          pass: "Uninor@12", // password of the email
         },
       });
       var mailOptions = {
-        from: "krtyagikr@gmail.com", // enter complete email. eg: kartik@gmail.com
+        from: "foaxxofficial@gmail.com", // enter complete email. eg: kartik@gmail.com
         to: req.body.email,
-        subject: "AreaGG verification code",
+        subject: "Foaxx verification code",
         html: `￼
-          <div style="background:#efefef;display:flex;font-family:Helvetica,sans-serif">
-  <div style="background:#fff;width:600px;height:100%;padding:10px 20px">
-<div style="margin:40px 0 44px 0">
-  <a style="color:#009ac7;text-decoration:none" href="https://dashboard.EthicalLearner.com/" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://dashboard.EthicalLearner.com/&amp;source=gmail&amp;ust=1615896337341000&amp;usg=AFQjCNE6ljjnknFuN70E_APOLwqgFfqiIQ">
-    <img src="./BANNER.png" style="vertical-align:middle;width:100%;height:auto;max-width:100%;border-width:0" alt="EthicalLearner" data-image-whitelisted="" class="CToWUd">
-  </a>
-  <div>
-    <div>
-      <h1 style="font-family:Verdana,Helvetica,sans-serif;font-weight:normal;font-size:32px;line-height:48px">
-                    Verify your email address
-                </h1>
-    </div>
-</div>
-</div>
-
-<div>
-  <div style="margin-top:24px;font-size:16px">
-    Hi Madan,
-  </div>
-
-  <div>
-    <p style="font-size:16px;margin-bottom:16px;line-height:24px">Thanks for signing up to EthicalLearner.</p>
-    <p style="font-size:16px;margin-bottom:16px;line-height:24px">To get access to your account please verify your email address by clicking the link below.</p>
-    <p style="font-size:16px;margin-bottom:16px;line-height:24px">
-      <span>${randomcode}</span>
-    </p>
-  </div>
-</div>
-
-<p>
-    <span style="line-height:24px;font-size:16px">Regards,</span><br>
-    <span style="line-height:24px;font-size:16px">The EthicalLearner Team</span>
-  </p>
-    <hr style="margin:40px 0 20px 0;display:block;height:1px;border:0;border-top:1px solid #c4cdd5;padding:0">
-    <footer style="margin-bottom:40px">
-      <span style="color:#919eab;line-height:28px;font-size:12px">EthicalLearner, Near Alaunus Hospital, Gardan City, Bisalpur Chauraha, Bareilly, Uttar Pradesh 243005</span><br>
-      <span style="color:#919eab;line-height:28px;font-size:12px">You received this because you're a registered EthicalLearner user. Do not reply</span><br>
-    </footer><div class="yj6qo"></div><div class="adL">
-    </div></div><div class="adL">
-</div></div>
+          
           `,
       };
       const info = await transporter.sendMail(mailOptions);
@@ -509,55 +478,164 @@ rtr.post("/email/verify", async (req, res) => {
     var transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "krtyagikr",
-        pass: "8954191698",
+        user: "foaxxofficial",
+        pass: "Uninor@12",
       },
     });
     var mailOptions = {
-      from: "krtyagikr@gmail.com",
+      from: "foaxxofficial@gmail.com",
       to: req.body.email,
       subject: "Scribble verification code",
       html: `
-      <div style="background:#efefef;display:flex;font-family:Helvetica,sans-serif">
-       <div style="background:#fff;width:600px;height:100%;padding:10px 20px">
-     <div style="margin:40px 0 44px 0">
-       <a style="color:#009ac7;text-decoration:none" href="https://dashboard.EthicalLearner.com/" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://dashboard.EthicalLearner.com/&amp;source=gmail&amp;ust=1615896337341000&amp;usg=AFQjCNE6ljjnknFuN70E_APOLwqgFfqiIQ">
-         <img src="./BANNER.png" style="vertical-align:middle;width:100%;height:auto;max-width:100%;border-width:0" alt="EthicalLearner" data-image-whitelisted="" class="CToWUd">
-       </a>
-       <div>
-         <div>
-           <h1 style="font-family:Verdana,Helvetica,sans-serif;font-weight:normal;font-size:32px;line-height:48px">
-                         Verify your email address
-                     </h1>
-         </div>
-     </div>
-     </div>
-     
-     <div>
-       <div style="margin-top:24px;font-size:16px">
-         Hi Madan,
-       </div>
-     
-       <div>
-         <p style="font-size:16px;margin-bottom:16px;line-height:24px">Thanks for signing up to EthicalLearner.</p>
-         <p style="font-size:16px;margin-bottom:16px;line-height:24px">To get access to your account please verify your email address by clicking the link below.</p>
-         <p style="font-size:16px;margin-bottom:16px;line-height:24px">
-           <span>${randomcode}</span>
-         </p>
-       </div>
-     </div>
-     
-     <p>
-         <span style="line-height:24px;font-size:16px">Regards,</span><br>
-         <span style="line-height:24px;font-size:16px">The EthicalLearner Team</span>
-       </p>
-         <hr style="margin:40px 0 20px 0;display:block;height:1px;border:0;border-top:1px solid #c4cdd5;padding:0">
-         <footer style="margin-bottom:40px">
-           <span style="color:#919eab;line-height:28px;font-size:12px">EthicalLearner, Near Alaunus Hospital, Gardan City, Bisalpur Chauraha, Bareilly, Uttar Pradesh 243005</span><br>
-           <span style="color:#919eab;line-height:28px;font-size:12px">You received this because you're a registered EthicalLearner user. Do not reply</span><br>
-         </footer><div class="yj6qo"></div><div class="adL">
-         </div></div><div class="adL">
-     </div></div>`,
+      
+    <div
+    style="
+      background: #efefef;
+      display: flex;
+      font-family: Helvetica, sans-serif;
+      text-align: center;
+    "
+  >
+    <div
+      style="
+        background: #fff;
+        width: 600px;
+        height: 100%;
+        padding: 10px 20px;
+        margin: 0 auto;
+      "
+    >
+      <div style="margin: 0px 0 44px 0">
+        <a
+          style="color: #009ac7; text-decoration: none"
+          href="https://foaxx.com/"
+          target="_blank"
+          data-saferedirecturl="https://www.foaxx.com"
+        >
+          <img
+            src="https://scribble2021.s3.ap-south-1.amazonaws.com/foaxxemailheader.png"
+            style="
+              vertical-align: middle;
+              width: 100%;
+              height: auto;
+              max-width: 100%;
+              border-width: 0;
+            "
+            alt="EthicalLearner"
+            data-image-whitelisted=""
+            class="CToWUd"
+          />
+        </a>
+        <div>
+          <div>
+            <h1
+              style="
+                font-family: Verdana, Helvetica, sans-serif;
+                font-weight: bold;
+                font-size: 32px;
+                line-height: 48px;
+              "
+            >
+              Welcome to FOAXX
+            </h1>
+          </div>
+        </div>
+      </div>
+
+      <div style="color: #96a2af">
+        <div>
+          <p style="font-size: 16px; margin-bottom: 16px; line-height: 24px">
+            Thanks for celebrating Scribble Day with us.
+          </p>
+          <p
+            style="
+              color: #96a2af;
+              font-size: 16px;
+              margin-bottom: 16px;
+              line-height: 24px;
+            "
+          >
+            Kindly enter the Verification Code mentioned below to verify your account:
+          </p>
+          <strong style="font-size: 26px; color: rgb(41, 41, 41)">
+            <span>${randomcode}</span>
+          </strong>
+          <p
+            style="
+              font-size: 16px;
+              margin-bottom: 16px;
+              margin-top: 36px;
+              line-height: 24px;
+              padding-inline: 40px;
+            "
+          >
+            This Pandemic (Covid-19) already caused a lot of mishappening. We
+            must stay safe, healthy and connected. Scribble Day is supposed to bring remarkable and
+            unforgettable moments in our lives and so do this year's Virtual
+            Scribble Day
+          </p>
+        </div>
+
+        <p style="margin-top: 46px">
+          <span style="line-height: 24px; font-size: 16px"
+            >Happy Scribble Day</span
+          ><br />
+          <span style="line-height: 24px; font-size: 16px"
+            >The FOAXX Team</span
+          >
+        </p>
+      </div>
+
+      <hr
+        style="
+          margin: 40px 0 20px 0;
+          display: block;
+          height: 1px;
+          border: 0;
+          border-top: 1px solid #c4cdd5;
+          padding: 0;
+        "
+      />
+      <footer style="color: #6d6d6d; background: #09203a; display: grid">
+        <div style="text-align: center; margin: 30px 0">
+          <div style="color: #a8adb2; font-size: 12px">
+            <img
+              src="
+            https://scribble2021.s3.ap-south-1.amazonaws.com/foaxxlogo.png
+            "
+              style="
+                vertical-align: middle;
+                width: 80px;
+                height: auto;
+                max-width: 100px;
+              "
+              alt="EthicalLearner"
+              data-image-whitelisted=""
+              class="CToWUd"
+            />
+          </div>
+          <p style="font-size: 12px">
+            Empowered under the hood of Adorway Pvt. Ltd.
+            <a
+              href="https://adorway.com"
+              style="font-size: 11px; font-weight: 300"
+              target="_blank"
+              data-saferedirecturl="https://adorway.com/"
+              >@adorway</a
+            >
+          </p>
+          <br />
+          <p style="font-size: 12px">
+            <em>Copyright © 2021 Adorway Pvt Ltd.</em>
+          </p>
+        </div>
+      </footer>
+      <div class="yj6qo"></div>
+      <div class="adL"></div>
+    </div>
+    <div class="adL"></div>
+  </div>
+`,
     };
     const info = await transporter.sendMail(mailOptions);
     if (info) {
