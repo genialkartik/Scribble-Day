@@ -1644,7 +1644,11 @@ function Home() {
                               variant="contained"
                               onClick={() => {
                                 navigator.clipboard.writeText(
-                                  `Hey dear friend, Lets Celebrate Scribble Day 2021 virtullay together | Write a Scribble Message for me || www.foaxx.com/u/${userdata.userId}`
+                                  `🤩 Let's Celebrate Virtual Scribble Day together 🤔
+
+  👕 Send me a Scribble Message 😎
+  here 👉 https://foaxx.com/u/${userdata.userId}
+  It's Fun 🥳`
                                 );
                                 setOpenSnackbar(true);
                                 setMsgSnackbar(
@@ -1663,7 +1667,7 @@ function Home() {
                           <a
                             target="_blank"
                             rel="noopener noreferrer"
-                            href={`https://www.linkedin.com/shareArticle?mini=true&url=www.foaxx.com/u/${userdata.userId}&title=Let's%20celebrate%20%F0%9F%91%95Scribble%20Day%202021%20%F0%9F%A5%B3%20Write%20a%20Scribble%20for%20me%20%F0%9F%98%8E%20&summary=Pandemic%20could%20ruin%20oour%20studies%20But%20not%20our%20last%20day%20of%20college%20%7C%20%F0%9F%91%95%20Happy%20Scribble%20Day%202021%20%F0%9F%A5%B3%20%7C%20Write%20a%20Scribble%20for%20me%20%F0%9F%98%8E&source=www.foaxx.com`}
+                            href={`https://www.linkedin.com/shareArticle?mini=true&url=https%3A//foaxx.com/u/${userdata.userId}&title=%F0%9F%A4%A9%20Let's%20Celebrate%20Virtual%20Scribble%20Day%20together%20%F0%9F%A4%94%20%20%F0%9F%91%95%20Send%20me%20a%20Scribble%20Message%20%F0%9F%98%8E%20here%20%F0%9F%91%89%20https%3A//foaxx.com/u/${userdata.userId}%20It's%20Fun%20%F0%9F%A5%B3&summary=%F0%9F%A4%A9%20Let's%20Celebrate%20Virtual%20Scribble%20Day%20together%20%F0%9F%A4%94%0A%0A%F0%9F%91%95%20Send%20me%20a%20Scribble%20Message%20%F0%9F%98%8E%0Ahere%20%F0%9F%91%89%20https%3A//foaxx.com/u/${userdata.userId}%0AIt's%20Fun%20%F0%9F%A5%B3&source=https%3A//foaxx.com/u/${userdata.userId}`}
                           >
                             <Button
                               variant="contained"
@@ -1693,7 +1697,7 @@ function Home() {
                           <a
                             target="_blank"
                             rel="noopener noreferrer"
-                            href={`https://twitter.com/intent/tweet?url=www.foaxx.com/u/${userdata.userId}&text=Let's%20celebrate%20%F0%9F%91%95Scribble%20Day%202021%20%F0%9F%A5%B3%20Write%20a%20Scribble%20for%20me%20%F0%9F%98%8E%20%0A%23scribbleday2021%20%0A%0A`}
+                            href={`https://twitter.com/intent/tweet?text=%F0%9F%A4%A9%20Let's%20Celebrate%20Virtual%20Scribble%20Day%20together%20%F0%9F%A4%94%0A%0A%F0%9F%91%95%20Send%20me%20a%20Scribble%20Message%20%F0%9F%98%8E%0Ahere%20%F0%9F%91%89%20https%3A//foaxx.com/u/${userdata.userId}%0AIt's%20Fun%20%F0%9F%A5%B3`}
                           >
                             <Button
                               variant="contained"
@@ -1708,8 +1712,8 @@ function Home() {
                           <a
                             href={
                               windowWidth > 568
-                                ? `https://web.whatsapp.com/send?text=Let's%20celebrate%20%F0%9F%91%95Scribble%20Day%202021%20%F0%9F%A5%B3%20Write%20a%20Scribble%20for%20me%20%F0%9F%98%8Ehttps%3A//foaxx.com/u/${userdata.userId}%20%20%20#scribbleday2021%20%20`
-                                : `whatsapp://send?text=Let's%20celebrate%20%F0%9F%91%95Scribble%20Day%202021%20%F0%9F%A5%B3%20Write%20a%20Scribble%20for%20me%20%F0%9F%98%8Ehttps%3A//foaxx.com/u/${userdata.userId}%20%20%20#scribbleday2021%20%20`
+                                ? `https://web.whatsapp.com/send?text=%F0%9F%A4%A9%20Let's%20Celebrate%20Virtual%20Scribble%20Day%20together%20%F0%9F%A4%94%0A%0A%F0%9F%91%95%20Send%20me%20a%20Scribble%20Message%20%F0%9F%98%8E%0Ahere%20%F0%9F%91%89%20https%3A//foaxx.com/u/${userdata.userId}%0AIt's%20Fun%20%F0%9F%A5%B3&data-action="share/whatsapp/share`
+                                : `whatsapp://send?text=text=%F0%9F%A4%A9%20Let's%20Celebrate%20Virtual%20Scribble%20Day%20together%20%F0%9F%A4%94%0A%0A%F0%9F%91%95%20Send%20me%20a%20Scribble%20Message%20%F0%9F%98%8E%0Ahere%20%F0%9F%91%89%20https%3A//foaxx.com/u/${userdata.userId}%0AIt's%20Fun%20%F0%9F%A5%B3&data-action="share/whatsapp/share`
                             }
                             data-action="share/whatsapp/share"
                             target="_blank"
