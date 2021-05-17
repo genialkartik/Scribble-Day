@@ -85,6 +85,20 @@ export default function OrderCard(props) {
   return props.userdata ? (
     <>
       <Card className={classes.root}>
+        <div
+          className="alert alert-warning alert-dismissible"
+          role="alert"
+          style={{ fontSize: "0.65em" }}
+        >
+          <button type="button" className="close" data-dismiss="alert">
+            <span aria-hidden="true">&times;</span>
+            <span className="sr-only">Close</span>
+          </button>
+          <strong>Announcement:</strong> We are planning to achieve a goal of
+          500 Tshirts Order and If we will be able to do so. We will send{" "}
+          <strong> 25% cashbacks</strong> to our{" "}
+          <strong>first 50 customers</strong> who placed orders
+        </div>
         <CardHeader
           avatar={
             <Avatar

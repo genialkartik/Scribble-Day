@@ -15,8 +15,8 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import FormControl from "@material-ui/core/FormControl";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
+import Popover from "@material-ui/core/Popover";
 import InfoIcon from "@material-ui/icons/Info";
-import CardHeader from "@material-ui/core/CardHeader";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import Dialog from "@material-ui/core/Dialog";
 import Avatar from "@material-ui/core/Avatar";
@@ -212,6 +212,16 @@ function Home() {
   const [scribbleSentCount, setScribbleSentCount] = useState("0");
   const [scribbleReceivedCount, setScribbleReceivedCount] = useState("0");
   const [scribbleBool, setscribbleBool] = useState("Received");
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  // Popover
+  const openZoomImage = Boolean(anchorEl);
+  const popOverId = openZoomImage ? "simple-popover" : undefined;
+  const handleZoomImageClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleZoomImageClose = () => {
+    setAnchorEl(null);
+  };
 
   useEffect(() => {
     setImageRefWidth(imageRef.current.getBoundingClientRect().width);
@@ -462,7 +472,7 @@ function Home() {
   };
 
   const handleVerifyPin = async () => {
-    if (!pinCodeToVerify) alert("Insert PIN to verify");
+    if (!pinCodeToVerify) alert("Insert Password to verify");
     else if (!inputEmail) alert("Insert Email first");
     else {
       const resp = await axios.post("/login", {
@@ -513,7 +523,12 @@ function Home() {
   };
 
   const handleSubmitSignupForm = async () => {
-    if (signupFormInputs === {} || signupFormInputs.university === "other") {
+    if (
+      signupFormInputs === {} ||
+      !avatar ||
+      !inputEmail ||
+      signupFormInputs.university === "other"
+    ) {
       setOpenSnackbar(true);
       setMsgSnackbar("Enter all Inputs");
       setTimeout(() => setOpenSnackbar(false), 3000);
@@ -873,20 +888,19 @@ function Home() {
                         onClick={() => {
                           window.location.replace("/");
                         }}
-                        startIcon={<HomeIcon />}
-                      ></Button>
+                      >
+                        <HomeIcon />
+                      </Button>
                     </div>
                     <Link className={"actions"} to={"/resources"}>
-                      <Button
-                        variant="contained"
-                        startIcon={<InfoIcon />}
-                      ></Button>
+                      <Button variant="contained">
+                        <InfoIcon />
+                      </Button>
                     </Link>
                     <Link className={"actions"} to={"/faq"}>
-                      <Button
-                        variant="contained"
-                        startIcon={<HelpIcon />}
-                      ></Button>
+                      <Button variant="contained">
+                        <HelpIcon />
+                      </Button>
                     </Link>
                     <div className={"actions"} style={{ flex: "1 0 auto" }}>
                       <Button
@@ -1053,7 +1067,7 @@ function Home() {
                         <Avatar
                           style={{ marginLeft: 12 }}
                           alt="U"
-                          src={universityLogo}
+                          src={process.env.PUBLIC_URL + universityLogo.slice(1)}
                         />
                       </div>
 
@@ -1158,7 +1172,36 @@ function Home() {
                               ? friendLogo
                               : require("../../assets/userdemoimage.jpg")
                           }
+                          aria-describedby={popOverId}
+                          onClick={handleZoomImageClick}
                         />
+                        <Popover
+                          id={popOverId}
+                          open={openZoomImage}
+                          anchorEl={anchorEl}
+                          onClose={handleZoomImageClose}
+                          anchorOrigin={{
+                            vertical: "bottom",
+                            horizontal: "left",
+                          }}
+                          transformOrigin={{
+                            vertical: "top",
+                            horizontal: "left",
+                          }}
+                        >
+                          <img
+                            style={{
+                              width: "300px",
+                              height: "300px",
+                            }}
+                            alt="F"
+                            src={
+                              friendLogo
+                                ? friendLogo
+                                : require("../../assets/userdemoimage.jpg")
+                            }
+                          />
+                        </Popover>
                       </div>
                       <Form.Control
                         className={"col-12 form"}
@@ -1568,60 +1611,6 @@ function Home() {
                                         {scribble.message}
                                       </div>
                                     </div>
-                                    {/* <CardHeader
-                                      avatar={
-                                        <Avatar
-                                          aria-label="recipe"
-                                          className={classes.avatar}
-                                          src={
-                                            scribbleBool === "Sent"
-                                              ? scribble.sendToAvatar
-                                              : scribble.sendByAvatar
-                                          }
-                                        ></Avatar>
-                                      }
-                                      action={
-                                        <>
-                                          {scribbleBool === "Received" && (
-                                            <Link
-                                              to={`/u/${scribble.sendByUserId}`}
-                                              target="_blank"
-                                              rel="noopener noreferrer"
-                                            >
-                                              <Button
-                                                variant="contained"
-                                                style={{
-                                                  backgroundColor: "#2E73AD",
-                                                  color: "#fff",
-                                                  transform: "scale(0.8)",
-                                                }}
-                                                startIcon={
-                                                  <span
-                                                    className={"fa fa-reply"}
-                                                  ></span>
-                                                }
-                                              >
-                                                Scribble Back
-                                              </Button>
-                                            </Link>
-                                          )}
-                                          <DeleteOutlineIcon
-                                            className={"scribbleDelete"}
-                                            onClick={() =>
-                                              handleDeleteScribble(
-                                                scribble.scribbleId
-                                              )
-                                            }
-                                          />
-                                        </>
-                                      }
-                                      title={
-                                        scribbleBool === "Sent"
-                                          ? scribble.sendToName
-                                          : scribble.sendByName
-                                      }
-                                      subheader={scribble.message}
-                                    /> */}
                                     <div
                                       style={{
                                         width: "100%",
@@ -1748,7 +1737,7 @@ function Home() {
                           id="input-with-icon-adornment"
                           placeholder={
                             enterPinOrCodeBool === "pin"
-                              ? "Enter PIN"
+                              ? "Enter Password"
                               : "Verification Code"
                           }
                           variant="filled"
@@ -1865,7 +1854,7 @@ function Home() {
                                 setNewUniversityOnSuccess("signup");
                               }}
                             >
-                              Other
+                              Add your University
                             </MenuItem>
                           </Select>
                         </FormControl>
@@ -1904,7 +1893,7 @@ function Home() {
                         <Form.Control
                           className={"col-12 form"}
                           type="text"
-                          placeholder="Enter a 4 digit's PIN"
+                          placeholder="Enter Password"
                           name="pin"
                           value={signupFormInputs.pin}
                           onChange={handleInputChange}
@@ -2098,7 +2087,7 @@ function Home() {
                     >
                       {786 + scribblesCount}
                     </span>{" "}
-                    scribbles
+                    scribbles sent
                   </p>
                   <div className="details-of-site">
                     <div className="part">
@@ -2214,13 +2203,13 @@ function Home() {
               )}
               <div className={"university-logo"}>
                 {tshirtSide === "front" && (
-                  <img
+                  <Avatar
                     style={{
                       width: getFontSize(60, imageRefWidth),
                       height: getFontSize(60, imageRefWidth),
                     }}
-                    alt={universityLogo}
-                    src={universityLogo}
+                    alt="U"
+                    src={process.env.PUBLIC_URL + universityLogo.slice(1)}
                   />
                 )}
               </div>
@@ -2244,9 +2233,6 @@ function Home() {
                       }}
                     >
                       {scribble.message}
-                      <span>
-                        <br />~ {scribble.sendByName}
-                      </span>
                     </p>
                   ))}
               <Draggable bounds="parent" disabled={dragBool}>
@@ -2267,6 +2253,8 @@ function Home() {
                     <>
                       <div
                         style={{
+                          msTransform: `rotate(${rotateValue}deg)`,
+                          transform: `rotate(${rotateValue}deg)`,
                           rotate: rotateValue + "deg",
                           color: messageColor,
                           fontSize: getFontSize(messageFont, imageRefWidth),
@@ -2277,10 +2265,7 @@ function Home() {
                         <p ref={messageRef}>
                           {message
                             ? message
-                            : "Scribble Message" + universityLogo}
-                          <span>
-                            <br />~ {userdata ? userdata.name : "Your name"}
-                          </span>
+                            : "Your Scribble message visible here"}
                         </p>
                       </div>
                     </>

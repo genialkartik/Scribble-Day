@@ -1,10 +1,9 @@
-/*
-*
-* ==========================================
-* FOR DEMO PURPOSES
-* ==========================================
-*
-*/
+.video_wrapper video {
+  border-radius: 6%;
+}
+.video_wrapper iframe {
+  border-radius: 6%;
+}
 
 .about-cont {
   background-color: #02203c;

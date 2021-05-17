@@ -21,7 +21,13 @@ export default function SuperHeader() {
             </a>
           </Col>
           <div className="nav-github-icon">
-            <GitHubIcon />
+            <a
+              href="https://github.com/genialkartik/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <GitHubIcon />
+            </a>
           </div>
         </Row>
       </Container>

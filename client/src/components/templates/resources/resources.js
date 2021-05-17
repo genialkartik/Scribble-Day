@@ -109,10 +109,21 @@ export default function Resources() {
                 </p>
                 <div className="row justify-content-center mb-5">
                   <div className="video_wrapper">
-                    <video
+                    {/* <video
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                      }}
+                      src="https://youtu.be/C85cOVrD2NA"
+                    ></video> */}
+                    <iframe
                       style={{ width: "100%", height: "100%" }}
-                      src="https://assets.mixkit.co/videos/preview/mixkit-skyline-of-a-desert-with-the-moon-at-night-40047-large.mp4"
-                    ></video>
+                      src="https://www.youtube.com/embed/C85cOVrD2NA?controls=0"
+                      title="YouTube video player"
+                      frameborder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowfullscreen
+                    ></iframe>
                   </div>
                   <div className="title_wrap">v.1 Web Browser</div>
                 </div>
@@ -120,8 +131,9 @@ export default function Resources() {
                 <div className="row justify-content-center mb-5">
                   <div className="video_wrapper">
                     <video
-                      style={{ width: "100%", height: "100%" }}
-                      src="https://assets.mixkit.co/videos/preview/mixkit-skyline-of-a-desert-with-the-moon-at-night-40047-large.mp4"
+                      style={{ width: "70%", height: "70%" }}
+                      controls
+                      src="https://developer-assets.paytm.com/sftp/upload/cmsuploads/Dynamic_QR_updated_New_a34b9fc54a.mp4?158619.29000000237"
                     ></video>
                   </div>
                   <div className="title_wrap">v.2 Mobile View</div>
