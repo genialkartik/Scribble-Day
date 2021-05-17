@@ -60,14 +60,14 @@
 }
 
 .partners a {
-  margin: 0 2rem 1rem;
+  margin: 0 2rem 3rem;
   display: block;
   width: 260px;
 }
 
 .partners img {
   position: relative;
-  background-color: #aed8f8;
+  background-color: #fff;
   width: 100%;
   padding-inline: 5%;
   padding-block: 2%;

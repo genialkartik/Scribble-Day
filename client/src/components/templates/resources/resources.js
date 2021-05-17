@@ -234,6 +234,24 @@ export default function Resources() {
                         />
                       </div>
                     </a>
+                    
+                    <a href="/" target="_blank" rel="noopener noreferrer">
+                      <div>
+                        <img
+                        style={{backgroundColor: 'transparent'}}
+                          src={require("../../../assets/Bway Logo.png")}
+                          alt=""
+                        />
+                      </div>
+                    </a>
+                    <a href="/" target="_blank" rel="noopener noreferrer">
+                      <div>
+                        <img
+                          src={require("../../../assets/gola_tourism.jpg")}
+                          alt=""
+                        />
+                      </div>
+                    </a>
                     <a href="/" target="_blank" rel="noopener noreferrer">
                       <div>
                         <img
@@ -242,14 +260,7 @@ export default function Resources() {
                         />
                       </div>
                     </a>
-                    <a href="/" target="_blank" rel="noopener noreferrer">
-                      <div>
-                        <img
-                          src={require("../../../assets/Bway Logo.png")}
-                          alt=""
-                        />
-                      </div>
-                    </a>
+                    
                   </div>
                 </div>
               </div>
