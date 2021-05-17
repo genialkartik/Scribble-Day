@@ -239,7 +239,7 @@ export default function Resources() {
                       <div>
                         <img
                         style={{backgroundColor: 'transparent'}}
-                          src={require("../../../assets/Bway Logo.png")}
+                          src={require("../../../assets/bwayventure.png")}
                           alt=""
                         />
                       </div>
