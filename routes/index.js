@@ -163,7 +163,7 @@ rtr.post("/create", async (req, res) => {
           userId: Math.floor(100000 + Math.random() * 900000),
           name: formdata.name,
           email: req.body.email,
-          pin: formdata.pin,
+          pin: formdata.pin.toString(),
           avatar: avatarLocation,
           university: formdata.university,
           gender: formdata.gender,

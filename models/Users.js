@@ -16,7 +16,7 @@ const userSchema = mongoose.Schema({
     required: true,
   },
   pin: {
-    type: Number,
+    type: String,
     required: true,
   },
   avatar: String,
@@ -50,7 +50,7 @@ userSchema.statics.findByCredentials = async (email, pin) => {
     // } else {
     //   return user;
     // }
-    return pin == user.pin ? user : null;
+    return pin.toString() == user.pin.toString() ? user : null;
   }
 };
 
